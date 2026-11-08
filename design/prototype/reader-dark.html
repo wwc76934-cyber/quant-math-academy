@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>11.4 概率不等式 · 量化数学学院（深色）</title>
+<link rel="stylesheet" href="katex/katex.min.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar__inner"><button class="icon-btn mobile-menu" type="button" aria-label="打开菜单"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="home.html">
+      <span class="brand__cn">量化数学学院</span>
+      <span class="brand__en">Quant Math Academy</span>
+    </a>
+    <nav class="nav" aria-label="主导航">
+      <a class="is-active" href="syllabus.html">教材</a>
+      <a href="#">学习路径</a>
+      <a href="#">练习</a>
+      <a href="#">学习进度</a>
+    </nav>
+    <div class="topbar__actions">
+      <button class="search-btn" type="button" aria-label="搜索">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <span class="search-label">搜索</span> <kbd>⌘K</kbd>
+      </button>
+      <button class="icon-btn" type="button" aria-label="切换主题">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="reader-top">
+  <div class="reader-top__inner">
+    <div class="breadcrumb"><a href="syllabus.html">教材</a><span>/</span><span>第 11 章</span></div>
+    <div class="reader-top__title">期望、方差、矩与概率不等式</div>
+    <div class="reader-top__progress" aria-label="本章阅读进度"><i></i></div>
+    <div class="reader-top__tools">
+      <button class="icon-btn" type="button" aria-label="字号">Aa</button>
+      <button class="icon-btn" type="button" aria-label="阅读宽度">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 7h16M4 12h10M4 17h16"/></svg>
+      </button>
+      <button class="icon-btn" type="button" aria-label="专注模式">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<main class="reader">
+  <div class="reader-grid">
+
+    <nav class="book-toc" aria-label="教材目录">
+      <div class="book-toc__part">
+        <div class="kicker">第三篇 · 概率论</div>
+        <a class="book-toc__chapter" href="#"><span class="num">09</span> 组合计数、概率空间</a>
+        <a class="book-toc__chapter" href="#"><span class="num">10</span> 随机变量、常见分布</a>
+        <a class="book-toc__chapter is-current" href="#"><span class="num">11</span> 期望、方差、矩与不等式</a>
+        <a class="book-toc__section is-current" href="#s114"><span class="num">11.1</span> 期望的定义与性质</a>
+        <a class="book-toc__section" href="#"><span class="num">11.2</span> 方差、矩与分布形态</a>
+        <a class="book-toc__section" href="#"><span class="num">11.3</span> 矩生成函数与特征函数</a>
+        <a class="book-toc__section is-current" href="#s114"><span class="num">11.4</span> 概率不等式</a>
+        <a class="book-toc__section" href="#"><span class="num">11.5</span> 全期望公式与条件分解</a>
+        <a class="book-toc__section" href="#"><span class="num">11.6</span> 量化研究中的矩与不等式</a>
+        <a class="book-toc__section" href="#"><span class="num">11.7</span> 本章小结</a>
+        <a class="book-toc__section" href="#"><span class="num">11.8</span> 习题</a>
+        <a class="book-toc__chapter" href="#"><span class="num">12</span> 联合分布、协方差</a>
+        <a class="book-toc__chapter" href="#"><span class="num">13</span> 条件期望与最优预测</a>
+        <a class="book-toc__chapter" href="#"><span class="num">14</span> 收敛、大数定律与 CLT</a>
+      </div>
+      <div class="book-toc__part">
+        <div class="kicker">第四篇 · 优化与数值</div>
+        <a class="book-toc__chapter" href="#"><span class="num">15</span> 凸集、凸函数与共轭工具</a>
+        <a class="book-toc__chapter" href="#"><span class="num">16</span> Lagrange、KKT 与对偶</a>
+      </div>
+    </nav>
+
+    <article class="article">
+      <header class="chapter-head">
+        <div class="kicker">第 11 章</div>
+        <h1>期望、方差、矩与概率不等式</h1>
+        <p class="lede">概率分布的完整刻画原则上需要无穷多个数字特征，但在理论研究与量化实践中被反复使用的，往往只是分布的前若干阶矩。期望是这一切的起点。</p>
+        <div class="meta"><span>6 节</span><span>约 4.5 小时</span><span>3 个 P0</span><span>第 3 / 8 篇</span></div>
+      </header>
+
+      <div class="section-heading" id="s114">
+        <span class="num">11.4</span>
+        <h2>概率不等式</h2>
+      </div>
+
+      <p>随机变量的分布函数或密度函数往往难以显式获得：独立变量之和的分布未必有初等表达式，高维联合分布更是几乎无法完全写出。相比之下，均值、方差这类矩信息通常容易计算或容易从数据中稳健地估计。概率不等式理论回答的核心问题是：仅凭有限的矩信息，能够对尾部概率给出多少保证？</p>
+      <p>这一问题的答案支撑着大数定律与中心极限定理，也是统计估计、回测显著性检验与机器学习泛化分析中一切误差控制的理论起点。本节按 Markov、Chebyshev、Chernoff、Jensen、Cauchy–Schwarz 与 Hoeffding 的顺序给出最重要的概率不等式，每一条都配完整证明。</p>
+
+      <section class="env env--theorem" id="thm-11-10">
+        <div class="env__label"><b>定理 11.10</b><span class="name">（Markov 不等式）</span><span class="link">复制链接</span></div>
+        <p>设 $X$ 为非负随机变量，即 $X \ge 0$ 几乎必然成立，且 $\mathbb E[X] &lt; \infty$。则对任意实数 $a &gt; 0$，</p>
+        <div class="equation"><div class="equation__math">$$\mathbb P(X \ge a) \le \frac{\mathbb E[X]}{a}.$$</div><span class="equation__num">(11.11)</span></div>
+      </section>
+
+      <section class="env env--proof">
+        <div class="env__label"><b>证明</b><span class="link">收起</span></div>
+        <p>记事件 $A = \{X \ge a\}$，并以 $\mathbf 1_A$ 表示其示性函数。把 $X$ 的期望按 $A$ 与其补事件 $A^c$ 分解为两部分：</p>
+        <div class="equation"><div class="equation__math">$$\mathbb E[X] = \mathbb E[X \mathbf 1_A] + \mathbb E[X \mathbf 1_{A^c}].$$</div></div>
+        <p>由于 $X \ge 0$ 几乎必然，右端两项均非负，舍去第二项只会使值变小，故 $\mathbb E[X] \ge \mathbb E[X \mathbf 1_A]$。在事件 $A$ 上有 $X \ge a$，从而逐点地 $X \mathbf 1_A \ge a \mathbf 1_A$ 几乎必然成立；对这一逐点不等式两边取期望，并利用期望的线性性，得</p>
+        <div class="equation"><div class="equation__math">$$\mathbb E[X \mathbf 1_A] \ge a\,\mathbb E[\mathbf 1_A] = a\,\mathbb P(A).$$</div></div>
+        <p>将上述不等式串联起来即得 $\mathbb E[X] \ge a\,\mathbb P(X \ge a)$，两边同除以正数 $a$，便是式（11.11）。</p>
+        <p class="qed">□</p>
+      </section>
+
+      <p>Markov 不等式的证明有三个不可或缺的要素：非负性保证舍去 $A^c$ 上的贡献不会使不等号反向；阈值事件 $\{X \ge a\}$ 上可以用常数 $a$ 从下方控制 $X$；期望的单调性把逐点不等式提升为期望不等式。这一“构造非负变量、在事件上从下方控制、除以阈值”的模式是后续所有指数型不等式的共同骨架。</p>
+
+      <section class="env env--note">
+        <div class="env__label"><b>注记</b><span class="name">（可达性与推广形式）</span></div>
+        <p>式（11.11）的上界不可整体改进：若 $X$ 只取 $0$ 与 $a$ 两个值，$\mathbb P(X = a) = p$，则 $\mathbb E[X] = pa$，而 $\mathbb P(X \ge a) = p = \mathbb E[X]/a$，等号成立。取 $g(x) = e^{tx}$（$t &gt; 0$）便得到本节最重要的 Chernoff 界。</p>
+      </section>
+
+      <section class="env env--theorem" id="thm-11-11">
+        <div class="env__label"><b>定理 11.11</b><span class="name">（Chebyshev 不等式）</span><span class="link">复制链接</span></div>
+        <p>设 $X$ 满足 $\mathbb E[X^2] &lt; \infty$，记 $\mu = \mathbb E[X]$，$\operatorname{Var}(X) = \sigma^2$。则对任意 $\varepsilon &gt; 0$，</p>
+        <div class="equation"><div class="equation__math">$$\mathbb P\big(|X - \mu| \ge \varepsilon\big) \le \frac{\operatorname{Var}(X)}{\varepsilon^2}.$$</div><span class="equation__num">(11.12)</span></div>
+      </section>
+
+      <section class="env env--proof">
+        <div class="env__label"><b>证明</b><span class="link">收起</span></div>
+        <p>令 $Y = (X - \mu)^2$，则 $Y \ge 0$ 且 $\mathbb E[Y] = \operatorname{Var}(X) = \sigma^2$。注意事件恒等式</p>
+        <div class="equation"><div class="equation__math">$$\{|X - \mu| \ge \varepsilon\} = \{(X - \mu)^2 \ge \varepsilon^2\} = \{Y \ge \varepsilon^2\},$$</div></div>
+        <p>对非负变量 $Y$ 与阈值 $a = \varepsilon^2$ 应用定理 11.10，得 $\mathbb P(|X - \mu| \ge \varepsilon) \le \operatorname{Var}(X)/\varepsilon^2$，此即式（11.12）。</p>
+        <p class="qed">□</p>
+      </section>
+
+      <section class="env env--example">
+        <div class="env__label"><b>例 11.8</b><span class="name">（对数正态收益的矩）</span></div>
+        <p>设对数收益 $\ln(1+R) \sim N(\mu, \sigma^2)$。求 $R$ 的期望、方差、偏度与超额峰度，并解释算术平均收益高于几何平均收益的原因。</p>
+        <div class="env env--solution">
+          <div class="env__label"><b>解</b></div>
+          <p>记 $G = 1 + R = e^{Y}$，其中 $Y \sim N(\mu,\sigma^2)$。由正态矩生成函数，对任意实数 $k$，</p>
+          <div class="equation"><div class="equation__math">$$\mathbb E[G^k] = \mathbb E[e^{kY}] = e^{k\mu + k^2\sigma^2/2}.$$</div><span class="equation__num">(11.22)</span></div>
+          <p>取 $k=1$ 得 $\mathbb E[R] = e^{\mu+\sigma^2/2}-1$；取 $k=2$ 得 $\operatorname{Var}(R) = e^{2\mu+\sigma^2}(e^{\sigma^2}-1)$。几何平均意义下的平均收益因子为 $e^{\mu}$，两者之比是 $e^{\sigma^2/2} &gt; 1$，这正是方差拖累。</p>
+        </div>
+      </section>
+
+      <div class="article-actions">
+        <button class="btn btn--secondary btn--sm action-status" type="button">标记为学习中</button>
+        <button class="btn btn--ghost btn--sm action-secondary" type="button">加入复习</button>
+        <span class="status-note action-note">当前：未开始</span>
+        <span class="spacer"></span>
+        <button class="btn btn--ghost btn--sm action-prev" type="button">上一节</button>
+        <button class="btn btn--primary btn--sm action-next" type="button">下一节 →</button>
+      </div>
+
+      <div class="section-heading" id="exercises" style="margin-top:72px"><span class="num">11.8</span><h2>习题</h2></div>
+      <article class="exercise">
+        <div class="exercise__id">11.4 · 第 7 题</div>
+        <div class="exercise__body">
+          <p>设非负随机变量 $X$ 满足 $\mathbb E[X] = 1$、$\mathbb E[X^2] = 4$。分别用 Markov 不等式、二阶矩形式的 Markov 不等式与 Chebyshev 不等式估计 $\mathbb P(X \ge 3)$，并指出哪一个界最紧、为什么。</p>
+        </div>
+        <div class="exercise__actions">
+          <button class="btn btn--ghost btn--sm" type="button">展开解析</button>
+          <button class="btn btn--ghost btn--sm" type="button">标记做对</button>
+          <button class="btn btn--ghost btn--sm" type="button">加入错题</button>
+        </div>
+      </article>
+      <article class="exercise">
+        <div class="exercise__id">11.4 · 第 20 题</div>
+        <div class="exercise__body">
+          <p>设 $X_1, X_2, \ldots$ 独立同分布，$\mathbb E[X_1] = \mu$、$\operatorname{Var}(X_1) = \sigma^2 &lt; \infty$。只使用期望的线性性、独立性下方差的可加性与 Chebyshev 不等式，完整证明弱大数定律。</p>
+        </div>
+        <div class="exercise__actions">
+          <button class="btn btn--ghost btn--sm" type="button">展开解析</button>
+          <button class="btn btn--ghost btn--sm" type="button">标记做对</button>
+          <button class="btn btn--ghost btn--sm" type="button">加入错题</button>
+        </div>
+      </article>
+    </article>
+
+    <aside class="rail" aria-label="本节信息">
+      <div class="rail__block">
+        <div class="rail__title">本页目录</div>
+        <div class="page-toc">
+          <a href="#s114" class="is-current">11.4 概率不等式</a>
+          <a href="#thm-11-10" class="sub">定理 11.10 Markov</a>
+          <a href="#thm-11-11" class="sub">定理 11.11 Chebyshev</a>
+          <a href="#exercises" class="sub">习题</a>
+        </div>
+      </div>
+
+      <div class="rail__block">
+        <div class="rail__title">本节信息</div>
+        <div class="section-meta__badges">
+          <span class="badge">D3</span>
+          <span class="badge badge--p0">P0 必须掌握</span>
+        </div>
+        <div class="section-meta__grid">
+          <div>预计时间<b>70 分钟</b></div>
+          <div>高频考查<b>是</b></div>
+          <div>学习状态<b>未开始</b></div>
+          <div>练习<b>3 道</b></div>
+        </div>
+      </div>
+
+      <div class="rail__block">
+        <div class="rail__title">先修知识</div>
+        <ul class="rail-list">
+          <li><span class="dot dot--master"></span><a href="#">11.1 期望的定义与性质</a><span class="tiny">已掌握</span></li>
+          <li><span class="dot dot--done"></span><a href="#">11.2 方差、矩与分布形态</a><span class="tiny">已学习</span></li>
+          <li><span class="dot dot--empty"></span><a href="#">11.3 矩生成函数与特征函数</a><span class="tiny">未开始</span></li>
+        </ul>
+      </div>
+
+      <div class="rail__block">
+        <div class="rail__title">相关知识点</div>
+        <ul class="rail-list">
+          <li><a href="#">11.6 量化研究中的矩与不等式</a></li>
+          <li><a href="#">14.2 大数定律</a></li>
+          <li><a href="#">18.2 Monte Carlo 误差</a></li>
+        </ul>
+      </div>
+
+      <div class="rail__block">
+        <div class="rail__title">量化应用</div>
+        <ul class="rail-list">
+          <li>回测误差控制</li>
+          <li>尾部风险上界</li>
+          <li>样本量估计</li>
+        </ul>
+      </div>
+
+      <div class="rail__block">
+        <div class="rail__title">为什么这样标注</div>
+        <p class="rail-note">本节集中了量化面试与研究中最高频的尾部/矩不等式；证明多为单页内可完成但需要条件辨析，故 D3；Markov、Chebyshev、Jensen、Cauchy–Schwarz 属于必须能独立写出的工具，故 P0。</p>
+      </div>
+    </aside>
+
+  </div>
+</main>
+
+<script defer src="katex/katex.min.js"></script>
+<script defer src="katex/contrib/auto-render.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: '$$', right: '$$', display: true },
+        { left: '$', right: '$', display: false }
+      ],
+      throwOnError: false,
+      strict: false
+    });
+  });
+</script>
+</body>
+</html>

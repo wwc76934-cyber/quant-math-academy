@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quant Math Academy · 视觉原型</title>
+<style>
+  :root { --bg:#faf9f5; --ink:#1c1b18; --muted:#6f6c64; --line:#e4e0d6; --accent:#a5432f; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:"Noto Serif SC","Source Han Serif SC","Songti SC",serif; }
+  .wrap { max-width:1200px; margin:0 auto; padding:48px 32px 96px; }
+  .kicker { font-family:"Noto Sans SC","Segoe UI",sans-serif; font-size:11px; letter-spacing:.14em; color:var(--muted); text-transform:uppercase; }
+  h1 { font-size:40px; font-weight:600; margin:10px 0 8px; }
+  p { color:var(--muted); max-width:720px; line-height:1.8; }
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:36px; }
+  .card { border:1px solid var(--line); background:#fff; border-radius:4px; overflow:hidden; }
+  .card img { display:block; width:100%; height:auto; border-bottom:1px solid var(--line); }
+  .card div { padding:14px 16px 16px; }
+  .card h2 { font-size:18px; font-weight:600; margin:0 0 4px; }
+  .card a { font-family:"Noto Sans SC","Segoe UI",sans-serif; font-size:12px; color:var(--accent); text-decoration:none; }
+  .card p { font-size:13px; line-height:1.6; margin:6px 0 0; }
+  .wide { grid-column:1 / -1; }
+  .note { margin-top:40px; border-top:1px solid var(--line); padding-top:18px; font-family:"Noto Sans SC","Segoe UI",sans-serif; font-size:12px; color:var(--muted); line-height:1.8; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="kicker">Quant Math Academy · Design Reference</div>
+  <h1>第一版视觉原型</h1>
+  <p>用真实教材内容验证阅读体验、目录结构、难度/必要性标注与移动端布局。静态 HTML 仅作设计参考，生产实现以 <code>docs/design/DESIGN_SYSTEM.md</code> 为准。</p>
+  <div class="grid">
+    <a class="card wide" href="reader.html" style="text-decoration:none;color:inherit">
+      <img src="reader-1440.png" alt="阅读页三栏布局">
+      <div>
+        <h2>阅读页 · 三栏布局</h2>
+        <a href="reader.html">打开原型 →</a>
+        <p>定义/定理/证明/例题的层级、KaTeX 公式、右栏标注与先修、章内目录。</p>
+      </div>
+    </a>
+    <a class="card" href="home.html" style="text-decoration:none;color:inherit">
+      <img src="home-1440.png" alt="首页">
+      <div>
+        <h2>首页</h2>
+        <a href="home.html">打开原型 →</a>
+        <p>继续学习、今日面板、三条学习路径与全书地图。</p>
+      </div>
+    </a>
+    <a class="card" href="syllabus.html" style="text-decoration:none;color:inherit">
+      <img src="syllabus-1440.png" alt="教材目录">
+      <div>
+        <h2>教材目录</h2>
+        <a href="syllabus.html">打开原型 →</a>
+        <p>8 篇 34 章完整目录；C11 展开显示节、D/P、时长与状态。</p>
+      </div>
+    </a>
+    <a class="card" href="reader-dark.html" style="text-decoration:none;color:inherit">
+      <img src="reader-dark-1440.png" alt="深色阅读页">
+      <div>
+        <h2>阅读页 · 深色</h2>
+        <a href="reader-dark.html">打开原型 →</a>
+        <p>暖黑底、纸色字、同一个强调色；验证公式与卡片对比度。</p>
+      </div>
+    </a>
+    <a class="card" href="reader-mobile.png">
+      <img src="reader-mobile.png" alt="移动端阅读页">
+      <div>
+        <h2>移动端阅读</h2>
+        <a href="reader.html">打开桌面版 →</a>
+        <p>390px 单栏、标题换行、正文可读、底部操作栏。</p>
+      </div>
+    </a>
+  </div>
+  <div class="note">
+    原型使用本地 KaTeX 渲染，字体为系统 Noto Serif SC / Noto Sans SC。截图由 Chrome CDP 生成（<code>capture.mjs</code>）。<br>
+    已知缺口：移动端目录抽屉、真实主题切换、真实学习数据、其余 30 章的标注。
+  </div>
+</div>
+</body>
+</html>
