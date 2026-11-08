@@ -1,0 +1,226 @@
+{
+  "schemaVersion": 1,
+  "chapterId": "c01",
+  "title": "数学语言、证明方法与实数完备性",
+  "partId": "part-1",
+  "summary": "本章系统梳理命题逻辑、量词变换与四大证明范式，并以确界公理为基础构建单调有界、区间套、Bolzano–Weierstrass 定理与 Cauchy 收敛准则，奠定实分析的地基。",
+  "whyStudy": "量化推导与算法收敛依赖严格的逻辑量词与极限表述；实数完备性与证明方法是理解后续测度、概率收敛与数值稳定性的先决条件。",
+  "prerequisites": [],
+  "metadataStatus": "reviewed",
+  "reviewedBy": "DSH",
+  "reviewedAt": "2026-11-08",
+  "sections": {
+    "c01-s1": {
+      "difficulty": "D2",
+      "priority": "P1",
+      "minutes": 35,
+      "examFrequency": "medium",
+      "tags": [
+        "分析",
+        "定义",
+        "定理",
+        "证明"
+      ],
+      "applications": [
+        "量化策略状态命题验证",
+        "反例驱动的逻辑边界排查"
+      ],
+      "prerequisites": [],
+      "related": [
+        "c01-s2"
+      ],
+      "learningObjective": "能陈述命题逻辑联结词与量词的严格定义，熟练进行德摩根定律与多层量词的逻辑否定推导。",
+      "keyFormulas": [
+        "c01-eq-1.1",
+        "c01-eq-1.2"
+      ],
+      "rationale": "本节建立命题联结词与量词运算体系，多层量词否定与次序交换极易出错，需要真值表与谓词变换训练，故为 D2；它是后续证明与状态判定的语言基础，但量化实习笔试很少直接考形式逻辑，冲刺期不必优先投入，故定为 P1（重点掌握）。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-08"
+    },
+    "c01-s2": {
+      "difficulty": "D2",
+      "priority": "P1",
+      "minutes": 40,
+      "examFrequency": "medium",
+      "tags": [
+        "分析",
+        "证明",
+        "反例",
+        "数学归纳法",
+        "反证法"
+      ],
+      "applications": [
+        "策略状态递推关系验证",
+        "无套利定理反证推导"
+      ],
+      "prerequisites": [
+        {
+          "id": "c01-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c01-s1",
+        "c01-s4"
+      ],
+      "learningObjective": "能熟练运用直接法、逆否法、反证法与数学归纳法完成基础数学命题证明，并能构造反例反驳全称命题。",
+      "keyFormulas": [
+        "c01-eq-1.3"
+      ],
+      "rationale": "本节系统讲述直接法、逆否法、反证法与数学归纳法，涉及根号二无理性等经典证明，推导工整，故为 D2；证明范式是全书定理推演的基础，但实习笔试通常以计算与概率题为主，形式证明并非最高频，故定为 P1（重点掌握）。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-08"
+    },
+    "c01-s3": {
+      "difficulty": "D1",
+      "priority": "P1",
+      "minutes": 30,
+      "examFrequency": "medium",
+      "tags": [
+        "分析",
+        "定义",
+        "确界原理"
+      ],
+      "applications": [
+        "投资组合收益上确界界定",
+        "回撤极值边界分析"
+      ],
+      "prerequisites": [
+        {
+          "id": "c01-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c01-s4",
+        "c01-s6"
+      ],
+      "learningObjective": "能区分集合与函数的最大值与确界，熟练运用上确界的两阶段逼近刻画进行极值边界判定与单步验证。",
+      "keyFormulas": [
+        "c01-eq-1.4"
+      ],
+      "rationale": "本节阐述有界集、上下确界定义与逼近刻画，以单步验证和概念辨析为主，例题直接代入函数有界性检验，故定为 D1；确界是实数完备性公理与上下极限的核心构件，量化中常用于理论界限刻画，属于基础支撑知识，故定为 P1。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-08"
+    },
+    "c01-s4": {
+      "difficulty": "D4",
+      "priority": "P3",
+      "minutes": 60,
+      "examFrequency": "low",
+      "tags": [
+        "分析",
+        "定理",
+        "证明",
+        "确界原理"
+      ],
+      "applications": [
+        "算法单调迭代收敛性证明",
+        "二分法定价逼近存在性"
+      ],
+      "prerequisites": [
+        {
+          "id": "c01-s3",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c01-s5",
+        "c01-s6"
+      ],
+      "learningObjective": "能陈述实数完备性公理，并理解 Archimedes 性质、单调有界定理与闭区间套定理之间的逻辑等价链条与证明思路。",
+      "keyFormulas": [],
+      "rationale": "本节围绕确界公理展开，证明 Archimedes 性质、单调有界定理与闭区间套定理，逻辑链条环环相扣，对实分析公理化推导素养要求高，故定为 D4；该内容为微积分与分析学底层地基，但量化笔试面试极少直接考察完备性等价证明，跳过不影响后续主线，故定为 P3。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-08"
+    },
+    "c01-s5": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 55,
+      "examFrequency": "high",
+      "tags": [
+        "分析",
+        "定义",
+        "定理",
+        "计算",
+        "证明"
+      ],
+      "applications": [
+        "蒙特卡洛误差衰减分析",
+        "梯度下降序列收敛验证"
+      ],
+      "prerequisites": [
+        {
+          "id": "c01-s2",
+          "strength": "helpful"
+        },
+        {
+          "id": "c01-s4",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c01-s6",
+        "c02-s1",
+        "c14-s1"
+      ],
+      "learningObjective": "能熟练陈述数列极限定义，掌握三角不等式放缩与夹逼定理，独立写出规范的 ε-N 极限证明。",
+      "keyFormulas": [
+        "c01-eq-1.5"
+      ],
+      "rationale": "本节涵盖极限唯一性、四则运算法则与夹逼定理，核心要求掌握根据误差界构造阶数放缩并选取 N 的 ε-N 严格分析技术，综合性较强，故定为 D3；极限语言是微积分、随机收敛与算法分析的通用语言，笔试面试考查频繁，故定为 P0。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-08"
+    },
+    "c01-s6": {
+      "difficulty": "D4",
+      "priority": "P2",
+      "minutes": 75,
+      "examFrequency": "medium",
+      "tags": [
+        "分析",
+        "定理",
+        "证明",
+        "计算",
+        "Cauchy收敛准则",
+        "上下极限"
+      ],
+      "applications": [
+        "资产收益序列振荡区间界定",
+        "随机序列收敛性检验"
+      ],
+      "prerequisites": [
+        {
+          "id": "c01-s4",
+          "strength": "required"
+        },
+        {
+          "id": "c01-s5",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c01-s4",
+        "c01-s5",
+        "c14-s1",
+        "c25-s5"
+      ],
+      "learningObjective": "能陈述并证明 Bolzano–Weierstrass 定理与 Cauchy 收敛准则，掌握利用 Cauchy 准则判定收敛与计算振荡序列上下极限的方法。",
+      "keyFormulas": [
+        "c01-eq-1.6",
+        "c01-eq-1.7"
+      ],
+      "rationale": "本节囊括 Bolzano–Weierstrass 定理的二分区间套证明、Cauchy 收敛准则以及上下极限的精确构造，证明链条长且高度抽象，故定为 D4；Cauchy 准则与上下极限为现代概率论和泛函分析的基础工具，在量化高级笔试中具备区分度，建议深入选学，故定为 P2。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-08"
+    }
+  }
+}

@@ -1,0 +1,278 @@
+{
+  "schemaVersion": 1,
+  "chapterId": "c08",
+  "title": "QR、Cholesky、SVD、PCA 与条件数",
+  "partId": "part-2",
+  "summary": "系统讲授 QR、Cholesky、SVD 与 PCA 四大矩阵分解的理论构造、算法实现与几何含义，建立条件数与扰动分析框架，并落地于因子协方差建模与大规模组合求解。",
+  "whyStudy": "矩阵分解是多因子模型、主成分降维与风险矩阵求逆的计算支柱；掌握扰动分析与数值稳定性是避免实盘回测与优化过拟合的关键技能。",
+  "prerequisites": [
+    "c04-s5",
+    "c05-s2",
+    "c06-s3",
+    "c07-s2"
+  ],
+  "metadataStatus": "reviewed",
+  "reviewedBy": "DSH",
+  "reviewedAt": "2026-11-08",
+  "sections": {
+    "c08-s1": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 80,
+      "examFrequency": "high",
+      "tags": [
+        "线性代数",
+        "数值计算",
+        "矩阵分解",
+        "QR分解",
+        "计算",
+        "证明"
+      ],
+      "applications": [
+        "因子回归数值稳定求解",
+        "高频特征正交化处理"
+      ],
+      "prerequisites": [
+        {
+          "id": "c05-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c05-s4",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c08-s2",
+        "c08-s3",
+        "c08-s5",
+        "c21-s1"
+      ],
+      "learningObjective": "掌握 Gram–Schmidt 与 Householder 反射实现 QR 分解的数学原理与唯一性条件，能手动完成低维矩阵的 Householder 变换与三角化求解。",
+      "keyFormulas": [
+        "c08-eq-8.2",
+        "c08-eq-8.5",
+        "c08-eq-8.7"
+      ],
+      "rationale": "本节系统推导 QR 分解的存在唯一性，深入剖析经典 Gram–Schmidt 算法的数值缺陷并构造 Householder 正交反射三角化过程，推导与计算量大，故定为 D3；QR 分解是正规方程病态时最小二乘回归的标准解法，面试高频考察，故定为 P0。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-08"
+    },
+    "c08-s2": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 60,
+      "examFrequency": "high",
+      "tags": [
+        "线性代数",
+        "数值计算",
+        "矩阵分解",
+        "Cholesky分解",
+        "计算",
+        "证明"
+      ],
+      "applications": [
+        "相关资产多元正态模拟",
+        "因子协方差矩阵正定性检验",
+        "组合优化二次型快速求解"
+      ],
+      "prerequisites": [
+        {
+          "id": "c07-s2",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c08-s1",
+        "c08-s5",
+        "c08-s6",
+        "c18-s5"
+      ],
+      "learningObjective": "掌握对称正定矩阵的判定与 Cholesky 分解的存在唯一性定理，能熟练运用平方根算法完成分解并应用于多维正态抽样。",
+      "keyFormulas": [
+        "c08-eq-8.10",
+        "c08-eq-8.12"
+      ],
+      "rationale": "本节利用分块矩阵 Schur 补与数学归纳法证明对称正定矩阵 Cholesky 分解的存在唯一性，并推导紧凑的递推算法，推导结构清晰，故定为 D2；Cholesky 是协方差矩阵快速求逆与相关蒙特卡洛模拟的工业级标准算法，量化笔试面试必考，故定为 P0。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-08"
+    },
+    "c08-s3": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 100,
+      "examFrequency": "high",
+      "tags": [
+        "线性代数",
+        "数值计算",
+        "矩阵分解",
+        "特征值",
+        "SVD",
+        "定理"
+      ],
+      "applications": [
+        "因子矩阵降维与去噪",
+        "共线性特征伪逆最小二乘求解",
+        "收益率截面低秩逼近"
+      ],
+      "prerequisites": [
+        {
+          "id": "c04-s5",
+          "strength": "required"
+        },
+        {
+          "id": "c06-s3",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c08-s1",
+        "c08-s4",
+        "c08-s5",
+        "c31-s2"
+      ],
+      "learningObjective": "掌握 SVD 的存在性构造证明、几何变换意义、四个基本子空间正交基分解以及 Eckart–Young–Mirsky 最优低秩截断定理。",
+      "keyFormulas": [
+        "c08-eq-8.14",
+        "c08-eq-8.18",
+        "c08-eq-8.22"
+      ],
+      "rationale": "本节涵盖 SVD 的谱构造证明、子空间正交基刻画、Moore–Penrose 伪逆及 Eckart–Young–Mirsky 最优低秩逼近定理，概念连接多且技巧综合，故定为 D3；SVD 是量化特征工程、PCA 降维与病态逆问题求解的通用数学引擎，为高频考核内容，故定为 P0。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-08"
+    },
+    "c08-s4": {
+      "difficulty": "D3",
+      "priority": "P1",
+      "minutes": 70,
+      "examFrequency": "high",
+      "tags": [
+        "线性代数",
+        "数理统计",
+        "机器学习",
+        "PCA",
+        "因子模型",
+        "应用"
+      ],
+      "applications": [
+        "股票截面收益率统计因子挖掘",
+        "利率期限结构三因子分解",
+        "高维特征降维防过拟合"
+      ],
+      "prerequisites": [
+        {
+          "id": "c08-s3",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c08-s3",
+        "c08-s6",
+        "c31-s2"
+      ],
+      "learningObjective": "理解总体与样本主成分的方差最大化推导，掌握 PCA 与中心化数据矩阵截断 SVD 的数学对应关系，并能解释载荷与方差贡献率。",
+      "keyFormulas": [
+        "c08-eq-8.29",
+        "c08-eq-8.33"
+      ],
+      "rationale": "本节从 Rayleigh 商极值与正交投影两视角建立 PCA，并证明其与样本协方差矩阵特征分解及数据矩阵截断 SVD 的数学等价性，需统合统计与代数视角，故定为 D3；PCA 是统计多因子与利率曲线分解的重要工具，在量化研究中广泛使用且可通过工具调用实现，故定为 P1。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-08"
+    },
+    "c08-s5": {
+      "difficulty": "D3",
+      "priority": "P1",
+      "minutes": 65,
+      "examFrequency": "medium",
+      "tags": [
+        "数值计算",
+        "线性代数",
+        "定理",
+        "扰动分析",
+        "证明"
+      ],
+      "applications": [
+        "多因子回归多重共线性诊断",
+        "资产协方差矩阵求逆稳定性评估",
+        "浮点舍入有效数字损失估算"
+      ],
+      "prerequisites": [
+        {
+          "id": "c04-s6",
+          "strength": "helpful"
+        },
+        {
+          "id": "c08-s3",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c08-s1",
+        "c08-s6",
+        "c18-s1"
+      ],
+      "learningObjective": "掌握谱条件数的数学定义与奇异值比值刻画，能严格推导线性系统在右端项与系数矩阵扰动下的相对误差界，并解释正规方程条件数平方效应。",
+      "keyFormulas": [
+        "c08-eq-8.35",
+        "c08-eq-8.37",
+        "c08-eq-8.41"
+      ],
+      "rationale": "本节利用诱导矩阵范数与 Neumann 级数建立线性方程组在右端项与系数矩阵扰动下的严格相对误差界，理论证明严密，故定为 D3；条件数揭示了正规方程平方放大病态的本质机制，是量化投资中协方差矩阵求逆与回归诊断的核心理论判据，故定为 P1。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-08"
+    },
+    "c08-s6": {
+      "difficulty": "D2",
+      "priority": "P1",
+      "minutes": 50,
+      "examFrequency": "medium",
+      "tags": [
+        "因子模型",
+        "组合优化",
+        "风险度量",
+        "矩阵分解",
+        "应用",
+        "计算"
+      ],
+      "applications": [
+        "Barra 风格因子协方差矩阵快速求逆",
+        "组合风险平价优化约束求解",
+        "多因子特异风险对角剥离"
+      ],
+      "prerequisites": [
+        {
+          "id": "c08-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c08-s4",
+          "strength": "helpful"
+        },
+        {
+          "id": "c08-s5",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c08-s2",
+        "c08-s4",
+        "c31-s1",
+        "c32-s6"
+      ],
+      "learningObjective": "能利用 Sherman–Morrison–Woodbury 公式对低秩加对角因子协方差矩阵进行解析求逆，并运用条件数评估风险模型谱健康度。",
+      "keyFormulas": [
+        "c08-eq-8.44",
+        "c08-eq-8.45"
+      ],
+      "rationale": "本节把低秩加对角协方差的快速求逆落到 Sherman–Morrison–Woodbury 公式与主元 Cholesky 截断，代数推导直接，故为 D2；它是组合风险系统的实用工具，但需先掌握 Cholesky/SVD，且可由实现库辅助，故定为 P1（重点掌握）。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-08"
+    }
+  }
+}

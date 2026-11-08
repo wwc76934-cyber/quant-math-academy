@@ -674,7 +674,12 @@ export function renderChapter(chapter, metadata = null, options = {}) {
       warnings
     });
 
-    const metaSec = metadata && metadata.sections ? metadata.sections.find(ms => ms.id === s.id) : null;
+    const rawMetaSections = metadata && metadata.sections ? metadata.sections : null;
+    const metaSec = rawMetaSections
+      ? Array.isArray(rawMetaSections)
+        ? rawMetaSections.find(ms => ms.id === s.id)
+        : rawMetaSections[s.id]
+      : null;
     const meta = metaSec || null;
     const exerciseIds = s.exerciseIds || [];
 

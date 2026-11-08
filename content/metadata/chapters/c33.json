@@ -1,0 +1,320 @@
+{
+  "schemaVersion": 1,
+  "chapterId": "c33",
+  "title": "衍生品定价与风险中性测度",
+  "partId": "part-8",
+  "summary": "本章从无套利假设出发建立两类套利与风险中性测度的对应关系，涵盖二叉树模型、资产定价基本定理、连续时间鞅定价与 Black–Scholes 公式及其希腊字母对冲。",
+  "whyStudy": "无套利与风险中性测度是衍生品定价与动态对冲的理论基石；掌握 Black–Scholes 推导与希腊字母是从事期权与波动率交易的必备专业能力。",
+  "prerequisites": [
+    "c15-s1",
+    "c25-s1",
+    "c26-s5"
+  ],
+  "metadataStatus": "reviewed",
+  "reviewedBy": "DSH",
+  "reviewedAt": "2026-11-08",
+  "sections": {
+    "c33-s1": {
+      "difficulty": "D4",
+      "priority": "P1",
+      "minutes": 85,
+      "examFrequency": "medium",
+      "tags": [
+        "金融数学",
+        "衍生品定价",
+        "定理",
+        "证明",
+        "无套利"
+      ],
+      "applications": [
+        "期权跨期组合套利机会排查",
+        "做市定价系统凸性无套利约束构建"
+      ],
+      "prerequisites": [
+        {
+          "id": "c04-s3",
+          "strength": "helpful"
+        },
+        {
+          "id": "c15-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c33-s2",
+        "c33-s3",
+        "c33-s4"
+      ],
+      "learningObjective": "能准确区分两类套利机会，掌握单期有限状态市场矩阵表达，并能陈述资产定价第一基本定理及利用分离超平面定理完成存在性证明。",
+      "keyFormulas": [
+        "c33-eq-33.3",
+        "c33-eq-33.6"
+      ],
+      "rationale": "本节在有限状态市场用凸集分离严格证明资产定价第一基本定理，抽象度与证明长度较高，故为 D4；无套利是衍生品定价的理论基石，但对多数实习岗位不是首轮必考，故定为 P1（重点掌握）。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-08"
+    },
+    "c33-s2": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 60,
+      "examFrequency": "high",
+      "tags": [
+        "金融数学",
+        "衍生品定价",
+        "计算",
+        "建模",
+        "二叉树",
+        "复制组合"
+      ],
+      "applications": [
+        "美式期权早行权数值定价",
+        "离散对冲动态调仓模拟",
+        "奇异期权格点倒向递推"
+      ],
+      "prerequisites": [
+        {
+          "id": "c33-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c33-s3",
+        "c33-s5",
+        "c33-s6"
+      ],
+      "learningObjective": "能推导二叉树无套利条件与风险中性概率公式，通过构造复制组合计算 Delta 对冲比率，并使用多期树倒向归纳法计算期权公允价格。",
+      "keyFormulas": [
+        "c33-eq-33.9",
+        "c33-eq-33.10",
+        "c33-eq-33.13"
+      ],
+      "rationale": "本节建立单期与多期二叉树模型，通过解线性方程组显式求解复制组合权重 Delta，推导鞅定价公式并给出多期倒向递推算法，计算直接明了，故定为 D2；二叉树是期权定价初学者必修且面试笔试中手算手撕频率最高的经典模型，属于核心必考点，故定为 P0。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-08"
+    },
+    "c33-s3": {
+      "difficulty": "D3",
+      "priority": "P1",
+      "minutes": 45,
+      "examFrequency": "medium",
+      "tags": [
+        "金融数学",
+        "衍生品定价",
+        "定理",
+        "反例",
+        "证明"
+      ],
+      "applications": [
+        "不完备市场超级对冲价格区间界定",
+        "随机波动率市场非唯一计价测度选择"
+      ],
+      "prerequisites": [
+        {
+          "id": "c04-s5",
+          "strength": "required"
+        },
+        {
+          "id": "c33-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c33-s1",
+        "c33-s2",
+        "c33-s4"
+      ],
+      "learningObjective": "理解完备市场的严格定义，掌握资产定价第二基本定理关于风险中性测度唯一性与索取权完全可复制性的充要对应关系。",
+      "keyFormulas": [
+        "c33-eq-33.15",
+        "c33-eq-33.17"
+      ],
+      "rationale": "本节探讨市场完备性与风险中性测度唯一性的等价关系（资产定价第二基本定理），通过线性方程组秩与凸多面体极点结构辨析三状态不完备定价区间，逻辑思辨性强，故定为 D3；完备性是判断衍生品能否完全对冲的理论分界线，量化衍生品面试常见，故定为 P1。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-08"
+    },
+    "c33-s4": {
+      "difficulty": "D4",
+      "priority": "P1",
+      "minutes": 85,
+      "examFrequency": "medium",
+      "tags": [
+        "金融数学",
+        "随机分析",
+        "随机过程",
+        "衍生品定价",
+        "Itô 积分",
+        "定理"
+      ],
+      "applications": [
+        "连续自融资调仓无套利检验",
+        "测度变换下复合资产风险中性定价"
+      ],
+      "prerequisites": [
+        {
+          "id": "c25-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c26-s5",
+          "strength": "required"
+        },
+        {
+          "id": "c33-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c33-s1",
+        "c33-s5",
+        "c27-s8"
+      ],
+      "learningObjective": "掌握自融资财富过程的贴现鞅性质，理解可容许策略的数学界定与 Girsanov 测度变换消除物理漂移的机制。",
+      "keyFormulas": [
+        "c33-eq-33.21",
+        "c33-eq-33.23"
+      ],
+      "rationale": "本节建立连续时间无套利定价的现代随机分析体系，要求处理倍赌策略排除、可容许自融资财富过程的贴现鞅证明以及 Girsanov 测度变换漂移消除，抽象度高，故定为 D4；该框架是连续时间金融工程的理论核心，衍生品量化方向重点考察，故定为 P1。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-08"
+    },
+    "c33-s5": {
+      "difficulty": "D4",
+      "priority": "P0",
+      "minutes": 90,
+      "examFrequency": "high",
+      "tags": [
+        "金融数学",
+        "衍生品定价",
+        "BS模型",
+        "计算",
+        "定理",
+        "证明"
+      ],
+      "applications": [
+        "欧式期权理论公允估值",
+        "Put-Call Parity 跨市场平价套利",
+        "Feynman-Kac 偏微分方程数值验证"
+      ],
+      "prerequisites": [
+        {
+          "id": "c26-s5",
+          "strength": "required"
+        },
+        {
+          "id": "c27-s8",
+          "strength": "helpful"
+        },
+        {
+          "id": "c33-s4",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c33-s2",
+        "c33-s4",
+        "c33-s6",
+        "c33-s7"
+      ],
+      "learningObjective": "能利用 Itô 公式构造 Delta 对冲推导 Black–Scholes PDE，运用风险中性测度正态积分完整推导 BS 显式解析式，并熟练运用平价公式。",
+      "keyFormulas": [
+        "c33-eq-33.25",
+        "c33-eq-33.28",
+        "c33-eq-33.31"
+      ],
+      "rationale": "本节从几何 Brown 运动与 Itô 公式推导 Black–Scholes PDE，再由风险中性期望得到闭式公式，综合度高，故为 D4；BS 公式、看跌看涨平价与对冲直觉是衍生品方向及量化面试的核心内容，故定为 P0（必须掌握）。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-08"
+    },
+    "c33-s6": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 75,
+      "examFrequency": "high",
+      "tags": [
+        "金融数学",
+        "衍生品定价",
+        "风险度量",
+        "计算",
+        "Delta对冲",
+        "对冲"
+      ],
+      "applications": [
+        "期权做市商 Delta 动态对冲头寸调仓",
+        "Gamma-Theta 波动率交易凸性对冲管理",
+        "到期日平值期权 Pin Risk 暴露监控"
+      ],
+      "prerequisites": [
+        {
+          "id": "c02-s2",
+          "strength": "helpful"
+        },
+        {
+          "id": "c33-s5",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c33-s5",
+        "c33-s7",
+        "c34-s4"
+      ],
+      "learningObjective": "能独立推导并熟练计算 Delta、Gamma、Vega、Theta 等核心希腊字母，掌握利用 BS 方程建立 Gamma 与 Theta 的权衡对冲策略。",
+      "keyFormulas": [],
+      "rationale": "本节通过多元微积分对 BS 公式求偏导显式推导 Delta、Gamma、Vega 与 Theta，并基于控制方程深入阐释 Gamma 凸性与 Theta 时间衰减的结构性对冲权衡，数学计算与直觉要求均高，故为 D3；希腊字母是衍生品实盘调仓与风控面试中最核心的高频考核工具，故定为 P0。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-08"
+    },
+    "c33-s7": {
+      "difficulty": "D3",
+      "priority": "P1",
+      "minutes": 70,
+      "examFrequency": "high",
+      "tags": [
+        "金融数学",
+        "衍生品定价",
+        "波动率",
+        "信用风险",
+        "应用",
+        "建模"
+      ],
+      "applications": [
+        "期权市场隐含波动率曲面数值校准",
+        "Dupire 局部波动率模型网格反解",
+        "Merton 结构化模型企业违约概率估算"
+      ],
+      "prerequisites": [
+        {
+          "id": "c18-s2",
+          "strength": "helpful"
+        },
+        {
+          "id": "c33-s5",
+          "strength": "required"
+        },
+        {
+          "id": "c33-s6",
+          "strength": "helpful"
+        }
+      ],
+      "related": [
+        "c33-s5",
+        "c33-s6",
+        "c29-s6",
+        "c32-s7"
+      ],
+      "learningObjective": "理解隐含波动率的数值反解原理，掌握波动率微笑对 BS 假定的否定机制，并能陈述 Merton 结构化信用模型的基本原理。",
+      "keyFormulas": [],
+      "rationale": "本节探讨从市场期权报价反解隐含波动率的数值算法，分析波动率微笑与偏斜现象，并延伸至 Dupire 局部波动率与 Merton 信用违约模型，概念跨度广且理论结合实际，故定为 D3；隐含波动率与微笑曲线是衍生品量化交易的日常工作语言，面试考查广泛，故定为 P1。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-08"
+    }
+  }
+}

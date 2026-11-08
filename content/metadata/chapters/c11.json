@@ -1,0 +1,284 @@
+{
+  "schemaVersion": 1,
+  "chapterId": "c11",
+  "title": "期望、方差、矩与概率不等式",
+  "partId": "part-3",
+  "summary": "从期望的公理化定义出发，建立方差、矩、矩生成函数与概率不等式，并连接到量化研究中的矩方法与尾部控制。",
+  "whyStudy": "期望与方差是量化研究最常用的两个数字特征；概率不等式决定尾部风险与样本复杂度的估计方式。",
+  "prerequisites": [
+    "c09-s3",
+    "c10-s2"
+  ],
+  "metadataStatus": "reviewed",
+  "reviewedBy": "DSH",
+  "reviewedAt": "2026-11-08",
+  "sections": {
+    "c11-s1": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 45,
+      "examFrequency": "high",
+      "tags": [
+        "概率论",
+        "定义",
+        "定理",
+        "计算",
+        "期望"
+      ],
+      "applications": [
+        "投资组合预期收益分解",
+        "复合资产现金流期望核算"
+      ],
+      "prerequisites": [
+        {
+          "id": "c09-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c10-s2",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c11-s2",
+        "c11-s5",
+        "c12-s1"
+      ],
+      "learningObjective": "能陈述数学期望的公理化积分定义与绝对可积收敛条件，熟练证明并应用期望线性性及独立乘积性质。",
+      "keyFormulas": [
+        "c11-eq-11.1",
+        "c11-eq-11.2",
+        "c11-eq-11.3"
+      ],
+      "rationale": "本节以测度积分视角统一离散与连续期望定义，阐明绝对可积充要条件，并严格证明期望线性性与无意识统计学家法则，推导规整直观，故为 D2；期望线性性是全书方差、协方差、资产定价与回归分析的统一基石，笔试面试必考，故定为 P0。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-08"
+    },
+    "c11-s2": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "概率论",
+        "定义",
+        "计算",
+        "风险度量",
+        "方差"
+      ],
+      "applications": [
+        "资产收益偏度与左尾风险诊断",
+        "组合方差矩阵对角项测算",
+        "厚尾资产模型矩失效检验"
+      ],
+      "prerequisites": [
+        {
+          "id": "c11-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c11-s3",
+        "c11-s6",
+        "c12-s2",
+        "c32-s2"
+      ],
+      "learningObjective": "能推导方差的基本性质与和方差分解公式，准确计算高阶中心矩、偏度与峰度，并辨析重尾分布矩的存在性条件。",
+      "keyFormulas": [
+        "c11-eq-11.4",
+        "c11-eq-11.5",
+        "c11-eq-11.6",
+        "c11-eq-11.7"
+      ],
+      "rationale": "本节讨论方差性质与独立和方差可加性，引入偏度与超额峰度刻画分布非对称与尖峰厚尾特征，并通过 Pareto 分布严格推导矩的发散临界点，推导难度适中，故定为 D2；方差与高阶矩是风险价值、有效前沿与尾部风险建模的核心数字特征，笔试面试最高频考点，故定为 P0。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-08"
+    },
+    "c11-s3": {
+      "difficulty": "D3",
+      "priority": "P1",
+      "minutes": 65,
+      "examFrequency": "medium",
+      "tags": [
+        "概率论",
+        "分析",
+        "定义",
+        "定理",
+        "矩生成函数",
+        "特征函数"
+      ],
+      "applications": [
+        "仿射跳跃扩散期权 Fourier 定价",
+        "独立随机变量卷积分布解析推导"
+      ],
+      "prerequisites": [
+        {
+          "id": "c02-s6",
+          "strength": "helpful"
+        },
+        {
+          "id": "c11-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c11-s4",
+        "c14-s4",
+        "c33-s5"
+      ],
+      "learningObjective": "能利用矩生成函数与特征函数的导数提取各阶矩，掌握独立和的乘积变换性质及 Lévy 逆转公式的反演计算。",
+      "keyFormulas": [
+        "c11-eq-11.8",
+        "c11-eq-11.9",
+        "c11-eq-11.10"
+      ],
+      "rationale": "本节引入矩生成函数及其存在域的凸性分析，并借助复分析 Fourier 变换引入处处存在的特征函数，推导反演公式与唯一性定理，理论抽象度较高，故定为 D3；生成函数方法是证明中心极限定理与进行期权数值积分定价的数学重器，在量化数理笔试中属重要进阶知识，故定为 P1。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-08"
+    },
+    "c11-s4": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 75,
+      "examFrequency": "high",
+      "tags": [
+        "概率论",
+        "不等式",
+        "定理",
+        "证明",
+        "概率不等式",
+        "尾部界"
+      ],
+      "applications": [
+        "策略回测过拟合尾部界定",
+        "样本均值置信区间保守估计",
+        "极端亏损概率无分布上界约束"
+      ],
+      "prerequisites": [
+        {
+          "id": "c11-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c11-s2",
+          "strength": "helpful"
+        },
+        {
+          "id": "c11-s3",
+          "strength": "helpful"
+        }
+      ],
+      "related": [
+        "c11-s6",
+        "c14-s3",
+        "c15-s3",
+        "c34-s3"
+      ],
+      "learningObjective": "能严格陈述并证明 Markov、Chebyshev、Chernoff、Jensen、Cauchy–Schwarz 与 Hoeffding 不等式，并精准比较各界的收敛阶数与适用条件。",
+      "keyFormulas": [
+        "c11-eq-11.11",
+        "c11-eq-11.12",
+        "c11-eq-11.13",
+        "c11-eq-11.14"
+      ],
+      "rationale": "本节系统推导 Markov、Chebyshev、Chernoff、Jensen、Cauchy–Schwarz 及 Hoeffding 不等式，涵盖从多项式衰减到次高斯指数界的多维分析，技巧性强，故定为 D3；各类尾部界是不依赖具体分布进行非参数风险控制与大样本估计的理论核心，面试考核频率极高，故定为 P0。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-08"
+    },
+    "c11-s5": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 60,
+      "examFrequency": "high",
+      "tags": [
+        "概率论",
+        "定理",
+        "全期望公式",
+        "计算",
+        "证明"
+      ],
+      "applications": [
+        "分层交易市场波动率分解",
+        "复合随机事件风险估算",
+        "最优线性预测误差方差分解"
+      ],
+      "prerequisites": [
+        {
+          "id": "c09-s3",
+          "strength": "required"
+        },
+        {
+          "id": "c11-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c11-s2",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c11-s6",
+        "c13-s1",
+        "c13-s4",
+        "c24-s4"
+      ],
+      "learningObjective": "能运用全期望公式与全方差公式推导随机变量的均值与方差分解，熟练求解复合随机和与分层概率模型的数字特征。",
+      "keyFormulas": [
+        "c11-eq-11.17",
+        "c11-eq-11.19",
+        "c11-eq-11.20"
+      ],
+      "rationale": "本节在初等概率框架下证明全期望公式与全方差公式，剖析期望内方差与方差内期望的变异源分解，并给出复合 Poisson 随机和的模型应用，推导步骤规范，难度适中，故为 D2；全期望与全方差公式是处理状态依赖、动态预测与衍生品定价的必修工具，面试常考，故定为 P0。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-08"
+    },
+    "c11-s6": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "风险度量",
+        "回测评估",
+        "概率论",
+        "应用",
+        "夏普比率"
+      ],
+      "applications": [
+        "策略夏普比率高阶矩偏度修正",
+        "无分布假设下单边在险价值上界估计",
+        "对数正态复利收益波动率拖累测算"
+      ],
+      "prerequisites": [
+        {
+          "id": "c11-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c11-s4",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c11-s2",
+        "c11-s4",
+        "c34-s1"
+      ],
+      "learningObjective": "能从效用函数 Taylor 展开推导均值—方差与偏度峰度修正框架，运用 Cantelli 单边不等式估计尾部亏损概率上界，并定量分析对数正态波动率拖累。",
+      "keyFormulas": [
+        "c11-eq-11.21",
+        "c11-eq-11.22",
+        "c11-eq-11.23"
+      ],
+      "rationale": "本节将前述矩与概率不等式落地于量化投资，探讨效用 Taylor 展开下的高阶矩修正、夏普比率定义、Cantelli 单边无分布尾部界及对数正态波动率拖累，数学深度平实，故定为 D2；夏普比率与极端亏损界是量化策略评估与风控面试的绝对核心内容，属于必须掌握知识，故定为 P0。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-08"
+    }
+  }
+}
