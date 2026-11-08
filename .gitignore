@@ -15,6 +15,7 @@ content/generated/
 web/public/content/
 web/dist/
 web/node_modules/
+*.tsbuildinfo
 
 # Local / OS
 .DS_Store
