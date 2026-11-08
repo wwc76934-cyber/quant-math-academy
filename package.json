@@ -4,6 +4,10 @@
   "private": true,
   "type": "module",
   "description": "Build pipeline for 量化数学进阶教材",
+  "scripts": {
+    "content:inventory": "node tools/content/parse-book.mjs",
+    "test:content": "node --test tools/content/parse-book.test.mjs"
+  },
   "dependencies": {
     "katex": "0.16.22",
     "marked": "15.0.12",

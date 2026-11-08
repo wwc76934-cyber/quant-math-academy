@@ -14,8 +14,13 @@
 | [技术架构](architecture/TECH_ARCHITECTURE.md) | 技术栈、仓库结构、内容编译、前端架构、测试、部署、ADR | 工程 |
 | [内容模型与标注规范](architecture/CONTENT_MODEL.md) | ID、数据结构、D/P 标注手册、校验、路径、开源边界 | 内容/工程 |
 | [设计系统](design/DESIGN_SYSTEM.md) | 颜色、字体、布局、组件、页面蓝图、禁止项、验收 | 设计/前端 |
+| [视觉原型](../design/prototype/index.html) | 首页、目录、阅读页、深色、移动端静态原型 | 设计/前端 |
 | [实施路线图](ROADMAP.md) | Phase 0–6、任务拆解、验收标准、执行规范 | 全员 |
 | [T01 任务书](tasks/T01-content-audit.md) | 教材审计与结构化解析器的具体交付要求 | AGY/验收 |
+| [T02 任务书](tasks/T02-metadata-pilot.md) | 四个试点章的 D/P 标注与校验 | AGY/验收 |
+| [T03 任务书](tasks/T03-render-pipeline.md) | Markdown → HTML/KaTeX 与保真校验 | AGY/验收 |
+| [T04 任务书](tasks/T04-web-foundation.md) | Web 基座、首页、完整目录 | AGY/验收 |
+| [T05 任务书](tasks/T05-reader.md) | 阅读页、标注、进度、响应式 | AGY/验收 |
 
 ## 教材源
 
@@ -27,7 +32,8 @@
 ## 当前状态
 
 - Phase 0 方案文档：已完成初稿，待 T01 审计结果校准数字。
-- T01（教材审计 + 解析器）：AGY 执行中。
+- T01（教材审计 + 解析器）：已生成 34 章结构化数据；正在修正 C32 BOM、环境边界与测试。
+- 视觉原型：首页 / 目录 / 阅读页 / 深色 / 移动端已完成，使用真实 C11 内容。
 - Phase 1 试点章：C01、C08、C11、C33。
 
 ## 关键决策

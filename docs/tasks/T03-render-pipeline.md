@@ -173,14 +173,14 @@ tools/content/
 
 ### 3.3 证明与解
 
-- 证明开始：单独一行 `**证明**`，或 `**证明**（...）`（括号内容作为说明）。输出：
+- 证明开始：单独一行 `**证明**`，或 `**证明**（...）`（括号内容作为说明）。使用原生 `<details>`，保证无 JS 也可展开、键盘可操作：
 
 ```html
-<div class="proof" data-proof-of="c11-thm-11.10">
-  <div class="proof__label">证明<span class="proof__note">（...）</span></div>
+<details class="proof" data-proof-of="c11-thm-11.10" open>
+  <summary class="proof__label">证明<span class="proof__note">（...）</span></summary>
   <div class="proof__body">…</div>
   <p class="proof__qed">□</p>
-</div>
+</details>
 ```
 
 - 证明结束：单独一行 `□` 或 `∎`；结束符保留在 `proof__qed`，不重复输出到正文。
