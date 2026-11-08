@@ -15,7 +15,10 @@ function getBaseUrl(): string {
   return base.endsWith('/') ? base : `${base}/`;
 }
 
-export async function loadChapter(chapterId: string): Promise<ChapterData> {
+export async function loadChapter(
+  chapterId: string,
+  signal?: AbortSignal
+): Promise<ChapterData> {
   if (chapterCache.has(chapterId)) {
     return chapterCache.get(chapterId)!;
   }
@@ -26,7 +29,7 @@ export async function loadChapter(chapterId: string): Promise<ChapterData> {
   const url = `${getBaseUrl()}content/chapters/${chapterId}.json`;
   const promise = (async () => {
     try {
-      const res = await fetch(url);
+      const res = await fetch(url, { signal });
       if (!res.ok) {
         throw new ContentError(`章节数据不存在 (HTTP ${res.status}): ${chapterId}`, res.status);
       }
@@ -37,6 +40,9 @@ export async function loadChapter(chapterId: string): Promise<ChapterData> {
       chapterCache.set(chapterId, data);
       return data;
     } catch (err) {
+      if (err instanceof Error && err.name === 'AbortError') {
+        throw err;
+      }
       if (err instanceof ContentError) {
         throw err;
       }
@@ -52,7 +58,11 @@ export async function loadChapter(chapterId: string): Promise<ChapterData> {
   return promise;
 }
 
-export async function loadSection(chapterId: string, sectionId: string): Promise<string> {
+export async function loadSection(
+  chapterId: string,
+  sectionId: string,
+  signal?: AbortSignal
+): Promise<string> {
   const key = `${chapterId}-${sectionId}`;
   if (sectionCache.has(key)) {
     return sectionCache.get(key)!;
@@ -68,7 +78,7 @@ export async function loadSection(chapterId: string, sectionId: string): Promise
 
   const promise = (async () => {
     try {
-      const res = await fetch(url);
+      const res = await fetch(url, { signal });
       if (!res.ok) {
         throw new ContentError(`节正文未找到 (HTTP ${res.status}): ${cleanSectionId}`, res.status);
       }
@@ -76,6 +86,9 @@ export async function loadSection(chapterId: string, sectionId: string): Promise
       sectionCache.set(key, text);
       return text;
     } catch (err) {
+      if (err instanceof Error && err.name === 'AbortError') {
+        throw err;
+      }
       if (err instanceof ContentError) {
         throw err;
       }
@@ -91,7 +104,10 @@ export async function loadSection(chapterId: string, sectionId: string): Promise
   return promise;
 }
 
-export async function loadExercises(chapterId: string): Promise<ExerciseData> {
+export async function loadExercises(
+  chapterId: string,
+  signal?: AbortSignal
+): Promise<ExerciseData> {
   if (exerciseCache.has(chapterId)) {
     return exerciseCache.get(chapterId)!;
   }
@@ -102,7 +118,7 @@ export async function loadExercises(chapterId: string): Promise<ExerciseData> {
   const url = `${getBaseUrl()}content/exercises/${chapterId}.json`;
   const promise = (async () => {
     try {
-      const res = await fetch(url);
+      const res = await fetch(url, { signal });
       if (!res.ok) {
         throw new ContentError(`练习数据未找到 (HTTP ${res.status}): ${chapterId}`, res.status);
       }
@@ -113,6 +129,9 @@ export async function loadExercises(chapterId: string): Promise<ExerciseData> {
       exerciseCache.set(chapterId, data);
       return data;
     } catch (err) {
+      if (err instanceof Error && err.name === 'AbortError') {
+        throw err;
+      }
       if (err instanceof ContentError) {
         throw err;
       }
@@ -136,3 +155,6 @@ export function clearChapterCaches(): void {
   exerciseCache.clear();
   exercisePromises.clear();
 }
+
+export const clearChapterCache = clearChapterCaches;
+

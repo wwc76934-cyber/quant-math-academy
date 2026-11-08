@@ -73,7 +73,8 @@ export interface StoreContextValue {
     sectionKey: string,
     update: Partial<SectionProgressItem>
   ) => void;
-  setLastLocation: (location: { chapterId: string; sectionId: string }) => void;
+  setLastLocation: (location: { chapterId: string; sectionId: string; scrollOffset?: number }) => void;
+  logActivity: (activity: { type: 'status' | 'read' | 'copy'; targetId: string; detail?: string }) => void;
   clearCorruptedNotice: () => void;
   resolvedTheme: 'light' | 'dark';
 }

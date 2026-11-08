@@ -7,8 +7,9 @@ import { StoreProvider, useStore } from './features/store/store';
 import { FeaturePlaceholder } from './routes/FeaturePlaceholder';
 import { HomePage } from './routes/HomePage';
 import { NotFoundPage } from './routes/NotFoundPage';
-import { ReaderPlaceholder } from './routes/ReaderPlaceholder';
+import { ReaderPage } from './routes/ReaderPage';
 import { SyllabusPage } from './routes/SyllabusPage';
+import { ToastProvider } from './components/reader/Toast';
 
 const StorageAlerts: React.FC = () => {
   const { storageAvailable, storageCorrupted, clearCorruptedNotice } = useStore();
@@ -81,7 +82,7 @@ const MainLayout: React.FC = () => {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/syllabus" element={<SyllabusPage />} />
-          <Route path="/learn/:chapterId" element={<ReaderPlaceholder />} />
+          <Route path="/learn/:chapterId" element={<ReaderPage />} />
           <Route
             path="/paths"
             element={
@@ -155,9 +156,11 @@ export const App: React.FC = () => {
 
   return (
     <StoreProvider>
-      <BrowserRouter basename={baseUrl}>
-        <MainLayout />
-      </BrowserRouter>
+      <ToastProvider>
+        <BrowserRouter basename={baseUrl}>
+          <MainLayout />
+        </BrowserRouter>
+      </ToastProvider>
     </StoreProvider>
   );
 };

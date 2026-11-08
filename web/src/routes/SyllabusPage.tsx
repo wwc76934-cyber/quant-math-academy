@@ -215,7 +215,7 @@ export const SyllabusPage: React.FC = () => {
         </div>
       )}
 
-      {filterMode === 'p0_p1' && filteredChapterCount === 0 && (
+      {filterMode === 'p0_p1' && (
         <div
           style={{
             margin: '24px 0',
@@ -226,7 +226,9 @@ export const SyllabusPage: React.FC = () => {
             color: 'var(--ink-secondary)',
           }}
         >
-          其余章标注完善中，当前所有章节尚未完成 P0/P1 优先级标注。
+          {filteredChapterCount === 0
+            ? '其余章标注完善中，当前所有章节尚未完成 P0/P1 优先级标注。'
+            : '其余章标注完善中，当前仅显示已标注 P0/P1 的试点章节。'}
         </div>
       )}
 

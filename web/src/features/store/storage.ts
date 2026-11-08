@@ -7,7 +7,7 @@ export const DEFAULT_STORE: StoreV1 = {
   schemaVersion: 1,
   settings: {
     theme: 'system',
-    fontSize: 'md',
+    fontSize: 'lg',
     measure: 'standard',
     focus: false,
     proofDefault: 'open',

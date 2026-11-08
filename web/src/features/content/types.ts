@@ -65,11 +65,15 @@ export interface SubsectionItem {
 }
 
 export interface SectionMeta {
-  difficulty?: DifficultyLevel | null;
+  difficulty?: DifficultyLevel | number | null;
   priority?: PriorityLevel | null;
   minutes?: number | null;
-  prerequisites?: Array<{ id: string; strength?: 'required' | 'helpful' }>;
+  prerequisites?: Array<string | { id: string; strength?: 'required' | 'helpful' }>;
   coreConcepts?: string[];
+  related?: string[];
+  applications?: string[];
+  rationale?: string;
+  learningObjective?: string;
 }
 
 export interface SectionData {
