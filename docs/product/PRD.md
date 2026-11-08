@@ -140,7 +140,7 @@ Quant Math Academy（量化数学学院）不是一个“把 PDF 搬到网页上
 - 正文文本覆盖率 = 100%（空白归一化后逐节比对）；
 - 习题↔解析匹配率 = 100%；
 - 桌面端 Lighthouse Performance ≥ 90、Accessibility ≥ 95（Phase 5 验收）；
-- 首屏 JS ≤ 250KB gzip（不含按章懒加载内容），单章数据 ≤ 400KB gzip；
+- 首屏 JS ≤ 250KB gzip（不含按章懒加载内容）；首屏只加载章 manifest + 第一节；单节 HTML ≤900KB 原始 / ≤120KB gzip；习题按需加载（≤3MB 原始 / ≤350KB gzip）；
 - 所有关键页面在 360px、768px、1024px、1440px 四档宽度无横向溢出。
 
 ---

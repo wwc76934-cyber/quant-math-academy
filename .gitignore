@@ -12,6 +12,9 @@ dist/
 
 # Generated website content (rebuild from src/)
 content/generated/
+web/public/content/
+web/dist/
+web/node_modules/
 
 # Local / OS
 .DS_Store

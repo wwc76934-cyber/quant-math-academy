@@ -17,7 +17,9 @@ Markdown 源文件（权威）
 Node 内容编译器（parse + validate + KaTeX 预渲染）
         │
         ├── book.json            目录与统计
-        ├── chapters/cXX.json    章节 HTML 片段 + 元数据
+        ├── chapters/cXX.json    章 manifest：节/环境/公式索引 + 元数据
+        ├── sections/cXX-sN.html 按节预渲染正文（懒加载）
+        ├── exercises/cXX.json   按章习题与解析（懒加载）
         ├── search/index.json    检索索引（Phase 2）
         └── validation.json      构建校验报告
         │
@@ -260,8 +262,10 @@ katex.renderToString(latex, {
 </Routes>
 ```
 
-- `book.json` 在应用启动时加载一次（<50KB），用于全局目录与导航。
-- 章节 JSON 在进入 `/learn/:id` 时 `fetch('/content/chapters/c11.json')`；模块级缓存，避免重复请求。
+- `book.json` 在应用启动时加载一次（<150KB），用于全局目录与导航。
+- 章节 manifest 在进入 `/learn/:id` 时 `fetch('/content/chapters/c11.json')`；模块级缓存，避免重复请求。
+- 章节正文按节拆分为 `content/sections/c11-s4.html`，首屏只加载第一节；其余节并行请求并逐节注入。
+- 习题拆分为 `content/exercises/c11.json`，接近视口时懒加载。
 - 加载态显示骨架（标题、段落占位），不显示空白页。
 - 章节不存在或加载失败显示错误页，不渲染半截内容。
 
@@ -357,7 +361,10 @@ interface Store {
 | 首屏 JS（gzip） | ≤ 250KB | `vite build` 报告 |
 | 首屏 CSS（gzip） | ≤ 60KB（不含 KaTeX 字体） | 构建报告 |
 | book.json | ≤ 80KB | 文件大小 |
-| 单章 JSON（最大章） | ≤ 1.2MB 原始 / ≤ 350KB gzip | 文件大小 + gzip |
+| 单章 manifest | ≤ 300KB 原始 | 文件大小 |
+| 单节 HTML | ≤ 900KB 原始 / ≤ 120KB gzip | 文件大小 + gzip |
+| 单章习题 JSON | ≤ 3MB 原始 / ≤ 350KB gzip | 文件大小 + gzip |
+| 首屏 | 只加载章 manifest + 第一节，不请求其他节/习题 | Network 面板 |
 | 阅读页首次正文 | ≤ 1.5s（本地/宽带） | Lighthouse/手动 |
 | 目录滚动高亮 | 无长任务 > 100ms | Performance 面板 |
 | 移动端 360px | 无横向滚动 | Playwright/手动 |

@@ -6,7 +6,10 @@
   "description": "Build pipeline for 量化数学进阶教材",
   "scripts": {
     "content:inventory": "node tools/content/parse-book.mjs",
-    "test:content": "node --test tools/content/parse-book.test.mjs"
+    "content:build": "node tools/content/build-content.mjs",
+    "content:validate": "node tools/content/validate-content.mjs",
+    "content:sync": "node tools/content/sync-web.mjs",
+    "test:content": "node --test tools/content/*.test.mjs"
   },
   "dependencies": {
     "katex": "0.16.22",

@@ -201,6 +201,7 @@ tools/content/
 - 题号：T01 的 `number`；`questionHtml` 不包含 `1.` 前缀；若 T01 的 markdown 含前缀，渲染前剥离。
 - 题干可含多段、公式、列表、小问；全部保留。
 - 解析：`solutionHtml` 可含多段/公式；不得把解析混入题干。
+- **习题是章末练习，`sectionId` 允许为 `null`。** T01 未逐题建立节归属；不得根据题解文本、例题或关键词推断 sectionId。逐题所属节是 Phase 3 的可选元数据，不是 T03 的职责。
 - 输出 `<article class="exercise" data-exercise-number="7">` 由 React 包装；JSON 只存 HTML 片段，不存外层 article（避免重复）。
 - 习题与解析数量/题号必须与 T01 一致；缺失解析为 error。
 

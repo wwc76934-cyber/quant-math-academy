@@ -102,13 +102,20 @@ web/
 
 在 `features/content/types.ts` 定义与 T03 schema 一致的：
 
-- `Book`、`BookPart`、`BookChapter`、`ChapterData`、`SectionData`、`SectionMeta`、`ExerciseData`、`EnvironmentIndex`、`EquationIndex`。
+- `Book`、`BookPart`、`BookChapter`：章 `title` 为干净章名，`label` 为“第 N 章”；每章含 `sections[]` 轻量目录（`id/number/title/anchor/difficulty/priority/minutes`，可空），统计含 `displayEquations` 与 `taggedEquations`。
+- `ChapterData`：`sections[]` 含 `htmlPath`（不内联 `html`），`exercisesPath`、`exerciseCount`；`introHtml`、`summaryHtml` 可内联。
+- `SectionData`：`id/number/title/anchor/subsections/meta/exerciseIds/htmlPath/htmlBytes`。
+- `ExerciseData`：单独加载的 `{chapterId, exercises:[...]}`，每题含 `id/number/sectionId/questionHtml/solutionHtml`；`sectionId` 允许为 `null`。
+- `EnvironmentIndex`、`EquationIndex`。
 - 不要用 `any` 绕过；字段与 T03 对齐。
 
 ### 5.2 加载
 
 - `loadBook()`：`fetch(`${import.meta.env.BASE_URL}content/book.json`)`，模块级缓存；失败抛 `ContentError`。
 - `loadChapter(id)`：同章缓存；404/解析失败给明确错误。
+- `loadSection(chapterId, sectionId)`：`fetch(`${BASE_URL}content/sections/${chapterId}-${sectionId}.html`)`，返回 text；按节缓存（T05 使用）。
+- `loadExercises(chapterId)`：`fetch(`${BASE_URL}content/exercises/${chapterId}.json`)`；按章缓存（T05 使用）。
+- 首页/目录/左栏只依赖 `book.json`，不得为了展开目录请求 34 个章 manifest。
 - 加载态：静态骨架（标题、行占位），不用 shimmer 动画。
 - 错误态：说明 + 重试 + 返回目录。
 - 非试点章：数据可能存在，但 Phase 1 不开放阅读；UI 显示“内容接入中”，不请求章节 JSON。

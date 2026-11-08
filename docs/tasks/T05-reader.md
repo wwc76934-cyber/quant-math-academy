@@ -17,8 +17,26 @@
 
 - 路由：`/learn/:chapterId`，节/环境用 hash：`#c11-s4`、`#c11-thm-11.10`。
 - 只允许 `book.json.pilotChapterIds` 进入正文；其他章显示“内容接入中”页（带返回目录）。
-- 数据：`loadChapter(chapterId)`；`book.json` 用于左栏完整目录。
+- 数据：
+  - `book.json` 用于左栏完整目录；
+  - `loadChapter(chapterId)` 返回章 manifest（`sections[].htmlPath`、`exercisesPath`、`introHtml`、`summaryHtml`、索引）；
+  - `loadSection(chapterId, sectionId)` 返回该节 HTML 文本；
+  - `loadExercises(chapterId)` 返回习题 JSON（懒加载）。
 - 加载态：标题 + 骨架段落；错误态：说明 + 重试 + 返回目录；不渲染半截正文。
+
+### 3.1 加载与渲染顺序（性能关键）
+
+章节正文已被 T03 拆分为独立节 HTML，禁止把整章 6MB HTML 一次性注入。
+
+1. 进入路由：加载 `book.json`（缓存）与章 manifest。
+2. 渲染章首、导言、左栏、右栏；立即请求第一节 HTML 与当前 hash 目标节（若有）。
+3. 第一节到达后先渲染；其余节并行请求（并发 ≤4），按到达顺序 append 到正文，每节单独 `dangerouslySetInnerHTML`，避免一次大 DOM 插入。
+4. 深链：若 hash 指向尚未到达的节/环境，等该节到达后滚动并高亮；其他节继续加载。等待期间显示“正在定位…”。
+5. 习题：当正文尾部 sentinel 接近视口（rootMargin 800px）或用户点击“习题”时，加载 `exercisesPath`；加载前显示静态骨架“正在加载习题…”。不要把 2.5MB 习题 HTML 放进首屏。
+6. 单节加载失败：该节显示“本节加载失败 / 重试”，不影响其他节；章级 manifest 失败才整页错误。
+7. 切换章：取消未完成请求（AbortController），从章首开始；不保留上一章 DOM。
+
+**性能预算**：首屏只加载章 manifest + 第一节（最大节约 900KB HTML）；首屏不得请求全部节或习题。
 
 ## 4. 页面结构
 
@@ -43,6 +61,7 @@
 ### 4.3 左栏：全书目录
 
 - 篇 → 章 → 节；篇可折叠，默认展开当前篇。
+- 目录数据来自 `book.json` 的轻量 `sections[]`，不为此请求 34 个章 manifest。
 - 当前章高亮；当前节左侧 2px 强调线 + 浅底。
 - 状态点：未开始/学习中/已学习/已掌握/需复习，6px。
 - 试点章可点击；非试点章显示“内容接入中”，不可进入。
@@ -59,9 +78,8 @@
 节：
 
 - `<h2 id="c11-s4" data-section-id="c11-s4">`：节号（sans 12px，muted）+ 标题（serif 28px）。
-- 节正文 HTML 来自 T03，直接注入；不得在客户端重新解析 Markdown。
-- 节末尾可选一行“本节信息”移动端入口（桌面右栏已有）。
-- 节与节之间 64px 留白；不插入广告/推荐。
+- 节正文 HTML 来自 T03 的 `sections/{chapterId}-{sectionId}.html`，按需 fetch，直接注入；不得在客户端重新解析 Markdown，也不得把整章 HTML 一次性注入。
+- 节与节之间 64px 留白；未加载的节显示静态占位（标题 + 一句“正在加载…”），不显示假正文。
 
 本章小结：
 
@@ -70,6 +88,7 @@
 习题：
 
 - `## 习题` 标题；题卡列表。
+- 习题是章末练习；`sectionId` 可能为 `null`，按章整体展示，不得伪造分节归属。
 - 每题：题号（sans 12px）、题干 HTML、操作行。
 - 解析：`<details class="exercise__solution">` 或按钮展开；默认折叠；展开后完整 HTML。
 - 操作：展开解析、标记做对、标记做错、收藏（Phase 3 前可只做“展开解析”；其余按钮禁用并说明“Phase 3 开放”）。不要伪装已保存。
@@ -209,7 +228,9 @@ activity: Array<{ at: string; type: 'status'|'read'|'copy'; targetId: string; de
 ## 10. 测试
 
 - 渲染 C11：章标题、节标题、定理/证明/例题、公式、习题、解析折叠。
-- 深链 `#c11-thm-11.10`：目标存在并成为当前节。
+- 按节加载：首屏只请求第一章 manifest + 第一节；其余节按到达顺序注入；单节失败可重试且不影响其他节。
+- 习题懒加载：sentinel 接近视口才请求 `exercises/{chapterId}.json`；加载前显示骨架。
+- 深链 `#c11-thm-11.10`：目标节未到达时显示“正在定位…”，到达后滚动并高亮。
 - 状态切换：写入 store、刷新恢复、章进度更新。
 - 阅读位置：滚动后保存、刷新恢复（可用 mock IntersectionObserver）。
 - 主题/字号/宽度/专注：持久化。

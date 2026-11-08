@@ -115,10 +115,13 @@
 完整定义见 `TECH_ARCHITECTURE.md` 第 4 节与 T01 任务书。关键约束：
 
 - `book.json` 只含目录、统计、路径入口；不含全文。
-- `chapters/cXX.json` 含导言、节、环境、公式、习题、解析；正文以 HTML 或 Markdown 切片存在，二者只能选一种作为渲染输入。
+- `chapters/cXX.json` 是章 manifest：含导言、小结、节清单（`htmlPath`）、环境/公式索引与元数据，不含整章正文 HTML。
+- `sections/cXX-sN.html` 是按节拆分的预渲染正文；阅读页逐节加载，避免整章 6MB 一次性注入。
+- `exercises/cXX.json` 是章节习题与解析，懒加载；习题为章末练习，`sectionId` 允许为 `null`，不伪造逐题节归属。
+- 正文以 HTML 切片存在（构建期生成），不在浏览器重新解析 Markdown。
 - 每个节必须含 `id`、`number`、`title`、`anchor`、`environmentIds`、`exerciseIds`。
 - 每个环境必须含 `id`、`kind`、`number`、`title`、`sectionId`、`anchor`。
-- 每个习题必须含 `id`、`number`、`sectionId`、`solutionMarkdown`（允许为空但需警告）。
+- 每个习题必须含 `id`、`number`、`questionHtml`、`solutionHtml`；`sectionId` 允许为 `null`（教材习题集中在章末）。
 - 统计字段必须与数组长度一致；构建校验会复核。
 
 ### 4.1 渲染后的 HTML 约定
