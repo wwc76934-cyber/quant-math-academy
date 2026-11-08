@@ -1,0 +1,12 @@
+{
+  "name": "quant-math-textbook",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Build pipeline for 量化数学进阶教材",
+  "dependencies": {
+    "katex": "0.16.22",
+    "marked": "15.0.12",
+    "pagedjs": "0.4.3"
+  }
+}

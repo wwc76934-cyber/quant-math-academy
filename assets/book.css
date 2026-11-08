@@ -1,0 +1,71 @@
+@font-face{font-family:BookSerif;src:url('NotoSerifSC-VF.ttf') format('truetype');font-weight:100 900;font-style:normal}
+@font-face{font-family:BookSans;src:url('NotoSansSC-VF.ttf') format('truetype');font-weight:100 900;font-style:normal}
+:root{--ink:#202124;--muted:#62676d;--rule:#9aa0a6;--accent:#263d52;--paper:#fff;--soft:#f4f5f6}
+@page{size:B5;margin:21mm 19mm 20mm 23mm;@top-center{content:string(book-running);font-family:BookSans;font-size:8.5pt;color:#555;letter-spacing:.04em}@bottom-center{content:counter(page);font-family:'Cambria',serif;font-size:9pt;color:#444}}
+@page front{@top-center{content:none}@bottom-center{content:counter(page,lower-roman);font-size:9pt}}
+@page cover{margin:0;@top-center{content:none}@bottom-center{content:none}}
+*{box-sizing:border-box}
+html{font-size:10.8pt}
+body{margin:0;color:var(--ink);background:var(--paper);font-family:BookSerif,'Noto Serif CJK SC','Source Han Serif SC',serif;font-weight:400;line-height:1.78;text-align:justify;text-justify:inter-ideograph;letter-spacing:.012em}
+p{margin:.48em 0 .72em;orphans:3;widows:3}
+strong{font-weight:650}
+a{color:inherit;text-decoration:none}
+.cover{page:cover;height:257mm;position:relative;padding:35mm 25mm 25mm;break-after:page;background:#f7f7f4;border-top:12mm solid #243a4e}
+.cover .series{font-family:BookSans;font-size:11pt;letter-spacing:.28em;color:#56636e}
+.cover h1{font-size:32pt;line-height:1.35;margin:28mm 0 8mm;border:0;padding:0;letter-spacing:.08em}
+.cover .subtitle{font-family:BookSans;font-size:13pt;color:#52606a;letter-spacing:.1em}
+.cover .meta{position:absolute;bottom:28mm;left:25mm;font-size:11pt;line-height:2;color:#4c555c}
+.title-page{page:front;text-align:center;padding-top:45mm;break-after:page}
+.title-page h1{border:0;font-size:26pt;margin:0 0 12mm}
+.title-page .en{font-family:Cambria,serif;color:#60646a;font-size:12pt;letter-spacing:.08em}
+.frontmatter{page:front;break-before:page}
+.frontmatter h1,.backmatter h1{font-size:22pt}
+h1,h2,h3,h4{font-family:BookSans,'Noto Sans CJK SC',sans-serif;color:var(--accent);text-align:left;line-height:1.42;break-after:avoid;bookmark-level:1}
+h1{font-size:22pt;margin:0 0 1.15em;padding-bottom:.38em;border-bottom:1.2pt solid var(--accent);string-set:book-running content();bookmark-level:1}
+h2{font-size:15pt;margin:1.65em 0 .65em;bookmark-level:2}
+h3{font-size:12.2pt;margin:1.3em 0 .55em;bookmark-level:3}
+h4{font-size:11pt;margin:1.15em 0 .45em;bookmark-level:none}
+.part{break-before:page;padding-top:55mm;text-align:center;page:main}
+.part .part-kicker{font-family:BookSans;color:#6c747b;letter-spacing:.28em;font-size:11pt}
+.part h1{border:0;font-size:27pt;margin:12mm 0 10mm;string-set:book-running content()}
+.part .part-desc{max-width:110mm;margin:auto;color:#565e65;text-align:center}
+.chapter{break-before:page}
+.chapter>p:first-of-type{margin-top:0}
+.backmatter{break-before:page}
+.toc{page:front;break-before:page}
+.toc h1{margin-bottom:1em}
+.toc ul{list-style:none;margin:0;padding:0}
+.toc .toc-part{font-family:BookSans;font-weight:650;font-size:12pt;margin:1.15em 0 .25em;color:var(--accent)}
+.toc .toc-chapter{margin:.3em 0;font-family:BookSans;font-size:10.2pt}
+.toc .toc-section{margin:.08em 0 .08em 2em;font-size:9.2pt;color:#444;line-height:1.55}
+.toc a{display:flex;gap:.35em;align-items:baseline;text-decoration:none;color:inherit}
+/* Chrome does not implement target-counter()/leader(), so page numbers are resolved in a
+   first print pass and emitted as static .toc-num text. The dotted bottom border on the
+   stretching label reproduces the leader rule. */
+.toc a .toc-label{flex:1 1 auto;min-width:0;border-bottom:.5px dotted #b9bec3}
+.toc a .toc-num{flex:0 0 auto;padding-left:.4em;color:#3f4a56;font-family:Cambria,'Noto Serif SC',serif;font-variant-numeric:tabular-nums}
+.env-heading{font-family:BookSans;margin:1.05em 0 .35em;padding:.28em .6em;border-left:3px solid var(--accent);background:var(--soft);break-after:avoid}
+.env-heading strong{color:var(--accent)}
+p.env-heading--证明,p.env-heading--解{border-left-color:#8a8f94;background:transparent;margin-top:.8em}
+.math-display{display:block;margin:.9em auto;text-align:center;overflow:visible;break-inside:avoid}
+.katex-display{margin:.85em 0!important;overflow:hidden}
+.katex{font-size:1.02em!important}
+.katex-display>.katex{white-space:normal}
+.tag{position:relative}
+table{border-collapse:collapse;width:100%;margin:1em 0;font-size:9.5pt;line-height:1.55;break-inside:avoid}
+th,td{border-bottom:.5px solid #aeb4b9;padding:.42em .55em;vertical-align:top}
+th{font-family:BookSans;font-weight:600;border-top:1px solid #59636b;border-bottom:1px solid #59636b;background:#f3f4f5}
+tr:last-child td{border-bottom:1px solid #59636b}
+ol,ul{padding-left:2em;margin:.5em 0 .85em}
+li{margin:.25em 0}
+blockquote{margin:1em 0;padding:.35em 1em;border-left:2px solid #a4abb1;color:#444;background:#f7f7f7}
+code{font-family:'Cascadia Code','Consolas',monospace;font-size:.9em}
+pre{padding:1em;background:#f4f5f6;border:1px solid #ddd;white-space:pre-wrap;break-inside:avoid}
+hr{border:0;border-top:.5px solid #bbb;margin:1.5em 0}
+.figure{margin:1.2em auto;text-align:center;break-inside:avoid}
+.figure img{max-width:100%;height:auto}
+.figure figcaption{font-size:9pt;color:#555;margin-top:.5em}
+.exercise-list>li{margin-bottom:.62em}
+.solution-chapter{break-before:page}
+.colophon{margin-top:25mm;color:#666;font-size:9pt;text-align:center}
+@media print{body{print-color-adjust:exact;-webkit-print-color-adjust:exact}a{text-decoration:none}}

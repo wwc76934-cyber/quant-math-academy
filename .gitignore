@@ -1,0 +1,20 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+.python-packages/
+
+# Build artifacts (book pipeline writes to D: via junction)
+build/
+dist/
+*.pdf
+*.docx
+*.log
+
+# Generated website content (rebuild from src/)
+content/generated/
+
+# Local / OS
+.DS_Store
+Thumbs.db
+*.tmp
+.cache/
