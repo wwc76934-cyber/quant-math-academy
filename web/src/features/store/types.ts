@@ -36,8 +36,9 @@ export interface UserBookmarks {
 }
 
 export interface PathSetting {
-  active: 'a' | 'b' | 'c' | 'free';
+  active: string; // 'internship' | 'progression' | 'research' | 'free' (or legacy 'a' | 'b' | 'c')
   startedAt?: string;
+  mode?: string;
 }
 
 export interface UserActivityItem {
@@ -74,6 +75,7 @@ export interface StoreContextValue {
     update: Partial<SectionProgressItem>
   ) => void;
   setLastLocation: (location: { chapterId: string; sectionId: string; scrollOffset?: number }) => void;
+  setActivePath: (pathId: string) => void;
   logActivity: (activity: { type: 'status' | 'read' | 'copy'; targetId: string; detail?: string }) => void;
   clearCorruptedNotice: () => void;
   resolvedTheme: 'light' | 'dark';

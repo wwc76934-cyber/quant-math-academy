@@ -288,6 +288,21 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({
     [updateStore]
   );
 
+  const setActivePath = useCallback(
+    (pathId: string) => {
+      updateStore((prev) => ({
+        ...prev,
+        path: {
+          ...prev.path,
+          active: pathId,
+          mode: pathId,
+          startedAt: prev.path.startedAt || new Date().toISOString(),
+        },
+      }));
+    },
+    [updateStore]
+  );
+
   const logActivity = useCallback(
     (act: { type: 'status' | 'read' | 'copy'; targetId: string; detail?: string }) => {
       updateStore((prev) => ({
@@ -320,6 +335,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({
       setProofDefault,
       updateSectionProgress,
       setLastLocation,
+      setActivePath,
       logActivity,
       clearCorruptedNotice,
       resolvedTheme,
@@ -335,6 +351,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({
       setProofDefault,
       updateSectionProgress,
       setLastLocation,
+      setActivePath,
       logActivity,
       clearCorruptedNotice,
       resolvedTheme,

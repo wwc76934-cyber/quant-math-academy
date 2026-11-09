@@ -523,7 +523,7 @@
 
 .path-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 16px;
 }
 .path-card {
@@ -535,7 +535,11 @@
   flex-direction: column;
   min-height: 190px;
   text-decoration: none;
-  transition: border-color 0.14s ease;
+  transition: border-color 0.14s ease, box-shadow 0.14s ease;
+}
+.path-card--active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
 }
 .path-card:hover {
   border-color: var(--line-strong);

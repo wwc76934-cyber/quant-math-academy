@@ -8,6 +8,8 @@ import { FeaturePlaceholder } from './routes/FeaturePlaceholder';
 import { GraphPage } from './routes/GraphPage';
 import { HomePage } from './routes/HomePage';
 import { NotFoundPage } from './routes/NotFoundPage';
+import { PathDetailPage } from './routes/PathDetailPage';
+import { PathsPage } from './routes/PathsPage';
 import { ReaderPage } from './routes/ReaderPage';
 import { SearchPage } from './routes/SearchPage';
 import { SyllabusPage } from './routes/SyllabusPage';
@@ -85,26 +87,8 @@ const MainLayout: React.FC = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/syllabus" element={<SyllabusPage />} />
           <Route path="/learn/:chapterId" element={<ReaderPage />} />
-          <Route
-            path="/paths"
-            element={
-              <FeaturePlaceholder
-                featureName="学习路径"
-                phase="Phase 3"
-                description="A/B/C 三条量化学习路径的知识图谱拓扑、先修依赖闭包与进度规划即将在 Phase 3 上线。"
-              />
-            }
-          />
-          <Route
-            path="/paths/:mode"
-            element={
-              <FeaturePlaceholder
-                featureName="学习路径详情"
-                phase="Phase 3"
-                description="该学习路径的详细规划与阶段目标即将在 Phase 3 上线。"
-              />
-            }
-          />
+          <Route path="/paths" element={<PathsPage />} />
+          <Route path="/paths/:mode" element={<PathDetailPage />} />
           <Route
             path="/practice"
             element={

@@ -4,24 +4,36 @@ import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { clearBookCache } from '../src/features/content/loadBook';
+import { clearPathsCache } from '../src/features/paths/loadPaths';
 import { STORAGE_KEY } from '../src/features/store/storage';
 import { StoreProvider } from '../src/features/store/store';
 import { HomePage } from '../src/routes/HomePage';
 
 const bookJsonPath = path.resolve(__dirname, '../../content/generated/site/book.json');
 const realBook = JSON.parse(fs.readFileSync(bookJsonPath, 'utf-8'));
+const pathsJsonPath = path.resolve(__dirname, '../../content/generated/site/paths.json');
+const realPaths = JSON.parse(fs.readFileSync(pathsJsonPath, 'utf-8'));
 
 describe('HomePage', () => {
   beforeEach(() => {
     localStorage.clear();
     clearBookCache();
+    clearPathsCache();
     vi.restoreAllMocks();
     vi.spyOn(globalThis, 'fetch').mockImplementation(async (url) => {
-      if (String(url).includes('book.json')) {
+      const urlStr = String(url);
+      if (urlStr.includes('book.json')) {
         return {
           ok: true,
           status: 200,
           json: async () => realBook,
+        } as Response;
+      }
+      if (urlStr.includes('paths.json')) {
+        return {
+          ok: true,
+          status: 200,
+          json: async () => realPaths,
         } as Response;
       }
       return { ok: false, status: 404 } as Response;
@@ -30,6 +42,7 @@ describe('HomePage', () => {
 
   afterEach(() => {
     clearBookCache();
+    clearPathsCache();
   });
 
   it('renders stats derived directly from book.json', async () => {
@@ -110,5 +123,42 @@ describe('HomePage', () => {
     expect(screen.getByText(/期望、方差、矩与概率不等式/)).toBeInTheDocument();
     expect(screen.getByText(/11.4 概率不等式/)).toBeInTheDocument();
     expect(screen.getByRole('link', { name: '继续阅读 →' })).toBeInTheDocument();
+  });
+
+  it('renders all 4 real learning paths with active indicator and links', async () => {
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        schemaVersion: 1,
+        settings: { theme: 'system', fontSize: 'md', measure: 'standard', focus: false, proofDefault: 'open' },
+        progress: {},
+        lastLocation: null,
+        bookmarks: { sections: [], formulas: [] },
+        path: { active: 'internship' },
+        activity: [],
+      })
+    );
+
+    render(
+      <StoreProvider>
+        <MemoryRouter>
+          <HomePage />
+        </MemoryRouter>
+      </StoreProvider>
+    );
+
+    expect(await screen.findByText('量化实习冲刺')).toBeInTheDocument();
+    expect(screen.getByText('系统数学进阶')).toBeInTheDocument();
+    expect(screen.getByText('量化研究应用')).toBeInTheDocument();
+    expect(screen.getByText('自由学习模式')).toBeInTheDocument();
+
+    // Active path badge
+    expect(screen.getByText('当前主路径')).toBeInTheDocument();
+
+    // Link to all paths
+    expect(screen.getByRole('link', { name: '完整规划与周计划 →' })).toHaveAttribute(
+      'href',
+      '/paths'
+    );
   });
 });

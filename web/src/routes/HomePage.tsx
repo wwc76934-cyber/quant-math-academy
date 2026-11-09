@@ -6,6 +6,8 @@ import { Button } from '../components/ui/Button';
 import { ErrorState } from '../components/ui/ErrorState';
 import { loadBook } from '../features/content/loadBook';
 import { Book } from '../features/content/types';
+import { getPathSectionIds, loadPathsData, normalizePathId } from '../features/paths/loadPaths';
+import { PathsFile } from '../features/paths/types';
 import { useStore } from '../features/store/store';
 import {
   formatCurrentDate,
@@ -13,21 +15,26 @@ import {
   formatPartNumber,
   formatPercentage,
 } from '../lib/format';
-import { learnPath, syllabusPath } from '../lib/paths';
+import { learnPath, pathsPath, syllabusPath } from '../lib/paths';
 
 export const HomePage: React.FC = () => {
   const { store } = useStore();
   const navigate = useNavigate();
   const [book, setBook] = useState<Book | null>(null);
+  const [pathsData, setPathsData] = useState<PathsFile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchBookData = async () => {
+  const fetchPageData = async () => {
     setLoading(true);
     setError(null);
     try {
-      const data = await loadBook();
-      setBook(data);
+      const [bookData, pData] = await Promise.all([
+        loadBook(),
+        loadPathsData().catch(() => null),
+      ]);
+      setBook(bookData);
+      setPathsData(pData);
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
     } finally {
@@ -36,7 +43,7 @@ export const HomePage: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchBookData();
+    fetchPageData();
   }, []);
 
   const totalSections = useMemo(() => {
@@ -93,11 +100,45 @@ export const HomePage: React.FC = () => {
     };
   }, [book, store.lastLocation, store.progress]);
 
+  const activePathId = normalizePathId(store.path.active);
+  const activePath = useMemo(() => {
+    if (!pathsData) return null;
+    return pathsData.paths.find((p) => p.id === activePathId) || null;
+  }, [pathsData, activePathId]);
+
   // Next section across the whole book for Today panel.
-  // Prefer the chapter the learner last opened so “today” does not jump back
-  // to chapter 1 while they are reading chapter 11.
+  // 1. Prefer the active path (if non-free and has incomplete sections)
+  // 2. Otherwise prefer the chapter the learner last opened so “today” does not jump back
   const nextSectionData = useMemo(() => {
     if (!book) return null;
+
+    // Helper map of all sections in the book
+    const sectionMap = new Map<
+      string,
+      { chapter: Book['chapters'][0]; section: Book['chapters'][0]['sections'][0] }
+    >();
+    for (const chapter of readableChapters) {
+      for (const section of chapter.sections) {
+        sectionMap.set(section.id, { chapter, section });
+      }
+    }
+
+    const activeSectionIds = getPathSectionIds(activePath);
+    if (activePath && activePath.id !== 'free' && activeSectionIds.length > 0) {
+      for (const sid of activeSectionIds) {
+        const item = store.progress[sid];
+        if (!item || (item.status !== 'done' && item.status !== 'master')) {
+          const found = sectionMap.get(sid);
+          if (found) {
+            return {
+              chapter: found.chapter,
+              section: found.section,
+              sourcePathTitle: activePath.title,
+            };
+          }
+        }
+      }
+    }
 
     const ordered = [...readableChapters];
     const lastChapterId = store.lastLocation?.chapterId;
@@ -116,12 +157,13 @@ export const HomePage: React.FC = () => {
           return {
             chapter,
             section,
+            sourcePathTitle: null,
           };
         }
       }
     }
     return null;
-  }, [book, readableChapters, store.progress, store.lastLocation]);
+  }, [book, readableChapters, store.progress, store.lastLocation, activePath]);
 
   // Part map progress calculation
   const partProgressList = useMemo(() => {
@@ -179,7 +221,7 @@ export const HomePage: React.FC = () => {
       <main className="home shell" id="main-content">
         <ErrorState
           message={error || '加载教材数据失败'}
-          onRetry={fetchBookData}
+          onRetry={fetchPageData}
           showReturnToSyllabus={false}
         />
       </main>
@@ -335,6 +377,9 @@ export const HomePage: React.FC = () => {
                 <span className="value">
                   {nextSectionData.section.number} {nextSectionData.section.title}
                   <small>
+                    {nextSectionData.sourcePathTitle
+                      ? `${nextSectionData.sourcePathTitle} · `
+                      : ''}
                     {nextSectionData.section.minutes
                       ? `预计 ${nextSectionData.section.minutes} 分钟`
                       : '标注完善中'}
@@ -389,47 +434,77 @@ export const HomePage: React.FC = () => {
       {/* 4. Learning Paths */}
       <div className="section-head">
         <h2>学习路径</h2>
-        <span className="small muted">Phase 3 开放交互式规划</span>
+        <Link to={pathsPath()}>完整规划与周计划 →</Link>
       </div>
       <div className="path-grid">
-        <div className="path-card">
-          <span className="path-card__mode">PATH A</span>
-          <h3>量化实习冲刺</h3>
-          <p>
-            只覆盖 P0 与高相关 P1，优先可计算、可解释、高频的知识点；非必要长证明后置。
-          </p>
-          <div className="path-card__meta">
-            <span>6 周</span>
-            <span>每周 9h</span>
-            <span>58 个知识点</span>
-          </div>
-        </div>
+        {(pathsData?.paths || []).map((path) => {
+          const isCurrent = path.id === activePathId;
+          const sectionIds = getPathSectionIds(path);
+          const completedCount =
+            path.id === 'free'
+              ? Object.values(store.progress).filter(
+                  (p) => p.status === 'done' || p.status === 'master'
+                ).length
+              : sectionIds.filter((sid) => {
+                  const s = store.progress[sid];
+                  return s && (s.status === 'done' || s.status === 'master');
+                }).length;
+          const totalSecs = path.id === 'free' ? 219 : path.totalSections;
+          const pct =
+            totalSecs > 0 ? Math.round((completedCount / totalSecs) * 100) : 0;
+          const modeLabel = path.code === 'D' ? 'FREE' : `PATH ${path.code}`;
+          const targetHoursPerWeek =
+            path.weeks > 0
+              ? Math.round(path.totalEstimatedMinutes / 60 / path.weeks)
+              : 0;
 
-        <div className="path-card">
-          <span className="path-card__mode">PATH B</span>
-          <h3>系统数学进阶</h3>
-          <p>
-            按教材顺序完整学习，保留证明与理论深度，适合六个月以上的系统进阶。
-          </p>
-          <div className="path-card__meta">
-            <span>22 周</span>
-            <span>每周 7h</span>
-            <span>全部 219 节</span>
-          </div>
-        </div>
-
-        <div className="path-card">
-          <span className="path-card__mode">PATH C</span>
-          <h3>量化研究应用</h3>
-          <p>
-            从因子、组合、时序、风险与定价问题出发，按先修闭包补齐数学工具。
-          </p>
-          <div className="path-card__meta">
-            <span>15 周</span>
-            <span>每周 8h</span>
-            <span>应用簇 + 先修</span>
-          </div>
-        </div>
+          return (
+            <Link
+              key={path.id}
+              to={`/paths/${path.id}`}
+              className={`path-card ${isCurrent ? 'path-card--active' : ''}`}
+              aria-label={`查看学习路径：${path.title}`}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: '4px',
+                }}
+              >
+                <span className="path-card__mode">{modeLabel}</span>
+                {isCurrent && (
+                  <span
+                    className="badge badge--p0"
+                    style={{ fontSize: '9px', height: '18px' }}
+                  >
+                    当前主路径
+                  </span>
+                )}
+              </div>
+              <h3>{path.title}</h3>
+              <p>{path.description}</p>
+              <div className="path-card__meta">
+                {path.id === 'free' ? (
+                  <>
+                    <span>自由节奏</span>
+                    <span>全书 {totalSecs} 节</span>
+                    <span>已学 {pct}%</span>
+                  </>
+                ) : (
+                  <>
+                    <span>{path.weeks} 周</span>
+                    <span>约 {targetHoursPerWeek}h/周</span>
+                    <span>
+                      {path.totalSections} 节 ({pct}%)
+                    </span>
+                  </>
+                )}
+              </div>
+            </Link>
+          );
+        })}
       </div>
 
       {/* 5. Full Book Map */}
