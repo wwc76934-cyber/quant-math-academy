@@ -1,0 +1,424 @@
+{
+  "schemaVersion": 1,
+  "chapterId": "c19",
+  "title": "抽样分布、点估计与极大似然",
+  "partId": "part-5",
+  "summary": "本章系统建立统计推断与点估计理论大厦：从统计模型、充分统计量与样本方差正交分解出发，推导正态样本下卡方、t与F精确抽样分布；严格定义无偏性、方差有效性与一致性准则，阐明均方误差的偏差-方差权衡；推导矩估计及其一致性充分条件；深入剖析似然函数几何、剖面似然与极大似然估计不变性；建立得分函数与Fisher信息恒等式，严格证明单参数Cramér-Rao方差下界；建立大样本下极大似然估计的一致性与渐近正态性，解析支撑集依赖参数的非正则反例；最后提炼各类点估计方法在量化参数校准中的选型原则与三层标准误体系。",
+  "whyStudy": "点估计与极大似然是量化金融连接概率生成模型与市场历史观测的数理枢纽：从资产收益分布正态/厚尾参数估计，到隐马尔可夫模型、波动率模型校准，再到因子收益回归估计量方差边界评估，掌握抽样分布精确性质、Cramér-Rao效率下界与MLE渐近正态性，是量化研究员严谨评估估计误差与防止过拟合的必修内功。",
+  "prerequisites": [
+    "c09-s1",
+    "c10-s1",
+    "c11-s1",
+    "c12-s1",
+    "c14-s6"
+  ],
+  "metadataStatus": "reviewed",
+  "reviewed": true,
+  "sections": {
+    "c19-s1": {
+      "difficulty": "D1",
+      "priority": "P0",
+      "minutes": 35,
+      "examFrequency": "high",
+      "tags": [
+        "统计模型",
+        "统计量",
+        "抽样分布",
+        "样本空间",
+        "参数推断"
+      ],
+      "coreConcepts": [
+        "参数统计模型三元组与样本空间",
+        "可测映射统计量定义与未知参数不依赖性",
+        "抽样分布与iid样本联合分布诱导测度",
+        "统计推断反向归纳与概率正向推导的范式转换"
+      ],
+      "applications": [
+        "量化因子样本均值与波动率的抽样分布建模",
+        "高频行情数据截面统计量的有限样本波动分析"
+      ],
+      "prerequisites": [
+        {
+          "id": "c10-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c11-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c19-s2",
+        "c19-s3",
+        "c20-s1"
+      ],
+      "learningObjective": "理解统计模型三元组形式化定义，掌握统计量不依赖未知参数的本质，掌握抽样分布概念及其与正向概率推导的区别。",
+      "keyFormulas": [],
+      "rationale": "本节建立定义19.1参数统计模型三元组与定义19.2统计量与抽样分布，确立统计推断与概率论正向演绎的本质差异。作为全书数理统计篇章的开篇基石，概念清晰直接，属于P0级核心起点与高频考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c19-s2": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "样本方差",
+        "卡方分布",
+        "正交分解",
+        "t分布",
+        "F分布"
+      ],
+      "coreConcepts": [
+        "定义19.3无偏样本方差与n-1分母自由度损失",
+        "定理19.4无偏性代数证明与协方差消去",
+        "定理19.6样本均值与样本方差独立的正交变换证明",
+        "定义19.5与19.7卡方、Student-t及Fisher-F分布构造"
+      ],
+      "applications": [
+        "资产日收益率波动率样本方差的无偏修正与置信推断",
+        "双策略收益率差异的双样本t检验统计量构造",
+        "多因子收益方差比的F检验与波动稳定性评估"
+      ],
+      "prerequisites": [
+        {
+          "id": "c05-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c11-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c12-s4",
+          "strength": "required"
+        },
+        {
+          "id": "c19-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c19-s3",
+        "c20-s2",
+        "c20-s5"
+      ],
+      "learningObjective": "推导样本方差无偏性，利用正交矩阵证明样本均值与方差独立及卡方性质，掌握三大抽样分布定义与正态样本枢轴量构造。",
+      "keyFormulas": [
+        "c19-eq-19.1",
+        "c19-eq-19.2",
+        "c19-eq-19.3"
+      ],
+      "rationale": "本节给出式(19.1)样本方差，证明定理19.4无偏性与定理19.6均值方差正交分解式(19.2)，导出式(19.3)正态样本t分布枢轴量。推导标准且奠定全书小样本精确推断基础，是量化面试与统计地基核心。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c19-s3": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 45,
+      "examFrequency": "high",
+      "tags": [
+        "点估计",
+        "偏差",
+        "均方误差",
+        "一致性",
+        "渐近无偏"
+      ],
+      "coreConcepts": [
+        "定义19.8估计量偏差与无偏估计",
+        "定理19.9均方误差的偏差-方差平方分解",
+        "定义19.10依概率收敛的一致估计量（弱相合性）",
+        "有限样本无偏与大样本渐近无偏的界限"
+      ],
+      "applications": [
+        "交易策略收益率与最大回撤估计量的均方误差权衡",
+        "岭回归通过引入可控偏差大幅缩减估计方差的实践",
+        "量化协方差矩阵收缩估计量优化"
+      ],
+      "prerequisites": [
+        {
+          "id": "c11-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c14-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c19-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c19-s4",
+        "c19-s5",
+        "c19-s6"
+      ],
+      "learningObjective": "掌握估计量偏差与无偏性，严格推导MSE偏差-方差分解，掌握弱一致性定义并能利用切比雪夫不等式证明一致性。",
+      "keyFormulas": [
+        "c19-eq-19.4"
+      ],
+      "rationale": "本节建立定义19.8偏差与定理19.9式(19.4)MSE偏差-方差权衡分解，给出定义19.10弱相合性与渐近无偏性。偏差-方差权衡是全书统计学习与资产定价模型选择的共同灵魂，属于量化高频核心必考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c19-s4": {
+      "difficulty": "D2",
+      "priority": "P1",
+      "minutes": 40,
+      "examFrequency": "medium",
+      "tags": [
+        "矩估计",
+        "样本矩",
+        "大数定律",
+        "连续映射定理"
+      ],
+      "coreConcepts": [
+        "定义19.11理论矩与样本矩联立代数方程组",
+        "例19.2 Gamma 分布形状与尺度参数的矩估计解",
+        "定理19.12基于大数定律与连续映射定理的一致性证明",
+        "矩估计可能落入参数空间边界外的局限性"
+      ],
+      "applications": [
+        "期权定价中几何布朗运动对数收益漂移率与波动率快速矩初值估计",
+        "广义双曲分布与厚尾资产收益高阶矩匹配快速参数初筛"
+      ],
+      "prerequisites": [
+        {
+          "id": "c11-s3",
+          "strength": "required"
+        },
+        {
+          "id": "c14-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c19-s3",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c19-s5",
+        "c19-s8"
+      ],
+      "learningObjective": "掌握矩估计方程列解与数值求解，能够对常见分布求解矩估计量，掌握基于大数定律和连续映射定理的一致性证明思路。",
+      "keyFormulas": [
+        "c19-eq-19.5"
+      ],
+      "rationale": "本节给出定义19.11式(19.5)矩估计法，结合例19.2 Gamma分布参数反解，应用定理19.12与连续映射定理证明矩估计一致性。矩法在量化复杂非线性模型中常作为MLE数值迭代的高质量初值，属于常用P1工具。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c19-s5": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "似然函数",
+        "极大似然估计",
+        "对数似然",
+        "剖面似然",
+        "不变性原理"
+      ],
+      "coreConcepts": [
+        "定义19.13似然函数、对数似然与极大似然估计量",
+        "例19.3 Bernoulli 试验成功概率 MLE 求解",
+        "例19.4 正态总体均值与方差的联立 MLE 及有偏性分析",
+        "命题19.14与式(19.8)剖面似然证明 MLE 的函数变换不变性"
+      ],
+      "applications": [
+        "GARCH 波动率模型与跳跃扩散模型参数的对数似然极大化校准",
+        "对冲基金信用违约二元分类 Logistic 逻辑回归参数标定",
+        "资产流动性微观结构买卖价差参数的极大似然反演"
+      ],
+      "prerequisites": [
+        {
+          "id": "c02-s5",
+          "strength": "required"
+        },
+        {
+          "id": "c10-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c19-s3",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c19-s6",
+        "c19-s7",
+        "c19-s8",
+        "c20-s5"
+      ],
+      "learningObjective": "理解似然函数内涵，熟练列出并求解对数似然方程，理解正态方差 MLE 有偏性，掌握基于剖面似然的参数变换不变性证明。",
+      "keyFormulas": [
+        "c19-eq-19.6",
+        "c19-eq-19.7",
+        "c19-eq-19.8"
+      ],
+      "rationale": "本节引入定义19.13式(19.6)似然函数与MLE，分析例19.3、例19.4式(19.7)正态方差MLE有偏性，证明命题19.14与式(19.8)剖面似然不变性。极大似然是现代量化统计推断基石，具有绝对的基础性与最高考核权重。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c19-s6": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 55,
+      "examFrequency": "high",
+      "tags": [
+        "得分函数",
+        "Fisher信息",
+        "CR下界",
+        "有效估计量",
+        "柯西不等式"
+      ],
+      "coreConcepts": [
+        "定义19.15得分函数与 Fisher 信息量",
+        "命题19.16积分求导可交换下得分零期望与负期望二阶导恒等式",
+        "定理19.17单参数 Cramér-Rao 下界证明（基于 Cauchy-Schwarz 不等式）",
+        "无偏估计量方差达到下界时的充分必要条件与有效估计量定义"
+      ],
+      "applications": [
+        "高斯白噪声环境下期权敏感度 Greeks 蒙特卡洛得分函数估计有效性",
+        "评估量化参数估计量方差是否达到信息论最优极限界"
+      ],
+      "prerequisites": [
+        {
+          "id": "c02-s5",
+          "strength": "required"
+        },
+        {
+          "id": "c11-s4",
+          "strength": "required"
+        },
+        {
+          "id": "c19-s5",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c19-s7",
+        "c20-s5"
+      ],
+      "learningObjective": "掌握得分函数均值为零及二阶导信息恒等式的推导，掌握柯西-施瓦茨不等式推导 Cramér-Rao 方差下界，掌握有效估计概念。",
+      "keyFormulas": [
+        "c19-eq-19.9",
+        "c19-eq-19.10",
+        "c19-eq-19.11"
+      ],
+      "rationale": "本节建立定义19.15得分函数与Fisher信息，证明命题19.16式(19.9)-(19.10)恒等式与定理19.17式(19.11)Cramér-Rao下界。推导严密精巧，确立无偏估计方差理论极限，是数理统计理论高峰与量化硬核考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c19-s7": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 55,
+      "examFrequency": "high",
+      "tags": [
+        "渐近正态性",
+        "大样本性质",
+        "Taylor展开",
+        "非正则模型",
+        "Slutsky定理"
+      ],
+      "coreConcepts": [
+        "定理19.18正则条件下 MLE 弱一致性与渐近正态性推导",
+        "得分函数一阶 Taylor 展开与观测信息依概率收敛至 Fisher 信息",
+        "渐近有效性：MLE 渐近方差严格达到 Cramér-Rao 下界",
+        "例19.7均匀分布支撑集依赖未知参数导致标准渐近理论失效的反例"
+      ],
+      "applications": [
+        "大样本资产组合因子载荷 MLE 估计的大样本置信椭球构建",
+        "极值分布拟合中边界参数对经典渐近正态假设破坏的诊断"
+      ],
+      "prerequisites": [
+        {
+          "id": "c14-s5",
+          "strength": "required"
+        },
+        {
+          "id": "c14-s6",
+          "strength": "required"
+        },
+        {
+          "id": "c19-s6",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c19-s8",
+        "c20-s3",
+        "c20-s5"
+      ],
+      "learningObjective": "理解 MLE 弱一致性证明思路，掌握利用得分函数 Taylor 展开和中心极限定理证明渐近正态性式(19.12)，理解支撑集依赖参数的非正则性。",
+      "keyFormulas": [
+        "c19-eq-19.12"
+      ],
+      "rationale": "本节证明定理19.18正则条件下式(19.12)MLE渐近正态性，展示渐近方差达到Cramér-Rao界，并通过例19.7揭示支撑集依赖参数非正则反例。将微积分、极限定理与Fisher信息融会贯通，是渐近推断的理论核心。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c19-s8": {
+      "difficulty": "D2",
+      "priority": "P1",
+      "minutes": 40,
+      "examFrequency": "medium",
+      "tags": [
+        "估计方法",
+        "矩估计对比",
+        "标准误",
+        "三层方差",
+        "数值优化"
+      ],
+      "coreConcepts": [
+        "矩估计与 MLE 的代数、计算复杂度与统计效率全方位权衡",
+        "标准误三层体系：理论方差、观测信息逆矩阵与稳健三明治方差",
+        "数值优化陷阱：局部极值、初值敏感性与边界约束处理",
+        "量化建模选型工作流：矩估计快速初值驱动 MLE 高精度数值收敛"
+      ],
+      "applications": [
+        "资产定价重尾分布（如 Student-t、GED）多参数估计工程选型",
+        "高维因子协方差矩阵估计中计算稳定性与估计精度的平衡"
+      ],
+      "prerequisites": [
+        {
+          "id": "c17-s1",
+          "strength": "helpful"
+        },
+        {
+          "id": "c19-s4",
+          "strength": "required"
+        },
+        {
+          "id": "c19-s7",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c19-s5",
+        "c20-s1",
+        "c20-s5"
+      ],
+      "learningObjective": "掌握矩估计与极大似然在计算成本、样本量需求与效率上的权衡准则，掌握理论、观测与三明治三层标准误体系，建立稳健工程选型思维。",
+      "keyFormulas": [],
+      "rationale": "本节系统梳理矩法与MLE联系，建立理论、观测与三明治标准误三层评估体系，解析局部极值与初值选择工程陷阱。将前七节理论沉淀为量化算法选型方法论，虽无独立标号公式，但极具实战指导价值，评为P1重要工具。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    }
+  },
+  "reviewedBy": "DSH",
+  "reviewedAt": "2026-11-10"
+}

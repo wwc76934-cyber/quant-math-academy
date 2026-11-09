@@ -1,0 +1,389 @@
+{
+  "schemaVersion": 1,
+  "chapterId": "c20",
+  "title": "置信区间、假设检验与多重检验",
+  "partId": "part-5",
+  "summary": "本章系统建立参数区间估计与假设检验的数理框架：从枢轴量定义与区间覆盖频率解释出发，推导单参数最短区间与等尾取舍；深入剖析单正态及双正态均值与方差的精确 z、t、卡方与 F 区间，推导 Behrens-Fisher 困境下的 Welch 近似自由度；基于渐近枢轴量与 delta 方法剖析 Wald 比例区间失效机理，推导 Wilson 得分区间与方差稳定变换；在带约束优化视角下严格证明 Neyman-Pearson 最优检验引理与 Karlin-Rubin 单调似然比定理，确立检验与置信区间的对偶性；严格证明 Wald、Score 与似然比三大渐近检验在平方根标度下的渐近等价性，推导 Pearson 卡方拟合优度检验；系统建立多重检验下 FWER 与 FDR 准则，证明 Bonferroni、Holm 与 Benjamini-Hochberg 控制定理；最后深度剖析量化因子 IC 显著性、Newey-West 自相关修正与策略回测数据窥探偏差。",
+  "whyStudy": "置信区间、假设检验与多重检验是量化研究从样本数据推断真实市场规律的严谨科学工具：从单因子有效性 t 检验与自相关校正，到回测参数扫描与海量因子挖掘中的假阳性控制（FWER/FDR 与 Harvey t 门槛），掌握枢轴量构造、对偶原理、三大渐近检验与多重检验控制，是识别真伪 alpha、杜绝过拟合与数据窥探的生命线。",
+  "prerequisites": [
+    "c10-s2",
+    "c11-s2",
+    "c12-s4",
+    "c14-s6",
+    "c19-s2",
+    "c19-s5",
+    "c19-s7"
+  ],
+  "metadataStatus": "reviewed",
+  "reviewed": true,
+  "sections": {
+    "c20-s1": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 45,
+      "examFrequency": "high",
+      "tags": [
+        "区间估计",
+        "枢轴量",
+        "置信水平",
+        "频率解释",
+        "等尾区间"
+      ],
+      "coreConcepts": [
+        "定义20.1置信区间覆盖概率的严格频率解释",
+        "定义20.2枢轴量定义（分布已知且不依赖未知参数）",
+        "定理20.3单调映射下的枢轴量求逆反解置信区间法",
+        "单参数非对称分布下最短置信区间与等尾区间的变分取舍"
+      ],
+      "applications": [
+        "量化多空组合期望超额收益率区间不确定性评估",
+        "高频交易延迟参数的区间估计与置信度量"
+      ],
+      "prerequisites": [
+        {
+          "id": "c11-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c19-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c19-s2",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c20-s2",
+        "c20-s3",
+        "c20-s4"
+      ],
+      "learningObjective": "理解置信区间的频率学派覆盖解释，掌握枢轴量定义，熟练运用定理20.3通过单调枢轴量反解参数置信区间，理解等尾与最短区间区别。",
+      "keyFormulas": [
+        "c20-eq-20.1",
+        "c20-eq-20.2"
+      ],
+      "rationale": "本节建立定义20.1式(20.1)区间估计频率解释与定义20.2枢轴量，证明定理20.3式(20.2)枢轴量求逆构造法并剖析最短区间取舍。枢轴量是参数区间推断的核心思想引擎，概念基础重要，属于P0级核心基石。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c20-s2": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 55,
+      "examFrequency": "high",
+      "tags": [
+        "正态区间",
+        "t区间",
+        "卡方区间",
+        "F区间",
+        "Welch近似"
+      ],
+      "coreConcepts": [
+        "定理20.4与20.5单正态均值z与t区间式(20.3)-(20.4)",
+        "定理20.6单正态方差卡方区间式(20.5)及其非对称性",
+        "定理20.7与20.8双样本合并方差t区间式(20.6)与方差比F区间式(20.7)",
+        "Behrens-Fisher 困境与 Welch-Satterthwaite 矩匹配近似自由度式(20.8)"
+      ],
+      "applications": [
+        "小样本策略日收益均值与日波动率的年化置信区间推算",
+        "两只对冲基金收益率差异的 Welch t 区间稳定性对比",
+        "跨期现套利基差波动率比值的 F 分布区间评估"
+      ],
+      "prerequisites": [
+        {
+          "id": "c19-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c20-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c20-s3",
+        "c20-s5",
+        "c20-s7"
+      ],
+      "learningObjective": "熟练推导正态总体下单双样本均值与方差的精确置信区间，理解 Welch-Satterthwaite 自由度近似推导，分析方差不齐时合并 t 的失真。",
+      "keyFormulas": [
+        "c20-eq-20.3",
+        "c20-eq-20.4",
+        "c20-eq-20.5",
+        "c20-eq-20.8"
+      ],
+      "rationale": "本节基于正态正交分解证明式(20.3)-(20.7)单双正态均值与方差精确区间，推导式(20.8)Welch矩匹配自由度并结合例20.2解析年化含义。推导经典严谨，是量化统计推断中最常用的小样本基石，属P0级高频考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c20-s3": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "Wald区间",
+        "Wilson区间",
+        "二项比例",
+        "方差稳定变换",
+        "delta方法"
+      ],
+      "coreConcepts": [
+        "中心极限定理与渐近枢轴量大样本区间构造",
+        "二项比例式(20.9) Wald 区间三大失效病灶（离散锯齿、标准误错配与边界崩溃）",
+        "式(20.10) Wilson 得分区间基于 score 检验反解的严格推导与边界稳健性",
+        "基于微分方程构造方差稳定变换（arcsine 变换）及 delta 方法二阶展开"
+      ],
+      "applications": [
+        "量化交易高频信号胜率及违约概率小样本置信区间修正",
+        "极深实值期权行权命中率在边界样本下的 Wilson 区间校准",
+        "波动率对数尺度乘性不对称置信区间构建"
+      ],
+      "prerequisites": [
+        {
+          "id": "c14-s6",
+          "strength": "required"
+        },
+        {
+          "id": "c19-s7",
+          "strength": "required"
+        },
+        {
+          "id": "c20-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c20-s2",
+        "c20-s4",
+        "c20-s5"
+      ],
+      "learningObjective": "理解渐近枢轴量，深入掌握 Wald 比例区间在边界失效机理，掌握二次方程求根推导 Wilson 得分区间式(20.10)，掌握方差稳定变换与 delta 方法。",
+      "keyFormulas": [
+        "c20-eq-20.9",
+        "c20-eq-20.10"
+      ],
+      "rationale": "本节剖析式(20.9)Wald比例区间在边界欠覆盖的根本机制，推导式(20.10)Wilson得分区间，结合delta方法与arcsine方差稳定变换建立大样本推断体系。对量化策略胜率与违约率等小样本比例评估至关重要，属P0核心考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c20-s4": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 55,
+      "examFrequency": "high",
+      "tags": [
+        "假设检验",
+        "两类错误",
+        "NP引理",
+        "单调似然比",
+        "区间对偶性"
+      ],
+      "coreConcepts": [
+        "定义20.9与20.10假设检验问题、拒绝域、两类错误与功效函数",
+        "定理20.11 Neyman-Pearson 引理存在性、最优性与唯一性证明",
+        "式(20.13)与定理20.12 Karlin-Rubin 单调似然比 UMP 检验",
+        "定义20.13 p 值频率含义及其在原假设下服从 U(0,1) 性质证明",
+        "定理20.14检验接受域反解与置信集覆盖概率的严格对偶性等价"
+      ],
+      "applications": [
+        "量化策略相比基准指数是否有正超额收益的最优单边检验设计",
+        "统计套利对冲残差均值回复显著性的 UMP 拒绝域确定"
+      ],
+      "prerequisites": [
+        {
+          "id": "c10-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c19-s5",
+          "strength": "required"
+        },
+        {
+          "id": "c20-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c20-s5",
+        "c20-s6",
+        "c20-s7"
+      ],
+      "learningObjective": "掌握检验问题形式化，证明 Neyman-Pearson 引理式(20.12)，理解单调似然比 UMP 构造，掌握 p 值在原假设下的均匀分布性质与检验-区间对偶定理。",
+      "keyFormulas": [
+        "c20-eq-20.11",
+        "c20-eq-20.12",
+        "c20-eq-20.15",
+        "c20-eq-20.16"
+      ],
+      "rationale": "本节建立定义20.9-20.10两类错误与功效函数，证明定理20.11引理式(20.12)、定理20.12 Karlin-Rubin与定理20.14对偶性式(20.16)。构建假设检验最高理论框架，是现代统计学与量化推断的核心地基。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c20-s5": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "Wald检验",
+        "Score检验",
+        "似然比检验",
+        "卡方拟合优度",
+        "F检验"
+      ],
+      "coreConcepts": [
+        "三大渐近统计量：式(20.17) Wald、式(20.18) Score 与式(20.19) 似然比",
+        "定理20.15基于 Taylor 展开证明三大检验在原假设下依概率等价收敛至卡方分布",
+        "三大检验在参数变换不变性、计算开销与有限样本（如 Hauck-Donner 效应）的表现差异",
+        "定理20.16 Pearson 卡方拟合优度检验式(20.22)及其自由度约束扣减"
+      ],
+      "applications": [
+        "金融收益率正态性与厚尾分布的 Pearson 卡方及 Jarque-Bera 拟合优度检验",
+        "多因子线性定价模型截距项联合显著性的 Wald 检验",
+        "因子波动率同质性比较的 F 检验与稳健 Levene 替代"
+      ],
+      "prerequisites": [
+        {
+          "id": "c19-s6",
+          "strength": "required"
+        },
+        {
+          "id": "c19-s7",
+          "strength": "required"
+        },
+        {
+          "id": "c20-s4",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c20-s2",
+        "c20-s6",
+        "c20-s7"
+      ],
+      "learningObjective": "理解三大检验统计量构造与几何直观，掌握利用 Taylor 展开证明定理20.15渐近等价性，掌握 Pearson 卡方拟合优度检验与自由度计算。",
+      "keyFormulas": [
+        "c20-eq-20.17",
+        "c20-eq-20.18",
+        "c20-eq-20.19",
+        "c20-eq-20.22"
+      ],
+      "rationale": "本节提出式(20.17)-(20.19)三大统计量，证明定理20.15渐近卡方等价性式(20.20)，给出t检验式(20.21)、定理20.16拟合优度式(20.22)与F检验式(20.23)。连接似然理论与实务假设检验，是应用统计与量化面试的核心考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c20-s6": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "多重检验",
+        "族错误率",
+        "错误发现率",
+        "Bonferroni",
+        "BH程序"
+      ],
+      "coreConcepts": [
+        "多重比较假阳性膨胀机理与定义20.17 FWER 与 FDR 准则定义",
+        "式(20.25) Bonferroni 校正在任意相依结构下的有效性证明与保守性来源",
+        "Holm 逐步下行检验程序对 Bonferroni 的一致改进证明",
+        "定理20.18 Benjamini-Hochberg (BH) 程序式(20.26)在线性放宽阈值下的 FDR 严格控制证明",
+        "校正强度随假设数 m 的增长标度律"
+      ],
+      "applications": [
+        "数百个量化截面候选因子初步筛选中的假阳性控制（FDR/BH 程序）",
+        "回测网格搜索多参数配置策略表现的严格家族误差控制（Holm/Bonferroni）"
+      ],
+      "prerequisites": [
+        {
+          "id": "c09-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c20-s4",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c20-s5",
+        "c20-s7"
+      ],
+      "learningObjective": "掌握多重检验假阳性膨胀机理，区分 FWER 与 FDR，证明 Bonferroni 与 Holm 法，掌握 BH 程序定理20.18的排序比较与 q 值计算。",
+      "keyFormulas": [
+        "c20-eq-20.24",
+        "c20-eq-20.25",
+        "c20-eq-20.26"
+      ],
+      "rationale": "本节建立定义20.17式(20.24)FWER与FDR，证明式(20.25)Bonferroni与Holm强控，证明定理20.18式(20.26)BH程序弱控并结合例20.6对比。量化因子挖掘与参数扫描防范过拟合的核心数理工具，理论成熟，属P0核心考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c20-s7": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 55,
+      "examFrequency": "high",
+      "tags": [
+        "信息系数",
+        "Newey-West",
+        "数据窥探",
+        "p-hacking",
+        "Harvey检验"
+      ],
+      "coreConcepts": [
+        "式(20.27)因子 IC 序列显著性 t 检验与 ICIR 含义",
+        "时序自相关导致方差低估的机理与 Newey-West 长期方差修正",
+        "式(20.28)策略回测中独立无效策略最优者 p 值的 Beta 分布与期望 1/(m+1)",
+        "数据窥探与 p-hacking 的选择性推断偏差及 Harvey t>3 门槛的统计推导",
+        "White Reality Check 与 Hansen SPA 检验对策略集合最大值的学生化检验机制"
+      ],
+      "applications": [
+        "量化因子长期月度 IC 序列自相关显著性核验与样本量预算",
+        "策略研发回测库中选择偏差与因子衰减的元分析诊断",
+        "VaR 风险模型 Kupiec 与 Christoffersen 检验的置信区间与功效分析"
+      ],
+      "prerequisites": [
+        {
+          "id": "c18-s5",
+          "strength": "helpful"
+        },
+        {
+          "id": "c20-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c20-s5",
+          "strength": "required"
+        },
+        {
+          "id": "c20-s6",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c20-s2",
+        "c20-s3",
+        "c20-s6"
+      ],
+      "learningObjective": "熟练计算因子 IC 与 ICIR 检验式(20.27)并进行 Newey-West 自相关修正，严格推导无效策略最优者 p 值分布式(20.28)，掌握 Harvey t>3 统计依据与样本外验证纪律。",
+      "keyFormulas": [
+        "c20-eq-20.27",
+        "c20-eq-20.28"
+      ],
+      "rationale": "本节应用前文理论解析式(20.27)因子IC检验与Newey-West修正，推导例20.8式(20.28)无效策略最优者p值分布，阐明数据窥探与Harvey t>3统计依据。将数理统计推断无缝对接量化投资实战痛点，极具实践价值，属P0必修考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    }
+  },
+  "reviewedBy": "DSH",
+  "reviewedAt": "2026-11-10"
+}
