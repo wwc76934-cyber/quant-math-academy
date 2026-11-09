@@ -1,0 +1,388 @@
+/* Quant Math Academy - Search Page Styles (T08) */
+
+.search-page,
+.search-page.shell {
+  padding-top: 36px;
+  padding-bottom: 72px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.search-header {
+  margin-bottom: 28px;
+}
+
+.search-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 8px;
+  color: var(--ink);
+}
+
+.search-header p {
+  color: var(--ink-secondary);
+  font-size: 14px;
+  margin: 0 0 20px;
+}
+
+/* Visually hidden but available to assistive tech */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  max-width: 720px;
+}
+
+.search-input-icon {
+  position: absolute;
+  left: 16px;
+  color: var(--ink-muted);
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+}
+
+.search-main-input {
+  width: 100%;
+  height: 48px;
+  padding: 0 44px 0 44px;
+  font-size: 16px;
+  font-family: var(--font-sans);
+  color: var(--ink);
+  background: var(--bg-elevated);
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-md);
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.search-main-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(165, 67, 47, 0.12);
+}
+
+.search-main-input::-webkit-search-cancel-button,
+.search-main-input::-webkit-search-decoration {
+  display: none;
+}
+
+.search-clear-btn {
+  position: absolute;
+  right: 12px;
+  background: transparent;
+  border: none;
+  color: var(--ink-muted);
+  padding: 6px;
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-clear-btn:hover {
+  color: var(--ink);
+  background: var(--bg-subtle);
+}
+
+/* History */
+.search-history {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-width: 720px;
+}
+
+.search-history-label {
+  font-size: 12px;
+  color: var(--ink-muted);
+  font-weight: 500;
+}
+
+.search-history-tag {
+  background: var(--bg-subtle);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 3px 10px;
+  font-size: 12px;
+  color: var(--ink-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.search-history-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.search-history-clear {
+  background: transparent;
+  border: none;
+  font-size: 12px;
+  color: var(--ink-muted);
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 2px 4px;
+}
+
+.search-history-clear:hover {
+  color: var(--accent);
+}
+
+/* Filters */
+.search-filters-bar {
+  margin-top: 24px;
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 860px;
+}
+
+.search-type-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.search-type-pill {
+  padding: 6px 14px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid var(--line);
+  background: var(--bg-elevated);
+  color: var(--ink-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.search-type-pill:hover {
+  border-color: var(--ink-muted);
+  color: var(--ink);
+}
+
+.search-type-pill.is-active {
+  background: var(--ink);
+  color: var(--bg);
+  border-color: var(--ink);
+}
+
+.search-select-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.search-select-filters select {
+  height: 34px;
+  padding: 0 10px;
+  font-size: 13px;
+  font-family: var(--font-sans);
+  color: var(--ink);
+  background: var(--bg-elevated);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  outline: none;
+}
+
+.search-select-filters select:focus {
+  border-color: var(--accent);
+}
+
+/* Live stats */
+.search-stats {
+  font-size: 13px;
+  color: var(--ink-secondary);
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+/* Results */
+.search-results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 860px;
+}
+
+.search-result-card {
+  display: block;
+  text-decoration: none;
+  background: var(--bg-elevated);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 20px 24px;
+  transition: all 0.15s ease;
+}
+
+.search-result-card:hover,
+.search-result-card.is-active {
+  border-color: var(--accent);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.search-result-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.search-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.search-badge--section {
+  background: rgba(43, 114, 186, 0.12);
+  color: #2b72ba;
+}
+
+.search-badge--theorem,
+.search-badge--definition,
+.search-badge--lemma,
+.search-badge--proposition,
+.search-badge--corollary,
+.search-badge--axiom {
+  background: rgba(184, 51, 42, 0.12);
+  color: var(--accent);
+}
+
+.search-badge--example {
+  background: rgba(56, 142, 60, 0.12);
+  color: #2e7d32;
+}
+
+.search-badge--exercise {
+  background: rgba(230, 81, 0, 0.12);
+  color: #e65100;
+}
+
+.search-badge--solution {
+  background: rgba(106, 27, 154, 0.12);
+  color: #6a1b9a;
+}
+
+.search-badge--note {
+  background: rgba(117, 117, 117, 0.12);
+  color: #616161;
+}
+
+.search-result-chapter {
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+
+.search-result-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 10px;
+}
+
+.search-result-snippet {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink-secondary);
+  margin: 0;
+}
+
+mark.search-highlight {
+  background: rgba(255, 235, 59, 0.35);
+  color: inherit;
+  font-weight: 600;
+  padding: 0 2px;
+  border-radius: 2px;
+}
+
+/* Empty State */
+.search-empty {
+  padding: 48px 24px;
+  text-align: center;
+  background: var(--bg-elevated);
+  border: 1px dashed var(--line);
+  border-radius: var(--radius-md);
+  max-width: 720px;
+}
+
+.search-empty h3 {
+  font-size: 18px;
+  color: var(--ink);
+  margin: 0 0 8px;
+}
+
+.search-empty p {
+  color: var(--ink-secondary);
+  font-size: 14px;
+  margin: 0 0 20px;
+}
+
+.search-suggestions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.search-suggestion-btn {
+  background: var(--bg-subtle);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 4px 12px;
+  font-size: 13px;
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.search-suggestion-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Skeleton Loading */
+.search-skeleton-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.skeleton-box {
+  background: linear-gradient(90deg, var(--bg-subtle) 25%, var(--line) 50%, var(--bg-subtle) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-sm);
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

@@ -1,0 +1,68 @@
+import { AliasMap } from './types';
+
+export const DEFAULT_ALIASES: AliasMap = {
+  期望: ['expectation', 'mean', 'expected value', '数学期望'],
+  方差: ['variance', 'var'],
+  协方差: ['covariance', 'cov'],
+  相关系数: ['correlation', 'correlation coefficient', 'corr'],
+  特征值: ['eigenvalue', 'eigenvalues', '特征根'],
+  特征向量: ['eigenvector', 'eigenvectors'],
+  奇异值: ['svd', 'singular value', 'singular value decomposition', '奇异值分解'],
+  正定: ['positive definite', '正定矩阵', '半正定', 'positive semi-definite'],
+  投影: ['projection', '投影矩阵', '正交投影', 'orthogonal projection'],
+  最小二乘: ['least squares', 'ols', '普通最小二乘', '最小二乘法'],
+  凸函数: ['convex', 'convex function', '凸优化', 'convex optimization'],
+  对偶: ['dual', 'duality', '对偶性', '拉格朗日对偶', 'lagrangian dual'],
+  kkt: ['karush-kuhn-tucker', 'kkt条件', 'kkt conditions'],
+  极大似然: ['mle', 'maximum likelihood', '极大似然估计', '似然函数'],
+  置信区间: ['confidence interval', 'ci'],
+  假设检验: ['hypothesis test', 'hypothesis testing', '显著性检验', 'p值'],
+  回归: ['regression', '线性回归', 'linear regression'],
+  鞅: ['martingale', '鞅过程', '亚鞅', '超鞅'],
+  布朗运动: ['brownian motion', 'wiener process', '维纳过程', '布朗'],
+  伊藤: ['ito', 'itô', 'ito calculus', 'ito lemma', '伊藤引理', '伊藤积分', '伊藤过程'],
+  garch: ['arch', 'generalized autoregressive conditional heteroskedasticity', 'garch模型', '波动率聚集'],
+  卡尔曼: ['kalman', 'kalman filter', '卡尔曼滤波', '状态空间', '状态估计'],
+  夏普: ['sharpe', 'sharpe ratio', '夏普比率', '夏普比', '超额收益'],
+  回撤: ['drawdown', 'max drawdown', '最大回撤'],
+  风险价值: ['var', 'value at risk', '在险价值', 'es', 'expected shortfall', '条件风险价值'],
+  '布莱克-斯科尔斯': ['black-scholes', 'black scholes', 'bs模型', 'bsm', '期权定价'],
+};
+
+/**
+ * Expands a user query into relevant synonyms / translation terms.
+ */
+export function expandQuery(query: string, aliasMap: AliasMap = DEFAULT_ALIASES): string[] {
+  const qClean = query.trim().toLowerCase();
+  if (!qClean) return [];
+
+  const expanded = new Set<string>();
+  expanded.add(qClean);
+
+  const unaccented = qClean.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  if (unaccented !== qClean) {
+    expanded.add(unaccented);
+  }
+
+  for (const [key, list] of Object.entries(aliasMap)) {
+    const keyLower = key.toLowerCase();
+    const listLower = list.map((item) => item.toLowerCase());
+
+    const isMatch =
+      keyLower === qClean ||
+      keyLower.includes(qClean) ||
+      qClean.includes(keyLower) ||
+      listLower.some((item) => item === qClean || item.includes(qClean) || qClean.includes(item));
+
+    if (isMatch) {
+      expanded.add(keyLower);
+      listLower.forEach((item) => {
+        expanded.add(item);
+        const itemUnaccented = item.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        if (itemUnaccented !== item) expanded.add(itemUnaccented);
+      });
+    }
+  }
+
+  return Array.from(expanded);
+}

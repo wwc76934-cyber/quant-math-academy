@@ -480,7 +480,7 @@ export const ReaderPage: React.FC = () => {
         setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
       } else if (e.key === '/') {
         e.preventDefault();
-        showToast('全文搜索将在 Phase 2 开放');
+        navigate('/search');
       } else if (e.key === '?') {
         e.preventDefault();
         setShortcutsModalOpen(true);

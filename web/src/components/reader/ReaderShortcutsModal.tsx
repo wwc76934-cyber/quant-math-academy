@@ -30,7 +30,7 @@ export const ReaderShortcutsModal: React.FC<ReaderShortcutsModalProps> = ({
     { key: ']', desc: '跳转到下一节' },
     { key: 'f', desc: '开启 / 退出专注沉浸模式' },
     { key: 't', desc: '切换主题（浅色 / 深色）' },
-    { key: '/', desc: '打开全局搜索（Phase 2）' },
+    { key: '/', desc: '打开全文检索' },
     { key: '?', desc: '打开快捷键帮助' },
     { key: 'Esc', desc: '退出全屏抽屉或关闭弹窗' },
   ];

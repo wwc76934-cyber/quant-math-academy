@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { DifficultyBadge } from '../components/metadata/DifficultyBadge';
 import { PriorityBadge } from '../components/metadata/PriorityBadge';
+import { Button } from '../components/ui/Button';
 import { ErrorState } from '../components/ui/ErrorState';
 import { loadBook } from '../features/content/loadBook';
 import { Book } from '../features/content/types';
@@ -16,6 +17,7 @@ import { learnPath, syllabusPath } from '../lib/paths';
 
 export const HomePage: React.FC = () => {
   const { store } = useStore();
+  const navigate = useNavigate();
   const [book, setBook] = useState<Book | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -198,6 +200,41 @@ export const HomePage: React.FC = () => {
           <p>
             以《量化数学进阶教材》为底本的结构化学习系统。8 篇 34 章，按难度与必要性重新组织，让一千多页的数学书变成每天可以推进的学习路径。
           </p>
+          <form
+            className="home-search-bar"
+            onSubmit={(e) => {
+              e.preventDefault();
+              const input = (e.currentTarget.elements.namedItem('homeSearch') as HTMLInputElement)?.value;
+              navigate(input ? `/search?q=${encodeURIComponent(input.trim())}` : '/search');
+            }}
+            style={{
+              display: 'flex',
+              gap: '8px',
+              maxWidth: '520px',
+              marginTop: '16px',
+            }}
+          >
+            <input
+              name="homeSearch"
+              type="search"
+              placeholder="搜索公式、定理、习题（按 / 快速检索）..."
+              aria-label="搜索教材内容"
+              style={{
+                flex: 1,
+                height: '40px',
+                padding: '0 14px',
+                borderRadius: 'var(--radius-sm)',
+                border: '1.5px solid var(--line)',
+                background: 'var(--bg-elevated)',
+                color: 'var(--ink)',
+                fontSize: '14px',
+                outline: 'none',
+              }}
+            />
+            <Button type="submit" variant="primary" size="md">
+              搜索
+            </Button>
+          </form>
         </div>
         <div className="masthead__meta">
           <div>

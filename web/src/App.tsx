@@ -8,6 +8,7 @@ import { FeaturePlaceholder } from './routes/FeaturePlaceholder';
 import { HomePage } from './routes/HomePage';
 import { NotFoundPage } from './routes/NotFoundPage';
 import { ReaderPage } from './routes/ReaderPage';
+import { SearchPage } from './routes/SearchPage';
 import { SyllabusPage } from './routes/SyllabusPage';
 import { ToastProvider } from './components/reader/Toast';
 
@@ -133,16 +134,7 @@ const MainLayout: React.FC = () => {
               />
             }
           />
-          <Route
-            path="/search"
-            element={
-              <FeaturePlaceholder
-                featureName="全文检索"
-                phase="Phase 2"
-                description="基于本地轻量索引的数学概念、公式、定理与习题快速搜索即将在 Phase 2 上线。"
-              />
-            }
-          />
+          <Route path="/search" element={<SearchPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </div>
