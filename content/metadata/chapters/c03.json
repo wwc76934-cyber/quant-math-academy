@@ -1,0 +1,283 @@
+{
+  "schemaVersion": 1,
+  "chapterId": "c03",
+  "title": "多元微积分、多重积分与常微分方程",
+  "partId": "part-1",
+  "summary": "本章拓展微积分至多维空间与动态系统：深入可微性与偏导数的本质区别，建立多元链式法则、二阶 Taylor 展开与 Hessian 极值判别；阐述二重积分 Fubini 换序与 Jacobian 变量替换；最后建立常微分方程的分离变量、积分因子法与 Picard 存在唯一性理论。",
+  "whyStudy": "多维随机变量联合分布、多资产组合二次优化、风险梯度计算、测度变换中密度 Jacobian 调整以及均值回复利率动态模型均直接构建于多元分析与常微分方程工具之上。",
+  "prerequisites": [
+    "c02-s2",
+    "c02-s3",
+    "c02-s4"
+  ],
+  "metadataStatus": "reviewed",
+  "reviewed": true,
+  "reviewedBy": "DSH",
+  "reviewedAt": "2026-11-09",
+  "sections": {
+    "c03-s1": {
+      "difficulty": "D2",
+      "priority": "P1",
+      "minutes": 40,
+      "examFrequency": "high",
+      "tags": [
+        "全微分",
+        "偏导数",
+        "方向导数",
+        "可微性",
+        "反例"
+      ],
+      "coreConcepts": [
+        "偏导数",
+        "方向导数",
+        "可微性",
+        "全微分"
+      ],
+      "applications": [
+        "量化因子特征在局部扰动下的全变分评估",
+        "多因子敏感度分析的方向一致性验证"
+      ],
+      "prerequisites": [
+        {
+          "id": "c02-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c02-s2",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c03-s2"
+      ],
+      "learningObjective": "能陈述全微分的严格线性映射定义，熟练推导方向导数与梯度的关系，并能构造反例论证偏导存在与可微性的本质区别。",
+      "keyFormulas": [
+        "c03-eq-3.1"
+      ],
+      "rationale": "本节建立定义3.1全微分概念，核心证明为定理3.3利用一元中值定理逐坐标拆分证明连续偏导蕴含可微，并通过例3.1反例厘清偏导与连续的关系，思维转换清晰，定为D2；该节是多维微积分概念基石，量化笔试中常考概念辨析题，故定为P1。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c03-s2": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 45,
+      "examFrequency": "high",
+      "tags": [
+        "梯度",
+        "Jacobian",
+        "Hessian",
+        "链式法则",
+        "多元 Taylor"
+      ],
+      "coreConcepts": [
+        "梯度",
+        "Jacobian矩阵",
+        "链式法则",
+        "Hessian矩阵",
+        "二次型判别"
+      ],
+      "applications": [
+        "投资组合方差风险的梯度与Hessian测算",
+        "高维损失函数梯度下降与牛顿法迭代更新"
+      ],
+      "prerequisites": [
+        {
+          "id": "c02-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c02-s4",
+          "strength": "required"
+        },
+        {
+          "id": "c03-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c03-s3"
+      ],
+      "learningObjective": "熟练运用多元链式法则计算复合函数导数，能写出多元二阶 Taylor 展开并利用 Hessian 矩阵特征判定多元驻点的极值类型。",
+      "keyFormulas": [
+        "c03-eq-3.2",
+        "c03-eq-3.3"
+      ],
+      "rationale": "本节涵盖定理3.4多元链式法则、定理3.5二阶Taylor展开及定理3.6利用Hessian正定性判别极值的完整体系，推导采用降维辅助函数，规范清晰，难度为D2；梯度与Hessian矩阵是资产配置二次规划、量化机器学习与最优化的核心语言，面试必考，故定为最高优先级P0。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c03-s3": {
+      "difficulty": "D2",
+      "priority": "P1",
+      "minutes": 35,
+      "examFrequency": "medium",
+      "tags": [
+        "隐函数定理",
+        "反函数",
+        "隐导数",
+        "非奇异"
+      ],
+      "coreConcepts": [
+        "隐函数定理",
+        "反函数定理",
+        "隐导数",
+        "非退化Jacobian"
+      ],
+      "applications": [
+        "Black-Scholes隐含波动率对市价的隐导数敏感度分析",
+        "等风险预算约束曲面的局部切平面方程刻画"
+      ],
+      "prerequisites": [
+        {
+          "id": "c03-s2",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c03-s5"
+      ],
+      "learningObjective": "能准确阐述隐函数定理的非奇异偏导条件，熟练利用链式法则计算多元方程确定的隐函数一阶导数与切空间。",
+      "keyFormulas": [
+        "c03-eq-3.4"
+      ],
+      "rationale": "本节讲解定理3.7隐函数定理，重点在于理解偏导非零条件如何排除折叠奇点，并由多元链式法则推导隐导数公式，推导直接明快，难度评为D2；隐函数求导是期权隐含波动率对标的资产敏度推导及非线性约束分析的常用工具，属于重要掌握内容，定为P1。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c03-s4": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 40,
+      "examFrequency": "high",
+      "tags": [
+        "二重积分",
+        "Fubini",
+        "累次积分",
+        "联合密度"
+      ],
+      "coreConcepts": [
+        "二重积分",
+        "Fubini定理",
+        "累次积分",
+        "积分区域换序"
+      ],
+      "applications": [
+        "连续型二维随机变量联合概率与边缘密度计算",
+        "二维资产损益概率区域积分与联合期望评估"
+      ],
+      "prerequisites": [
+        {
+          "id": "c02-s3",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c03-s5"
+      ],
+      "learningObjective": "熟练利用 Fubini 定理将二重积分转化为累次积分，能根据积分区域几何边界准确重构积分限并完成积分次序交换。",
+      "keyFormulas": [
+        "c03-eq-3.5",
+        "c03-eq-3.6"
+      ],
+      "rationale": "本节依托定义3.8建立二重Riemann积分，并由定理3.9给出连续函数下Fubini换序定理，例3.5重点训练了非矩形区域的积分限重构技巧，难度为D2；Fubini定理是二维随机变量联合密度边缘化、全期望公式连续化与联合方差计算的生命线，应用广泛，优先级定为P0。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c03-s5": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 45,
+      "examFrequency": "high",
+      "tags": [
+        "变量替换",
+        "Jacobian",
+        "多重积分",
+        "Gauss 积分"
+      ],
+      "coreConcepts": [
+        "变量替换公式",
+        "Jacobian行列式",
+        "极坐标变换",
+        "Gauss积分"
+      ],
+      "applications": [
+        "多维正态随机向量线性与非线性变量替换密度推导",
+        "Gauss密度归一化常数推导与正态期权定价解析解核算"
+      ],
+      "prerequisites": [
+        {
+          "id": "c03-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c03-s4",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c03-s6"
+      ],
+      "learningObjective": "能计算坐标变换的 Jacobian 行列式并应用变量替换公式求解多重积分，熟练运用极坐标技巧证明 Gauss 积分恒等式。",
+      "keyFormulas": [
+        "c03-eq-3.7",
+        "c03-eq-3.8"
+      ],
+      "rationale": "本节核心为定理3.10多重积分变量替换公式，通过局部线性变换面积放大因子阐明Jacobian行列式修正机制，并以例3.7 Gauss积分展现经典的升维化积技巧，综合度较高，定为D3；该公式是多维概率密度变换公式与正态分布标准化的理论基石，笔试核心必考，定为P0。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c03-s6": {
+      "difficulty": "D2",
+      "priority": "P1",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "常微分方程",
+        "分离变量",
+        "积分因子",
+        "Picard",
+        "均值回复"
+      ],
+      "coreConcepts": [
+        "常微分方程",
+        "分离变量",
+        "积分因子法",
+        "均值回复模型",
+        "Picard存在唯一性"
+      ],
+      "applications": [
+        "Vasicek利率与Ornstein-Uhlenbeck均值回复确定性漂移轨迹求解",
+        "商品库存与波动率半衰期动态建模"
+      ],
+      "prerequisites": [
+        {
+          "id": "c02-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c02-s3",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c03-s2"
+      ],
+      "learningObjective": "熟练运用分离变量法与积分因子法求解一阶常微分方程，能对均值回复模型求解轨迹并阐明 Picard 定理的 Lipschitz 唯一性条件。",
+      "keyFormulas": [
+        "c03-eq-3.9",
+        "c03-eq-3.10",
+        "c03-eq-3.11"
+      ],
+      "rationale": "本节涵盖定理3.12积分因子法、例3.8 Logistic分离变量及定理3.13 Picard存在唯一性分析，并由例3.9导出均值回复解，解法规整清晰，难度为D2；常微分方程是后续随机微分方程（SDE）、Vasicek利率模型与波动率半衰期建模的基础骨架，考频高，定为P1。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    }
+  }
+}

@@ -1,0 +1,282 @@
+{
+  "schemaVersion": 1,
+  "chapterId": "c02",
+  "title": "一元微积分、Taylor 公式与级数",
+  "partId": "part-1",
+  "summary": "本章以极限语言与实数完备性为基石，建立一元微积分核心架构：深入连续函数闭区间性质、导数与中值定理的局部到整体推演、Riemann 积分与微积分基本定理、带 Lagrange 余项的 Taylor 逼近控制，以及数项级数与幂级数一致收敛的分析理论。",
+  "whyStudy": "量化金融中的局部敏度近似（Delta/Gamma）、连续复利积累、数值离散化误差控制以及矩生成函数与特征函数的级数展开，均直接植根于本章的一元分析工具。",
+  "prerequisites": [
+    "c01-s5",
+    "c01-s6"
+  ],
+  "metadataStatus": "reviewed",
+  "reviewed": true,
+  "reviewedBy": "DSH",
+  "reviewedAt": "2026-11-09",
+  "sections": {
+    "c02-s1": {
+      "difficulty": "D2",
+      "priority": "P1",
+      "minutes": 40,
+      "examFrequency": "medium",
+      "tags": [
+        "极限",
+        "连续",
+        "介值定理",
+        "最值定理",
+        "ε-δ"
+      ],
+      "coreConcepts": [
+        "函数极限",
+        "连续性",
+        "介值定理",
+        "最值定理"
+      ],
+      "applications": [
+        "二分法数值求根收敛性保证",
+        "隐含波动率反解的存在性判定"
+      ],
+      "prerequisites": [
+        {
+          "id": "c01-s5",
+          "strength": "required"
+        },
+        {
+          "id": "c01-s6",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c02-s2",
+        "c02-s3"
+      ],
+      "learningObjective": "能使用 ε-δ 语言与 Heine 数列刻画判定函数极限，熟练运用介值定理与最值定理证明方程根的存在性与函数有界性。",
+      "keyFormulas": [
+        "c02-eq-2.1"
+      ],
+      "rationale": "本节从定义2.1的ε-δ极限出发，经定理2.2数列归结引向定理2.3介值定理与定理2.4最值定理的严格分析证明，要求理解紧致区间上的紧性推理，难度定为D2；介值性是二分数值求根与隐含波动率反解的基础，但面试笔试极少直接考证明，故优先级为P1。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c02-s2": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 35,
+      "examFrequency": "high",
+      "tags": [
+        "导数",
+        "中值定理",
+        "Rolle",
+        "微分",
+        "敏感度"
+      ],
+      "coreConcepts": [
+        "导数",
+        "线性近似",
+        "Rolle定理",
+        "Lagrange中值定理"
+      ],
+      "applications": [
+        "衍生品一阶敏感度Delta测算",
+        "利用中值不等式控制损益增量界"
+      ],
+      "prerequisites": [
+        {
+          "id": "c02-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c02-s4",
+        "c03-s1"
+      ],
+      "learningObjective": "能陈述导数的增量与线性逼近定义，熟练运用 Rolle 定理与 Lagrange 中值定理推导函数增量界并证明分析不等式。",
+      "keyFormulas": [
+        "c02-eq-2.2",
+        "c02-eq-2.3"
+      ],
+      "rationale": "本节从定义2.5的差商极限展开，通过构造辅助函数将定理2.6 Rolle定理推广为定理2.7 Lagrange中值定理，推导规整紧凑，定为D2；导数是整个量化敏度分析（Delta）与梯度优化的第一地基，中值定理连接局部导数与整体变化，属于面试必考核心，故评为P0。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c02-s3": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "Riemann 积分",
+        "Darboux 和",
+        "微积分基本定理",
+        "反常积分"
+      ],
+      "coreConcepts": [
+        "Darboux上下和",
+        "Riemann积分",
+        "微积分基本定理",
+        "反常积分"
+      ],
+      "applications": [
+        "连续现金流折现值累计核算",
+        "尾部概率与未质押期望损失反常积分计算"
+      ],
+      "prerequisites": [
+        {
+          "id": "c02-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c02-s2",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c02-s4",
+        "c03-s4"
+      ],
+      "learningObjective": "能使用 Darboux 上下和判据证明连续函数 Riemann 可积，熟练应用微积分基本定理进行变上限积分求导与反常积分收敛性判定。",
+      "keyFormulas": [
+        "c02-eq-2.4",
+        "c02-eq-2.5",
+        "c02-eq-2.6"
+      ],
+      "rationale": "本节涵盖定义2.8的Darboux上下和、定理2.9基于一致连续性的可积性证明以及定理2.10微积分基本定理的双向推导，多步分析综合度高，定为D3；变上限积分与微积分基本定理是连续时间定价累积、期望计算与Itô积分的理论基石，具有绝对不可替代性，故定为P0。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c02-s4": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 45,
+      "examFrequency": "high",
+      "tags": [
+        "Taylor 公式",
+        "余项",
+        "局部近似",
+        "收敛阶"
+      ],
+      "coreConcepts": [
+        "Taylor展开",
+        "Lagrange余项",
+        "局部近似",
+        "误差控制"
+      ],
+      "applications": [
+        "期权Delta-Gamma局部敏感度近似",
+        "连续复利极限逼近的离散化误差控制"
+      ],
+      "prerequisites": [
+        {
+          "id": "c02-s2",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c02-s6",
+        "c03-s2"
+      ],
+      "learningObjective": "能独立证明带 Lagrange 余项的 Taylor 公式，熟练运用低阶多项式进行局部非线性近似并给出量化误差上界估计。",
+      "keyFormulas": [
+        "c02-eq-2.7",
+        "c02-eq-2.8"
+      ],
+      "rationale": "本节核心为定理2.12带Lagrange余项的Taylor公式，证明采用经典辅助函数多次抵消与Rolle定理，推导工整，属于D2标准推导；在量化中，Taylor公式是Delta-Gamma风险近似、数值算法收敛阶分析与连续复利推导的根本支柱，面试常考且无可替代，故定为P0。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c02-s5": {
+      "difficulty": "D2",
+      "priority": "P1",
+      "minutes": 45,
+      "examFrequency": "high",
+      "tags": [
+        "数项级数",
+        "绝对收敛",
+        "条件收敛",
+        "判别法"
+      ],
+      "coreConcepts": [
+        "级数收敛",
+        "比较判别法",
+        "比值判别法",
+        "Leibniz判别法",
+        "绝对收敛"
+      ],
+      "applications": [
+        "离散概率分布概率和与矩的适定性检验",
+        "蒙特卡罗方差缩减中级数加速算法"
+      ],
+      "prerequisites": [
+        {
+          "id": "c01-s5",
+          "strength": "required"
+        },
+        {
+          "id": "c01-s6",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c02-s6"
+      ],
+      "learningObjective": "能准确区分绝对收敛与条件收敛，熟练运用比较、比值、根值及 Leibniz 判别法判定数项级数的敛散性。",
+      "keyFormulas": [
+        "c02-eq-2.9",
+        "c02-eq-2.10"
+      ],
+      "rationale": "本节系统建立数项级数判别体系，涵盖定理2.14必要条件、定理2.15比较法、定理2.16比值法及定理2.17 Leibniz判别法，均依赖部分和数列性质，难度为D2；级数收敛是离散概率分布适定性与矩母函数展开的必要前置，考频高但属于通用工具，故定为P1。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c02-s6": {
+      "difficulty": "D3",
+      "priority": "P1",
+      "minutes": 50,
+      "examFrequency": "medium",
+      "tags": [
+        "一致收敛",
+        "幂级数",
+        "换序",
+        "收敛半径"
+      ],
+      "coreConcepts": [
+        "一致收敛",
+        "Weierstrass判别法",
+        "极限换序",
+        "收敛半径",
+        "逐项微积分"
+      ],
+      "applications": [
+        "矩生成函数逐项求导推导各阶矩",
+        "特征函数反演积分中的符号与极限换序验证"
+      ],
+      "prerequisites": [
+        {
+          "id": "c02-s3",
+          "strength": "required"
+        },
+        {
+          "id": "c02-s5",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c02-s4"
+      ],
+      "learningObjective": "能使用 Weierstrass M 判别法证明函数项级数一致收敛，熟练计算幂级数收敛半径并在收敛区间内执行逐项求导与积分换序。",
+      "keyFormulas": [
+        "c02-eq-2.11",
+        "c02-eq-2.12"
+      ],
+      "rationale": "本节讨论定义2.20一致收敛、定理2.21 Weierstrass判别法及定理2.22三大换序定理，涉及ε-N-x多层量词控制，多步分析较深，定为D3；在特征函数反演与矩生成函数求导中一致收敛是换序合法性的理论支柱，但笔试多直接考求半径与展开，故定为P1。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    }
+  }
+}

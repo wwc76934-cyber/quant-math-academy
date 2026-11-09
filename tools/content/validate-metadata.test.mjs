@@ -8,12 +8,13 @@ import { validateMetadata } from './validate-metadata.mjs';
 test('T02 元数据校验器测试套件', async (t) => {
   const rootDir = process.cwd();
 
-  await t.test('1. 生产环境 4 个试点章 25 节元数据全量校验通过（0 错误）', () => {
+  await t.test('1. 生产环境 7 个已标注章 44 节元数据全量校验通过（0 错误 0 警告）', () => {
     const result = validateMetadata({ rootDir });
     assert.equal(result.errors.length, 0, `期望 0 错误，实际发现 ${result.errors.length}：${JSON.stringify(result.errors)}`);
-    assert.equal(result.summary.pilotChapters, 4);
-    assert.equal(result.summary.totalPilotSections, 25);
-    assert.equal(result.summary.coveredSections, 25);
+    assert.equal(result.summary.pilotChapters, 7);
+    assert.equal(result.summary.totalPilotSections, 44);
+    assert.equal(result.summary.coveredSections, 44);
+    assert.equal(result.summary.warnings, 0);
 
     // Assert distributions
     assert.ok(result.distribution.difficulty.D1 >= 1, '应包含 D1');

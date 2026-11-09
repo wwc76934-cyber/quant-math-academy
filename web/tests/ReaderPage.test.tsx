@@ -188,7 +188,7 @@ describe('ReaderPage', () => {
     );
   });
 
-  it('renders any chapter in the full book (C02) and marks missing metadata honestly', async () => {
+  it('renders newly annotated chapter (C02) without pilot gating', async () => {
     render(
       <StoreProvider>
         <ToastProvider>
@@ -214,10 +214,9 @@ describe('ReaderPage', () => {
       })
     ).toBeInTheDocument();
     expect(screen.queryByText('内容接入中')).not.toBeInTheDocument();
-    expect(screen.getAllByText('标注完善中').length).toBeGreaterThan(0);
   });
 
-  it('renders C34 without pilot gating', async () => {
+  it('renders unannotated chapter (C34) and marks missing metadata honestly', async () => {
     render(
       <StoreProvider>
         <ToastProvider>
@@ -242,6 +241,8 @@ describe('ReaderPage', () => {
         name: '收益序列与绩效指标',
       })
     ).toBeInTheDocument();
+    expect(screen.queryByText('内容接入中')).not.toBeInTheDocument();
+    expect(screen.getAllByText('标注完善中').length).toBeGreaterThan(0);
   });
 
   it('shows the error state when a chapter manifest is missing', async () => {

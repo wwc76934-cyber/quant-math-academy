@@ -175,7 +175,7 @@ export const GraphPage: React.FC = () => {
             active={scopeParam === 'annotated'}
             onClick={() => updateParam('scope', 'annotated')}
           >
-            只看已标注 (25 节)
+            {`只看已标注 (${graphData?.stats?.annotatedNodes ?? 0} 节)`}
           </Chip>
         </div>
 

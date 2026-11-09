@@ -1,0 +1,315 @@
+{
+  "schemaVersion": 1,
+  "chapterId": "c04",
+  "title": "向量空间、线性映射与线性方程组",
+  "partId": "part-2",
+  "summary": "本章系统奠定线性代数的公理化与结构化基础：从向量空间、子空间与张成出发，严格证明基的存在与维数不变性；将线性映射具象为基底下的矩阵与核像结构；以高斯消元为核心打通 LU 分解与秩—零化度定理；系统揭示四个基本子空间的正交互补性、行列式体积缩放定理及因子暴露约束中的自由度分析。",
+  "whyStudy": "现代量化金融中多因子模型、协方差特征分解、多资产组合中性化约束以及回归最小二乘求解，均完全建立在向量空间、基坐标变换与子空间正交投影的代数框架之上。",
+  "prerequisites": [
+    "c01-s1",
+    "c01-s2"
+  ],
+  "metadataStatus": "reviewed",
+  "reviewed": true,
+  "reviewedBy": "DSH",
+  "reviewedAt": "2026-11-09",
+  "sections": {
+    "c04-s1": {
+      "difficulty": "D1",
+      "priority": "P1",
+      "minutes": 30,
+      "examFrequency": "medium",
+      "tags": [
+        "向量空间",
+        "子空间",
+        "张成",
+        "线性组合"
+      ],
+      "coreConcepts": [
+        "向量空间",
+        "子空间",
+        "封闭性判据",
+        "张成空间"
+      ],
+      "applications": [
+        "投资组合零投资（Dollar-Neutral）对冲策略子空间验证",
+        "因子收益率线性张成空间约束"
+      ],
+      "prerequisites": [
+        {
+          "id": "c01-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c04-s2",
+        "c04-s4"
+      ],
+      "learningObjective": "能陈述向量空间公理体系，熟练利用线性组合封闭性判定子空间，并写出集合的生成张成空间表达式。",
+      "keyFormulas": [],
+      "rationale": "本节围绕定义4.1向量空间公理及定理4.3子空间封闭性判据展开，辅以定义4.4张成概念与例4.1齐次解空间验证，内容以公理检验与定义理解为主，无复杂推导，定为D1；该节是整个线性代数体系的公理化起点，属于必知地基，优先级定为P1。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c04-s2": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 40,
+      "examFrequency": "high",
+      "tags": [
+        "线性无关",
+        "基",
+        "维数",
+        "替换引理"
+      ],
+      "coreConcepts": [
+        "线性无关",
+        "基",
+        "坐标表示",
+        "替换引理",
+        "维数"
+      ],
+      "applications": [
+        "多因子模型中因子共线性与冗余因子筛选识别",
+        "主成分降维中基底正交化与有效维数估计"
+      ],
+      "prerequisites": [
+        {
+          "id": "c04-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c04-s3",
+        "c04-s5"
+      ],
+      "learningObjective": "能严格判定向量组线性相关性，熟练运用引理 4.9 替换引理证明维数不变性，并求出指定基下的向量坐标。",
+      "keyFormulas": [],
+      "rationale": "本节涵盖定义4.5线性无关、定理4.8坐标唯一性，核心难点在于引理4.9替换引理的归纳推导以及定理4.10维数唯一性证明，逻辑严密，定为D2；基与维数是量化中因子共线性排查、有效资产跨度与降维分析的根本度量，笔试面试极为高频，故定为核心优先级P0。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c04-s3": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 40,
+      "examFrequency": "high",
+      "tags": [
+        "线性映射",
+        "矩阵表示",
+        "核与像",
+        "单射"
+      ],
+      "coreConcepts": [
+        "线性映射",
+        "矩阵表示",
+        "基变换",
+        "核空间",
+        "像空间"
+      ],
+      "applications": [
+        "资产组合权重经暴露矩阵映射至因子暴露度",
+        "无套利状态价格向量在支付映射下的原像求解"
+      ],
+      "prerequisites": [
+        {
+          "id": "c04-s2",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c04-s5"
+      ],
+      "learningObjective": "能根据基向量映射构建线性映射的矩阵表示，熟练求解线性算子的核与像，并证明单射与零核的等价性。",
+      "keyFormulas": [
+        "c04-eq-4.1"
+      ],
+      "rationale": "本节通过定理4.12证明基向量完全决定线性映射，由此自然导出式(4.1)的矩阵表示与定义4.13核像结构，例4.3演示求导算子矩阵化，结构清晰紧凑，难度定为D2；矩阵作为线性映射记录器的概念是因子暴露、主成分投影与二次型优化的认识前提，极其重要，定为P0。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c04-s4": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 45,
+      "examFrequency": "high",
+      "tags": [
+        "高斯消元",
+        "LU 分解",
+        "线性方程组",
+        "零空间"
+      ],
+      "coreConcepts": [
+        "高斯消元",
+        "特解与通解",
+        "初等行变换",
+        "LU分解",
+        "主元与自由变量"
+      ],
+      "applications": [
+        "组合复制方程组高效数值求解与多场景再平衡",
+        "大规模资产协方差线性系统的前代回代快速求逆"
+      ],
+      "prerequisites": [
+        {
+          "id": "c04-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c04-s3",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c04-s5",
+        "c08-s1"
+      ],
+      "learningObjective": "熟练执行高斯消元法求解非齐次线性方程组，能准确拆分特解与零空间通解，并计算方阵的 LU 分解矩阵。",
+      "keyFormulas": [
+        "c04-eq-4.2",
+        "c04-eq-4.3"
+      ],
+      "rationale": "本节从式(4.2)通解仿射结构出发，通过命题4.15行变换保解性建立消元算法，并定理化推导定理4.16 LU分解，强调算法与矩阵乘法的等价性，难度为D2；高斯消元与LU分解是求解资产权重、线性拟合与算法工程的最基础底座，笔试实操频次极高，故评为核心P0。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c04-s5": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "秩—零化度",
+        "四个基本子空间",
+        "行秩",
+        "列秩"
+      ],
+      "coreConcepts": [
+        "秩—零化度定理",
+        "行秩与列秩",
+        "四个基本子空间",
+        "正交补",
+        "方阵可逆等价性"
+      ],
+      "applications": [
+        "因子收益率回归中自变量矩阵满秩检验与不可识别零空间剔除",
+        "约束投资组合收益正交投影与残差风险最小化"
+      ],
+      "prerequisites": [
+        {
+          "id": "c04-s3",
+          "strength": "required"
+        },
+        {
+          "id": "c04-s4",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c04-s6",
+        "c08-s4"
+      ],
+      "learningObjective": "能独立证明秩—零化度定理并掌握行秩等于列秩的论证，熟练求解矩阵四个基本子空间的基与维数并阐释其正交互补关系。",
+      "keyFormulas": [
+        "c04-eq-4.4",
+        "c04-eq-4.5"
+      ],
+      "rationale": "本节涵盖定理4.17秩—零化度定理的基扩充证明、定理4.18行秩等于列秩及定理4.19四个基本子空间的正交分解，理论闭环且证明深刻，定为D3；四个基本子空间构成了线性最小二乘、投影算子与SVD分解的核心骨架，在量化笔试面试中具压倒性重要度，定为P0。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c04-s6": {
+      "difficulty": "D2",
+      "priority": "P1",
+      "minutes": 40,
+      "examFrequency": "high",
+      "tags": [
+        "行列式",
+        "可逆性",
+        "置换",
+        "乘积性质"
+      ],
+      "coreConcepts": [
+        "行列式",
+        "置换符号",
+        "多线性交错性",
+        "矩阵乘积行列式",
+        "奇异性判别"
+      ],
+      "applications": [
+        "多维联合正态密度标准化协方差行列式计算",
+        "矩阵特征多项式根与特征值谱分析"
+      ],
+      "prerequisites": [
+        {
+          "id": "c04-s4",
+          "strength": "required"
+        },
+        {
+          "id": "c04-s5",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c03-s5"
+      ],
+      "learningObjective": "熟练利用行初等变换与乘积性质计算矩阵行列式，能运用行列式判定参数矩阵的可逆性并解释其几何体积缩放含义。",
+      "keyFormulas": [
+        "c04-eq-4.6"
+      ],
+      "rationale": "本节通过定义4.22给出置换和定义，重点结合定理4.23推导乘积性det(AB)=detA detB及可逆充要条件，结合例4.6进行奇异参数辨析，推导结构清晰，定为D2；行列式是特征多项式与多元正态密度归一化的基础，但实操中多用分解算法替代直接计算，故定为P1。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c04-s7": {
+      "difficulty": "D2",
+      "priority": "P1",
+      "minutes": 35,
+      "examFrequency": "medium",
+      "tags": [
+        "因子暴露",
+        "秩",
+        "自由度",
+        "约束冗余"
+      ],
+      "coreConcepts": [
+        "因子暴露约束",
+        "约束矩阵的秩",
+        "自由度",
+        "冗余约束",
+        "仿射可行集"
+      ],
+      "applications": [
+        "多因子中性化投资组合的独立约束筛选与有效自由度测算",
+        "股票组合行业敞口全覆盖约束的冗余性诊断"
+      ],
+      "prerequisites": [
+        {
+          "id": "c04-s4",
+          "strength": "required"
+        },
+        {
+          "id": "c04-s5",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c31-s1"
+      ],
+      "learningObjective": "能将资产投资组合的线性暴露约束建立为矩阵方程，熟练计算约束矩阵的秩以判定冗余约束并求解可行解空间的自由维数。",
+      "keyFormulas": [
+        "c04-eq-4.7"
+      ],
+      "rationale": "本节以式(4.7)为核心，通过例4.7具体演示资产组合在中性化与预算约束下利用秩与零空间分析自由维数的过程，是理论在量化约束设计中的直观落地，难度为D2；此节直击多因子模型中约束冗余与共线性病态诊断的实操问题，具较强实务参考价值，优先级定为P1。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    }
+  }
+}

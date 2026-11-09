@@ -25,7 +25,18 @@ export function validateMetadata(options = {}) {
   const bookPath = options.bookPath || path.join(rootDir, 'content', 'generated', 'book.json');
   const metadataDir = options.metadataDir || path.join(rootDir, 'content', 'metadata');
   const generatedChaptersDir = options.generatedChaptersDir || path.join(rootDir, 'content', 'generated', 'chapters');
-  const pilotChapterIds = options.pilotChapterIds || PILOT_CHAPTER_IDS;
+  let pilotChapterIds = options.pilotChapterIds;
+  if (!pilotChapterIds) {
+    const chaptersDir = path.join(metadataDir, 'chapters');
+    if (fs.existsSync(chaptersDir)) {
+      pilotChapterIds = fs.readdirSync(chaptersDir)
+        .filter(f => f.endsWith('.json'))
+        .map(f => path.basename(f, '.json'))
+        .sort();
+    } else {
+      pilotChapterIds = PILOT_CHAPTER_IDS;
+    }
+  }
   const outputPath = options.outputPath || path.join(rootDir, 'content', 'generated', 'metadata-validation.json');
   const writeOutput = options.writeOutput !== false;
 
@@ -532,11 +543,11 @@ export function validateMetadata(options = {}) {
 
 // CLI runner
 if (process.argv[1] && path.resolve(process.argv[1]) === path.resolve(fileURLToPath(import.meta.url))) {
-  console.log('[validate-metadata] 开始校验试点章元数据 (C01, C08, C11, C33)...');
+  console.log('[validate-metadata] 开始校验已标注章节元数据...');
   const result = validateMetadata();
 
   console.log('[validate-metadata] 校验结果：');
-  console.log(`  - 试点章节数：${result.summary.pilotChapters}`);
+  console.log(`  - 章节数：${result.summary.pilotChapters}`);
   console.log(`  - 试点节总数：${result.summary.totalPilotSections}`);
   console.log(`  - 已覆盖节数：${result.summary.coveredSections}`);
   console.log(`  - 错误数：${result.summary.errors}`);
