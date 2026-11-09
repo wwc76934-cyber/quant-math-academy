@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { ChapterList } from '../components/toc/ChapterList';
 import { PartIndex } from '../components/toc/PartIndex';
 import { Chip } from '../components/ui/Chip';
@@ -166,6 +167,19 @@ export const SyllabusPage: React.FC = () => {
           <h1>完整目录</h1>
           <p>
             {book.parts.length} 篇 {book.chapters.length} 章 · {totalSections} 个知识点 · 所有公式与证明保持教材原文
+            {' · '}
+            <Link
+              to="/graph"
+              className="syllabus-graph-link"
+              style={{
+                color: 'var(--accent)',
+                textDecoration: 'underline',
+                textUnderlineOffset: '3px',
+                fontWeight: 500,
+              }}
+            >
+              知识关系图 →
+            </Link>
           </p>
         </div>
         <div className="syllabus__tools">

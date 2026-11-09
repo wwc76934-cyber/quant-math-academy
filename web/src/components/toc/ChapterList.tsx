@@ -9,7 +9,12 @@ import {
 } from '../../features/content/types';
 import { useStore } from '../../features/store/store';
 import { SectionProgressStatus } from '../../features/store/types';
-import { formatChapterNumber, formatChinesePartLabel, formatMinutes } from '../../lib/format';
+import {
+  formatChapterNumber,
+  formatChinesePartLabel,
+  formatDisplayTitle,
+  formatMinutes,
+} from '../../lib/format';
 import { learnPath } from '../../lib/paths';
 import { DifficultyBadge } from '../metadata/DifficultyBadge';
 import { PriorityBadge } from '../metadata/PriorityBadge';
@@ -148,7 +153,7 @@ export const ChapterList: React.FC<ChapterListProps> = ({
                     <span className="chapter__num">
                       {formatChapterNumber(chapter.number)}
                     </span>
-                    <span className="chapter__title">{chapter.title}</span>
+                    <span className="chapter__title">{formatDisplayTitle(chapter.title)}</span>
                     <span className="chapter__meta">
                       {metaSummary.hasMeta ? (
                         <>
@@ -193,7 +198,7 @@ export const ChapterList: React.FC<ChapterListProps> = ({
                               {sec.number}
                             </span>
                             <span className="section-row__title">
-                              {sec.title}
+                              {formatDisplayTitle(sec.title)}
                             </span>
                             <span className="section-row__meta">
                               {hasSecMeta ? (

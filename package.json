@@ -8,6 +8,7 @@
     "content:inventory": "node tools/content/parse-book.mjs",
     "content:build": "node tools/content/build-content.mjs",
     "content:validate": "node tools/content/validate-content.mjs",
+    "content:graph": "node tools/content/build-graph.mjs",
     "content:sync": "node tools/content/sync-web.mjs",
     "metadata:validate": "node tools/content/validate-metadata.mjs",
     "test:content": "node --test tools/content/*.test.mjs"

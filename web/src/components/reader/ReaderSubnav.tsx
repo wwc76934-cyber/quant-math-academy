@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { formatDisplayTitle } from '../../lib/format';
 import { learnPath, syllabusPath } from '../../lib/paths';
 
 export interface ReaderSubnavProps {
@@ -37,8 +38,8 @@ export const ReaderSubnav: React.FC<ReaderSubnavProps> = ({
           <span>{chapterLabel}</span>
         </div>
 
-        <div className="reader-top__title" title={chapterTitle}>
-          {chapterTitle}
+        <div className="reader-top__title" title={formatDisplayTitle(chapterTitle)}>
+          {formatDisplayTitle(chapterTitle)}
         </div>
 
         <div

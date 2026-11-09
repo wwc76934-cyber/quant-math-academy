@@ -1,0 +1,398 @@
+/**
+ * Quant Math Academy - Knowledge Association Graph Styles (T09)
+ */
+
+.graph-page {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+@media (max-width: 600px) {
+  .graph-page {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+.graph-head {
+  margin-bottom: 32px;
+}
+
+.graph-head .kicker {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
+}
+
+.graph-head h1 {
+  font-family: var(--font-serif);
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 8px 0;
+}
+
+.graph-head p {
+  color: var(--ink-secondary);
+  font-size: 15px;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Stats Banner */
+.graph-stats-banner {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  margin: 24px 0 32px 0;
+  padding: 20px 24px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  box-sizing: border-box;
+}
+
+@media (max-width: 480px) {
+  .graph-stats-banner {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 16px;
+  }
+}
+
+.graph-stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.graph-stat-item__num {
+  font-family: var(--font-mono);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.graph-stat-item__label {
+  font-size: 13px;
+  color: var(--ink-secondary);
+}
+
+/* Filters bar */
+.graph-filters-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 32px;
+  padding: 16px 20px;
+  background: var(--bg-subtle);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line);
+}
+
+.graph-filter-group {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.graph-filter-select {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.graph-filter-select:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* Chapter Card */
+.graph-chapter-card {
+  margin-bottom: 36px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.graph-chapter-header {
+  padding: 16px 20px;
+  background: var(--bg-subtle);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.graph-chapter-title {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0;
+}
+
+.graph-chapter-num {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--accent);
+}
+
+.graph-chapter-badge {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-elevated);
+  border: 1px solid var(--line);
+  color: var(--ink-secondary);
+}
+
+.graph-chapter-badge--annotated {
+  color: var(--sage, #3b6e5e);
+  border-color: rgba(59, 110, 94, 0.3);
+  background: rgba(59, 110, 94, 0.08);
+}
+
+/* Unannotated chapter notice */
+.graph-unannotated-notice {
+  padding: 18px 20px;
+  color: var(--ink-muted);
+  font-size: 14px;
+  font-style: italic;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Visible Table Header */
+.graph-section-header {
+  display: grid;
+  grid-template-columns: 280px 1fr 1fr 140px;
+  gap: 16px;
+  padding: 10px 20px;
+  background: var(--bg-subtle);
+  border-bottom: 1px solid var(--line);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-secondary);
+  letter-spacing: 0.04em;
+}
+
+@media (max-width: 960px) {
+  .graph-section-header {
+    display: none;
+  }
+}
+
+/* Section rows */
+.graph-section-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.graph-section-row {
+  display: grid;
+  grid-template-columns: 280px 1fr 1fr 140px;
+  gap: 16px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--line);
+  align-items: start;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.graph-section-row:last-child {
+  border-bottom: none;
+}
+
+.graph-section-row:hover {
+  background-color: var(--bg-subtle);
+}
+
+.graph-section-row.is-highlighted {
+  background-color: rgba(194, 87, 55, 0.08);
+  border-left: 4px solid var(--accent);
+  padding-left: 16px;
+}
+
+.graph-sec-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.graph-sec-title-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.graph-sec-num {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.graph-sec-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.graph-sec-title:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.graph-sec-badges {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Column headers / titles */
+.graph-col-label {
+  display: none;
+  font-size: 11px;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.graph-chips-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* Relationship chips */
+.graph-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  text-decoration: none;
+  background: var(--bg-elevated);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.graph-chip:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.graph-chip--required {
+  border-color: rgba(194, 87, 55, 0.3);
+  background: rgba(194, 87, 55, 0.05);
+}
+
+.graph-chip--helpful {
+  border-color: rgba(59, 110, 94, 0.3);
+  background: rgba(59, 110, 94, 0.05);
+}
+
+.graph-chip-strength {
+  font-size: 10px;
+  opacity: 0.75;
+}
+
+.graph-transitive-note {
+  font-size: 11px;
+  color: var(--ink-secondary);
+  margin-top: 4px;
+}
+
+/* Citations & actions column */
+.graph-citations-col {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-end;
+}
+
+.graph-cited-badge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-subtle);
+  border: 1px solid var(--line);
+  color: var(--ink-secondary);
+}
+
+.graph-cited-badge--has {
+  color: var(--accent);
+  background: rgba(194, 87, 55, 0.08);
+  border-color: rgba(194, 87, 55, 0.25);
+  font-weight: 600;
+}
+
+.graph-read-link {
+  font-size: 12px;
+  color: var(--ink-secondary);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.graph-read-link:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+/* Empty or Loading States */
+.graph-loading,
+.graph-error {
+  padding: 48px 24px;
+  text-align: center;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--bg-elevated);
+  margin: 32px 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 960px) {
+  .graph-section-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .graph-col-label {
+    display: block;
+  }
+
+  .graph-citations-col {
+    align-items: flex-start;
+  }
+}

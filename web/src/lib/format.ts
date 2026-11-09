@@ -45,3 +45,28 @@ export function formatCurrentDate(): string {
   const day = now.getDate();
   return `${month} 月 ${day} 日`;
 }
+
+/**
+ * Formats section/chapter display titles by normalizing LaTeX math expressions
+ * (e.g., "$\\varepsilon-N$" -> "ε-N", "\\varepsilon" -> "ε", "\\delta" -> "δ", etc.)
+ * and stripping leftover wrapping dollar signs.
+ */
+export function formatDisplayTitle(title: string | null | undefined): string {
+  if (!title) return '';
+
+  return title
+    .replace(/\$\\varepsilon-N\$/g, 'ε-N')
+    .replace(/\\varepsilon-N/g, 'ε-N')
+    .replace(/\$\\varepsilon\$/g, 'ε')
+    .replace(/\\varepsilon/g, 'ε')
+    .replace(/\$\\delta\$/g, 'δ')
+    .replace(/\\delta/g, 'δ')
+    .replace(/\$\\alpha\$/g, 'α')
+    .replace(/\\beta\$/g, 'β')
+    .replace(/\$\\sigma\$/g, 'σ')
+    .replace(/\$\\mu\$/g, 'μ')
+    .replace(/\$\\lambda\$/g, 'λ')
+    .replace(/\$([^$]+)\$/g, '$1') // remove remaining wrapping $math$
+    .replace(/\$/g, '') // remove any stray $
+    .trim();
+}

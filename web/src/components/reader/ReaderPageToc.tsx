@@ -1,5 +1,6 @@
 import React from 'react';
 import { ChapterData } from '../../features/content/types';
+import { formatDisplayTitle } from '../../lib/format';
 
 export interface ReaderPageTocProps {
   chapterData: ChapterData;
@@ -29,7 +30,7 @@ export const ReaderPageToc: React.FC<ReaderPageTocProps> = ({
                   onScrollTo(sec.id);
                 }}
               >
-                {sec.number} {sec.title}
+                {sec.number} {formatDisplayTitle(sec.title)}
               </a>
 
               {/* Subsections if current */}
@@ -45,7 +46,7 @@ export const ReaderPageToc: React.FC<ReaderPageTocProps> = ({
                       onScrollTo(sub.anchor || sub.id);
                     }}
                   >
-                    {sub.number} {sub.title}
+                    {sub.number} {formatDisplayTitle(sub.title)}
                   </a>
                 ))}
             </React.Fragment>

@@ -1,7 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Book, BookChapter, BookPart } from '../../features/content/types';
 import { useStore } from '../../features/store/store';
-import { formatChapterNumber, formatChinesePartLabel } from '../../lib/format';
+import {
+  formatChapterNumber,
+  formatChinesePartLabel,
+  formatDisplayTitle,
+} from '../../lib/format';
 import { StatusDot } from '../metadata/StatusDot';
 
 export interface ReaderBookTocProps {
@@ -122,7 +126,7 @@ export const ReaderBookToc: React.FC<ReaderBookTocProps> = ({
                     >
                       <span className="num">{formatChapterNumber(chapter.number)}</span>
                       <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                        {chapter.title}
+                        {formatDisplayTitle(chapter.title)}
                       </span>
                     </button>
 
@@ -144,7 +148,7 @@ export const ReaderBookToc: React.FC<ReaderBookTocProps> = ({
                               <StatusDot status={progress} />
                               <span className="num">{sec.number}</span>
                               <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                                {sec.title}
+                                {formatDisplayTitle(sec.title)}
                               </span>
                             </a>
                           );

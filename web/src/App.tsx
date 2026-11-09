@@ -5,6 +5,7 @@ import { AppHeader } from './components/layout/AppHeader';
 import { SkipLink } from './components/layout/SkipLink';
 import { StoreProvider, useStore } from './features/store/store';
 import { FeaturePlaceholder } from './routes/FeaturePlaceholder';
+import { GraphPage } from './routes/GraphPage';
 import { HomePage } from './routes/HomePage';
 import { NotFoundPage } from './routes/NotFoundPage';
 import { ReaderPage } from './routes/ReaderPage';
@@ -135,6 +136,7 @@ const MainLayout: React.FC = () => {
             }
           />
           <Route path="/search" element={<SearchPage />} />
+          <Route path="/graph" element={<GraphPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </div>

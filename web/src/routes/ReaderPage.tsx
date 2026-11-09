@@ -15,6 +15,7 @@ import { loadBook } from '../features/content/loadBook';
 import { loadChapter, loadSection } from '../features/content/loadChapter';
 import { Book, ChapterData, SectionData } from '../features/content/types';
 import { useStore } from '../features/store/store';
+import { formatDisplayTitle } from '../lib/format';
 import { learnPath, syllabusPath } from '../lib/paths';
 
 export const ReaderPage: React.FC = () => {
@@ -83,7 +84,7 @@ export const ReaderPage: React.FC = () => {
     const map: Record<string, { number: string; title: string }> = {};
     for (const chapter of book?.chapters || []) {
       for (const section of chapter.sections) {
-        map[section.id] = { number: section.number, title: section.title };
+        map[section.id] = { number: section.number, title: formatDisplayTitle(section.title) };
       }
     }
     return map;
@@ -599,7 +600,9 @@ export const ReaderPage: React.FC = () => {
     );
   }
 
-  const activeSectionTitle = activeSection ? `${activeSection.number} ${activeSection.title}` : chapterData.title;
+  const activeSectionTitle = activeSection
+    ? `${activeSection.number} ${formatDisplayTitle(activeSection.title)}`
+    : formatDisplayTitle(chapterData.title);
 
   return (
     <div className={`reader-wrapper ${store.settings.focus ? 'reader--focus' : ''}`}>
@@ -745,7 +748,7 @@ export const ReaderPage: React.FC = () => {
                     data-section-id={section.id}
                   >
                     <span className="num">{section.number}</span>
-                    <h2>{section.title}</h2>
+                    <h2>{formatDisplayTitle(section.title)}</h2>
                   </div>
 
                   {htmlContent ? (
@@ -824,7 +827,7 @@ export const ReaderPage: React.FC = () => {
                 学习状态设置 ▾
               </Button>
               <span className="status-note">
-                当前节：{activeSection ? activeSection.title : chapterData.title}
+                当前节：{activeSection ? formatDisplayTitle(activeSection.title) : formatDisplayTitle(chapterData.title)}
               </span>
               <span className="spacer" />
               <Button

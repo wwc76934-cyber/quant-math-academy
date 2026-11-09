@@ -4,6 +4,7 @@ import { DifficultyBadge } from '../components/metadata/DifficultyBadge';
 import { PriorityBadge } from '../components/metadata/PriorityBadge';
 import { Button } from '../components/ui/Button';
 import { DifficultyLevel, PriorityLevel } from '../features/content/types';
+import { formatDisplayTitle } from '../lib/format';
 import {
   executeSearch,
   getHighlightParts,
@@ -538,7 +539,7 @@ export const SearchPage: React.FC = () => {
                         </div>
 
                         <h2 className="search-result-title">
-                          {renderHighlighted(item.title, item.matchedTerms)}
+                          {renderHighlighted(formatDisplayTitle(item.title), item.matchedTerms)}
                         </h2>
 
                         {item.snippet && (
