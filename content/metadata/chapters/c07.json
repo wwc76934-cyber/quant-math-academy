@@ -1,0 +1,267 @@
+{
+  "schemaVersion": 1,
+  "chapterId": "c07",
+  "title": "二次型、正定矩阵与矩阵微分",
+  "partId": "part-2",
+  "summary": "本章深入探讨二次型分类、正定性多维判定与矩阵微分核心演算：确立实二次型与其对称表示的一一对应，通过子空间维数交截严格证明 Sylvester 惯性定理及规范形不变量；串联特征值、顺序主子式与 Cholesky 分解证明正定性四大充要等价刻画，阐明半正定锥凸性；引入分块矩阵 Schur 补正定判据与行列式递归分解；系统建立基于迹识别法的矩阵微分与 Hessian 展开；最终全面落脚于马科维茨投资组合方差极小化、边际风险贡献与极大似然估计。",
+  "whyStudy": "二次型与矩阵微分是凸优化与量化金融工程的核心数学语言：投资组合方差二次型的正定性决定了均值—方差最优解的唯一存在性，而矩阵微分则是推导高维资产权重解析解、极大似然协方差估计以及深度学习风险模型的必备演算工具。",
+  "prerequisites": [
+    "c05-s2",
+    "c06-s3"
+  ],
+  "metadataStatus": "reviewed",
+  "reviewed": true,
+  "reviewedBy": "DSH",
+  "reviewedAt": "2026-11-09",
+  "sections": {
+    "c07-s1": {
+      "difficulty": "D3",
+      "priority": "P1",
+      "minutes": 45,
+      "examFrequency": "medium",
+      "tags": [
+        "二次型",
+        "合同",
+        "惯性定理",
+        "正惯性指数",
+        "负惯性指数",
+        "符号差"
+      ],
+      "coreConcepts": [
+        "二次型对称表示",
+        "合同等价关系",
+        "Sylvester 惯性定理",
+        "子空间维数交截论证",
+        "秩与符号差"
+      ],
+      "applications": [
+        "投资组合方差与马氏能量几何曲面分类",
+        "非退化双线性形式坐标变换",
+        "多变量极值临界点鞍点判定"
+      ],
+      "prerequisites": [
+        {
+          "id": "c04-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c06-s3",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c07-s2",
+        "c06-s4"
+      ],
+      "learningObjective": "理解二次型与其唯一对称矩阵表示的对应关系，熟练运用配方法化简二次型，并掌握利用子空间维数交截证明惯性定理的核心思想。",
+      "keyFormulas": [
+        "c07-eq-7.1",
+        "c07-eq-7.2",
+        "c07-eq-7.3",
+        "c07-eq-7.4"
+      ],
+      "rationale": "本节以定义7.1确定二次型唯一对称表示(7.1)，定义7.2建立合同关系并辨析其与相似的本质差异，定理7.3运用子空间维数交截严格证明Sylvester惯性定理规范形(7.3)正负号不变性，定义7.4给出秩与符号差，例7.1与7.2剖析配方法与谱分解差异及参数退化。理论证明深度高，定为D3难度；作为二次型分类理论，设定为P1优先级。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c07-s2": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 45,
+      "examFrequency": "high",
+      "tags": [
+        "正定矩阵",
+        "半正定",
+        "顺序主子式",
+        "Cholesky分解",
+        "凸优化"
+      ],
+      "coreConcepts": [
+        "正定矩阵四充要等价刻画",
+        "顺序主子式判别准则",
+        "Cholesky 分解存在性",
+        "对称半正定凸锥",
+        "Gram 矩阵退化性"
+      ],
+      "applications": [
+        "高维样本协方差矩阵奇异性与正定性判别",
+        "协方差对角加载与正则化收缩",
+        "多元极值充分二阶条件判定"
+      ],
+      "prerequisites": [
+        {
+          "id": "c06-s4",
+          "strength": "required"
+        },
+        {
+          "id": "c07-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c07-s3",
+        "c07-s5",
+        "c15-s2"
+      ],
+      "learningObjective": "熟练掌握实对称矩阵正定性的四大等价条件及其递推证明，掌握半正定凸锥性质，理解高维小样本下 Gram 协方差矩阵的秩亏机理。",
+      "keyFormulas": [
+        "c07-eq-7.6",
+        "c07-eq-7.7",
+        "c07-eq-7.8",
+        "c07-eq-7.9"
+      ],
+      "rationale": "本节在定义7.5基础上，定理7.6串联正定性定义、特征值全正、顺序主子式全正(7.7)及Cholesky分解四大等价条件完成循环证明，命题7.7确立对称半正定锥凸性(7.8)与正定开集性，并剖析高维协方差Gram奇异机理与例7.3边界退化。兼具代数综合深度与优化几何内涵，定为D3；因在优化与量化金融中不可替代，定为P0。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c07-s3": {
+      "difficulty": "D2",
+      "priority": "P1",
+      "minutes": 35,
+      "examFrequency": "medium",
+      "tags": [
+        "Schur 补",
+        "分块矩阵",
+        "正定矩阵",
+        "行列式"
+      ],
+      "coreConcepts": [
+        "分块矩阵 Schur 补",
+        "分块对称正定判定定理",
+        "行列式分解公式",
+        "递归主子式关系"
+      ],
+      "applications": [
+        "多元高斯联合分布条件协方差计算",
+        "卡尔曼滤波后验协方差更新",
+        "半定规划线性矩阵不等式 (LMI) 转化"
+      ],
+      "prerequisites": [
+        {
+          "id": "c04-s4",
+          "strength": "required"
+        },
+        {
+          "id": "c07-s2",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c07-s5",
+        "c16-s3"
+      ],
+      "learningObjective": "理解分块对称矩阵 Schur 补的代数消元本质，熟练运用 Schur 判据判定分块矩阵正定性，掌握行列式分块分解公式。",
+      "keyFormulas": [
+        "c07-eq-7.10",
+        "c07-eq-7.11",
+        "c07-eq-7.12"
+      ],
+      "rationale": "本节通过定义7.8引入分块对称矩阵的Schur补式(7.10)，定理7.9借助分块初等下三角变换将分块矩阵正定性解耦为子块A与Schur补S的正定性(7.11)，推论7.10导出著名行列式分解(7.12)，并在例7.4中展示高阶矩阵正定降维检验。推导技巧集中且结构对称优美，定为D2难度；作为分块矩阵降维与高斯条件分布的核心工具，定为P1。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c07-s4": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 45,
+      "examFrequency": "high",
+      "tags": [
+        "矩阵微分",
+        "迹微分",
+        "梯度",
+        "Hessian",
+        "MLE"
+      ],
+      "coreConcepts": [
+        "迹微分法",
+        "矩阵函数微分与导数对应",
+        "求逆与对数行列式微分",
+        "二次型梯度与 Hessian",
+        "多元正态 MLE 协方差估计"
+      ],
+      "applications": [
+        "高维参数极大似然估计解析解求解",
+        "资产协方差逆矩阵与精度矩阵灵敏度分析",
+        "大规模数值优化梯度与牛顿方向计算"
+      ],
+      "prerequisites": [
+        {
+          "id": "c03-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c07-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c07-s5",
+        "c15-s1"
+      ],
+      "learningObjective": "精通基于迹微分法的矩阵求导方法，掌握矩阵求逆、对数行列式与二次型的求导法则，能独立推导多元正态分布协方差极大似然估计。",
+      "keyFormulas": [
+        "c07-eq-7.13",
+        "c07-eq-7.14",
+        "c07-eq-7.15",
+        "c07-eq-7.16"
+      ],
+      "rationale": "本节建立基于迹识别法的矩阵微分体系，命题7.12确立全微分匹配迹求梯度法则与二阶展开(7.13)，式(7.14)推导逆矩阵与对数行列式微分，式(7.15)-(7.17)导出二次型与logdet梯度公式，例7.5运用其推导多元正态MLE协方差估计。推导技巧性极强且易出错，定为D3难度；因其为高维统计与优化求导标配工具，定为必须掌握的P0。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c07-s5": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 40,
+      "examFrequency": "high",
+      "tags": [
+        "二次型",
+        "组合优化",
+        "边际风险贡献",
+        "全局最小方差组合",
+        "Lagrange"
+      ],
+      "coreConcepts": [
+        "组合方差二次型与凸性",
+        "欧拉风险分解与边际风险贡献",
+        "全投资约束下 Lagrange 乘子法",
+        "全局最小方差组合解析解",
+        "风险分散化效应"
+      ],
+      "applications": [
+        "马科维茨有效前沿最小方差资产配置",
+        "成分方差与风险预算分配报告",
+        "逆协方差精度加权资产权重求解"
+      ],
+      "prerequisites": [
+        {
+          "id": "c07-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c07-s4",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c06-s6",
+        "c32-s1",
+        "c32-s2"
+      ],
+      "learningObjective": "理解组合方差二次型的半正定 Hessian 与严格凸性，能熟练运用 Lagrange 乘子法推导全局最小方差权重公式，掌握边际风险贡献分解。",
+      "keyFormulas": [
+        "c07-eq-7.18",
+        "c07-eq-7.19",
+        "c07-eq-7.20"
+      ],
+      "rationale": "本节将正定二次型与矩阵微分彻底落脚于资产组合理论，式(7.18)证明组合方差的半正定Hessian保证凸优化性质并导出欧拉风险贡献，在预算约束下通过Lagrange一阶条件求出解析解(7.19)，并在例7.7中完成两资产最小方差权重(7.20)与风险分散化数值验证。模型经典、推演完整，定为D2难度；作为量化金融资产配置的核心基石，定为最高优先级P0。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    }
+  }
+}

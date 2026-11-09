@@ -1,0 +1,249 @@
+{
+  "schemaVersion": 1,
+  "chapterId": "c05",
+  "title": "内积、正交投影与最小二乘",
+  "partId": "part-2",
+  "summary": "本章为向量空间引入长度、角度与正交几何结构：从实内积空间公理与 Cauchy–Schwarz 不等式出发，由 Gram–Schmidt 正交化构造标准正交基；严格证明有限维子空间的正交投影定理与最近点最优性；系统推导超定线性系统的最小二乘解、正规方程与投影矩阵，并深入阐释列满秩与不满秩下的唯一性差异；最终将中心化向量、相关系数与因子中性化统一于正交补投影框架。",
+  "whyStudy": "现代量化研究中的因子中性化、最小二乘多因子回归（Barra）、马氏距离度量以及协方差椭球投影，其几何内核完全取决于内积诱导的范数度量与子空间正交投影理论。",
+  "prerequisites": [
+    "c04-s1",
+    "c04-s2"
+  ],
+  "metadataStatus": "reviewed",
+  "reviewed": true,
+  "reviewedBy": "DSH",
+  "reviewedAt": "2026-11-09",
+  "sections": {
+    "c05-s1": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 35,
+      "examFrequency": "high",
+      "tags": [
+        "内积",
+        "范数",
+        "柯西不等式",
+        "不等式"
+      ],
+      "coreConcepts": [
+        "实内积空间",
+        "加权内积",
+        "诱导范数",
+        "Cauchy–Schwarz 不等式",
+        "三角不等式"
+      ],
+      "applications": [
+        "马氏加权距离度量",
+        "随机变量协方差内积结构验证",
+        "向量夹角计算"
+      ],
+      "prerequisites": [
+        {
+          "id": "c04-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c05-s2",
+        "c05-s5",
+        "c01-s4"
+      ],
+      "learningObjective": "理解实内积空间公理，熟练运用判别式法证明 Cauchy–Schwarz 不等式，并能计算加权内积下的向量长度与夹角。",
+      "keyFormulas": [
+        "c05-eq-5.1",
+        "c05-eq-5.2"
+      ],
+      "rationale": "本节围绕定义5.1内积公理与定义5.2诱导范数奠基，核心在于定理5.3 Cauchy–Schwarz不等式通过构造实二次多项式非负性完成严格证明，并推导三角不等式与例5.1加权内积夹角计算。属于分析与代数的双重基石，定为D2难度；作为量化金融度量距离与相关系数的绝对核心，赋予P0优先级。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c05-s2": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 40,
+      "examFrequency": "high",
+      "tags": [
+        "正交",
+        "Gram-Schmidt",
+        "正交矩阵",
+        "矩阵分解"
+      ],
+      "coreConcepts": [
+        "正交与标准正交组",
+        "正交组线性无关性",
+        "Gram–Schmidt 正交化",
+        "正交矩阵保距性"
+      ],
+      "applications": [
+        "量化因子正交化（对称正交与序贯正交）",
+        "QR 矩阵分解数据预处理",
+        "特征基旋转坐标变换"
+      ],
+      "prerequisites": [
+        {
+          "id": "c04-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c05-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c05-s3",
+        "c06-s3",
+        "c08-s1"
+      ],
+      "learningObjective": "掌握正交与标准正交概念，能熟练执行 Gram–Schmidt 正交化递推计算，理解正交矩阵保持内积与距离的几何本质。",
+      "keyFormulas": [
+        "c05-eq-5.3"
+      ],
+      "rationale": "本节通过定义5.4阐明正交性与线性无关性联系，核心定理5.5给出Gram–Schmidt正交化递推式(5.3)并归纳证明标准正交基的存在，在例5.2中演示构造，继而定义5.6阐明正交矩阵保距保角性质。推导结构规范且涉及递推构造，定为D2；作为后续特征分解与QR分解的先决工具，设为P0优先级。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c05-s3": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 45,
+      "examFrequency": "high",
+      "tags": [
+        "正交补",
+        "投影定理",
+        "正交投影",
+        "子空间"
+      ],
+      "coreConcepts": [
+        "正交补子空间",
+        "正交投影定理",
+        "毕达哥拉斯等式",
+        "投影算子幂等性与对称性"
+      ],
+      "applications": [
+        "资产收益在基准因子子空间上的投影分解",
+        "条件期望的正交投影解释",
+        "约束极小化距离投影"
+      ],
+      "prerequisites": [
+        {
+          "id": "c04-s5",
+          "strength": "required"
+        },
+        {
+          "id": "c05-s2",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c05-s4",
+        "c11-s4"
+      ],
+      "learningObjective": "深刻理解子空间正交直和分解，掌握投影定理的最优逼近唯一性证明，并熟练推导正交投影算子的代数性质。",
+      "keyFormulas": [
+        "c05-eq-5.4",
+        "c05-eq-5.5"
+      ],
+      "rationale": "本节定义5.7正交补后，以定理5.8建立有限维子空间正交投影定理，通过毕达哥拉斯等式(5.5)严格证明正交分解唯一性及最近点极小化特性，并由命题5.9导出投影算子的幂等性与对称性，例5.3展示法向量距离求法。涉及算子代数与拓扑极小化综合论证，定为D3；因其为回归与条件期望之母，定为P0。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c05-s4": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 45,
+      "examFrequency": "high",
+      "tags": [
+        "最小二乘",
+        "正规方程",
+        "投影矩阵",
+        "回归"
+      ],
+      "coreConcepts": [
+        "最小二乘问题",
+        "正规方程",
+        "列满秩唯一解",
+        "投影矩阵 (Hat Matrix)",
+        "几何残差正交性"
+      ],
+      "applications": [
+        "时间序列与截面资产收益率多元线性回归",
+        "因子载荷与残差项估计",
+        "超定方程拟合与样本内预测"
+      ],
+      "prerequisites": [
+        {
+          "id": "c04-s3",
+          "strength": "required"
+        },
+        {
+          "id": "c05-s3",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c05-s5",
+        "c07-s4",
+        "c32-s1"
+      ],
+      "learningObjective": "能从投影几何与代数极值双视角推导正规方程，写出投影矩阵显式表达式，并辨析列满秩与不满秩情形的解结构差异。",
+      "keyFormulas": [
+        "c05-eq-5.6",
+        "c05-eq-5.7",
+        "c05-eq-5.8"
+      ],
+      "rationale": "本节由定义5.10建立超定系统最小二乘目标，定理5.11通过列空间正交投影与误差内积双路径严格推导正规方程(5.6)，定理5.12剖析列满秩下逆矩阵解(5.7)与投影矩阵(5.8)，并在例5.4中验证残差正交性。数理逻辑严密、计算明确，定为D2难度；作为所有统计回归与多因子模型的基础，定为核心P0。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c05-s5": {
+      "difficulty": "D2",
+      "priority": "P1",
+      "minutes": 35,
+      "examFrequency": "medium",
+      "tags": [
+        "中心化",
+        "相关系数",
+        "因子中性化",
+        "因子模型"
+      ],
+      "coreConcepts": [
+        "中心化投影",
+        "Pearson 相关系数与夹角余弦",
+        "全一向量正交补",
+        "单因子正交中性化"
+      ],
+      "applications": [
+        "量化因子行业与市值中性化暴露剥离",
+        "因子相关性矩阵构建",
+        "零截距回归与残差正交化预处理"
+      ],
+      "prerequisites": [
+        {
+          "id": "c05-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c05-s3",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c05-s4",
+        "c06-s6",
+        "c07-s5"
+      ],
+      "learningObjective": "理解中心化算子的正交补几何本质，能从向量夹角推导 Pearson 相关系数，并熟练计算单因子正交中性化残差。",
+      "keyFormulas": [
+        "c05-eq-5.9"
+      ],
+      "rationale": "本节揭示统计统计量背后的线性几何结构，将中心化刻画为对全一向量正交补的投影，通过式(5.9)将Pearson相关系数等同于中心化向量夹角余弦，并在例5.5与例5.6中分别落地为样本相关计算和多因子alpha研究中至关重要的单因子中性化投影。理论结合实际应用紧密，定为D2；作为因子工程关键基础，定为P1。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    }
+  }
+}

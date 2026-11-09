@@ -57,11 +57,11 @@ describe('ReaderSectionInfo 知识关系增强', () => {
   };
 
   const mockUnannotatedSection: SectionData = {
-    id: 'c05-s1',
-    number: '5.1',
-    title: '内积空间与范数',
-    anchor: 'c05-s1',
-    htmlPath: 'sections/c05-s1.html',
+    id: 'c12-s1',
+    number: '12.1',
+    title: '多元正态分布',
+    anchor: 'c12-s1',
+    htmlPath: 'sections/c12-s1.html',
     htmlBytes: 1024,
     subsections: [],
     exerciseIds: [],
@@ -145,7 +145,7 @@ describe('ReaderSectionInfo 知识关系增强', () => {
         <MemoryRouter>
           <ReaderSectionInfo
             section={mockUnannotatedSection}
-            chapterTitle="第5章 内积空间与正交性"
+            chapterTitle="第12章 多维正态与极限定理"
             sectionLookup={sectionLookup}
             onOpenStatusModal={vi.fn()}
             onScrollToSection={vi.fn()}
@@ -164,6 +164,6 @@ describe('ReaderSectionInfo 知识关系增强', () => {
     // Still provides entry to graph
     const graphLink = screen.getByText('查看完整知识关系');
     expect(graphLink).toBeInTheDocument();
-    expect(graphLink.closest('a')).toHaveAttribute('href', '/graph?section=c05-s1');
+    expect(graphLink.closest('a')).toHaveAttribute('href', '/graph?section=c12-s1');
   });
 });
