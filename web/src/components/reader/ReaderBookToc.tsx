@@ -20,7 +20,6 @@ export const ReaderBookToc: React.FC<ReaderBookTocProps> = ({
   onClose,
 }) => {
   const { store } = useStore();
-  const pilotSet = new Set(book.pilotChapterIds || ['c01', 'c08', 'c11', 'c33']);
 
   // Find which part the current chapter belongs to
   const initialPart = book.parts.find((p) => p.chapterIds.includes(currentChapterId));
@@ -94,46 +93,44 @@ export const ReaderBookToc: React.FC<ReaderBookTocProps> = ({
                 if (!chapter) return null;
 
                 const isCurrentChap = chapter.id === currentChapterId;
-                const isPilot = pilotSet.has(chapter.id);
+                const firstSection = chapter.sections[0];
 
                 return (
                   <div key={chapter.id} style={{ marginBottom: '8px' }}>
-                    <div
+                    <button
+                      type="button"
                       className={`book-toc__chapter ${isCurrentChap ? 'is-current' : ''}`}
-                      title={chapter.title}
+                      title={isCurrentChap ? chapter.title : `打开 ${chapter.title}`}
+                      onClick={() => {
+                        if (!isCurrentChap && firstSection) {
+                          onSelectSection(chapter.id, firstSection.id);
+                          if (onClose) onClose();
+                        }
+                      }}
+                      aria-current={isCurrentChap ? 'page' : undefined}
+                      style={{
+                        width: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        background: 'none',
+                        border: 'none',
+                        padding: 0,
+                        textAlign: 'left',
+                        cursor: isCurrentChap ? 'default' : 'pointer',
+                      }}
                     >
                       <span className="num">{formatChapterNumber(chapter.number)}</span>
                       <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                         {chapter.title}
                       </span>
-                      {!isPilot && (
-                        <span className="tiny" style={{ fontSize: '9px', color: 'var(--ink-faint)' }}>
-                          接入中
-                        </span>
-                      )}
-                    </div>
+                    </button>
 
-                    {/* If this chapter is current, or if pilot, show sections */}
                     {isCurrentChap && (
                       <div className="book-toc__sections">
                         {chapter.sections.map((sec) => {
                           const isCurrentSec = sec.id === currentSectionId;
                           const progress = store.progress[sec.id]?.status || 'empty';
-
-                          if (!isPilot) {
-                            return (
-                              <div
-                                key={sec.id}
-                                className="book-toc__section is-disabled"
-                                title="该章节内容接入中"
-                              >
-                                <span className="num">{sec.number}</span>
-                                <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                                  {sec.title}
-                                </span>
-                              </div>
-                            );
-                          }
 
                           return (
                             <a
@@ -154,28 +151,24 @@ export const ReaderBookToc: React.FC<ReaderBookTocProps> = ({
                         })}
 
                         {/* Chapter summary & exercises entries */}
-                        {isPilot && (
-                          <>
-                            <a
-                              href="#summary"
-                              className={`book-toc__section ${currentSectionId === 'summary' ? 'is-current' : ''}`}
-                              onClick={(e) => handleSectionClick(e, chapter.id, 'summary')}
-                            >
-                              <span className="dot dot--empty" />
-                              <span className="num">小结</span>
-                              <span>本章小结</span>
-                            </a>
-                            <a
-                              href="#exercises"
-                              className={`book-toc__section ${currentSectionId === 'exercises' ? 'is-current' : ''}`}
-                              onClick={(e) => handleSectionClick(e, chapter.id, 'exercises')}
-                            >
-                              <span className="dot dot--empty" />
-                              <span className="num">练习</span>
-                              <span>习题</span>
-                            </a>
-                          </>
-                        )}
+                        <a
+                          href="#summary"
+                          className={`book-toc__section ${currentSectionId === 'summary' ? 'is-current' : ''}`}
+                          onClick={(e) => handleSectionClick(e, chapter.id, 'summary')}
+                        >
+                          <span className="dot dot--empty" />
+                          <span className="num">小结</span>
+                          <span>本章小结</span>
+                        </a>
+                        <a
+                          href="#exercises"
+                          className={`book-toc__section ${currentSectionId === 'exercises' ? 'is-current' : ''}`}
+                          onClick={(e) => handleSectionClick(e, chapter.id, 'exercises')}
+                        >
+                          <span className="dot dot--empty" />
+                          <span className="num">练习</span>
+                          <span>习题</span>
+                        </a>
                       </div>
                     )}
                   </div>

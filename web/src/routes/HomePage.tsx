@@ -53,24 +53,18 @@ export const HomePage: React.FC = () => {
     );
   }, [book]);
 
-  const pilotSet = useMemo(() => {
-    return new Set(book?.pilotChapterIds || ['c01', 'c08', 'c11', 'c33']);
+  const readableChapters = useMemo(() => {
+    return book?.chapters || [];
   }, [book]);
 
-  const pilotChapters = useMemo(() => {
-    if (!book) return [];
-    return book.chapters.filter((c) => pilotSet.has(c.id));
-  }, [book, pilotSet]);
-
-  const pilotExercisesCount = useMemo(() => {
-    return pilotChapters.reduce((acc, c) => acc + (c.exerciseCount || 0), 0);
-  }, [pilotChapters]);
+  const totalExercisesCount = useMemo(() => {
+    return readableChapters.reduce((acc, c) => acc + (c.exerciseCount || 0), 0);
+  }, [readableChapters]);
 
   // Determine continue card data
   const continueData = useMemo(() => {
     if (!book || !store.lastLocation) return null;
     const { chapterId, sectionId } = store.lastLocation;
-    if (!pilotSet.has(chapterId)) return null;
 
     const chapter = book.chapters.find((c) => c.id === chapterId);
     if (!chapter) return null;
@@ -95,15 +89,15 @@ export const HomePage: React.FC = () => {
       total: chapter.sections.length,
       percentage: pct,
     };
-  }, [book, store.lastLocation, store.progress, pilotSet]);
+  }, [book, store.lastLocation, store.progress]);
 
-  // Next section in pilot chapters for Today panel.
+  // Next section across the whole book for Today panel.
   // Prefer the chapter the learner last opened so “today” does not jump back
   // to chapter 1 while they are reading chapter 11.
   const nextSectionData = useMemo(() => {
     if (!book) return null;
 
-    const ordered = [...pilotChapters];
+    const ordered = [...readableChapters];
     const lastChapterId = store.lastLocation?.chapterId;
     if (lastChapterId) {
       const idx = ordered.findIndex((c) => c.id === lastChapterId);
@@ -125,7 +119,7 @@ export const HomePage: React.FC = () => {
       }
     }
     return null;
-  }, [book, pilotChapters, store.progress, store.lastLocation]);
+  }, [book, readableChapters, store.progress, store.lastLocation]);
 
   // Part map progress calculation
   const partProgressList = useMemo(() => {
@@ -325,8 +319,8 @@ export const HomePage: React.FC = () => {
               </>
             ) : (
               <span className="value">
-                已完成试点章
-                <small>其余章节正在接入中</small>
+                全书已学完
+                <small>可开始复习与错题回顾</small>
               </span>
             )}
           </div>
@@ -345,7 +339,7 @@ export const HomePage: React.FC = () => {
           <div className="today__row">
             <span className="label">练习</span>
             <span className="value">
-              试点章共 {pilotExercisesCount} 题
+              全书共 {totalExercisesCount} 题
               <small>练习系统与错题本即将在 Phase 3 开放</small>
             </span>
             <span className="arrow muted" title="Phase 3 开放" aria-hidden="true">

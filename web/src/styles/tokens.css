@@ -43,7 +43,7 @@
 
   /* Prose Defaults */
   --prose-size: 18px;
-  --measure: 34em;
+  --measure: 38em;
 }
 
 html[data-theme="dark"] {

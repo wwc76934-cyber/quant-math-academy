@@ -31,8 +31,8 @@ const FONT_SIZE_MAP: Record<FontSizeSetting, string> = {
 };
 
 const MEASURE_MAP: Record<MeasureSetting, string> = {
-  narrow: '30em',
-  standard: '34em',
+  narrow: '34em',
+  standard: '38em',
   wide: '40em',
 };
 

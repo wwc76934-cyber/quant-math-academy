@@ -67,7 +67,6 @@ export const ChapterList: React.FC<ChapterListProps> = ({
   filterMode = 'all',
 }) => {
   const { store } = useStore();
-  const pilotSet = new Set(book.pilotChapterIds || ['c01', 'c08', 'c11', 'c33']);
 
   // Filter chapters
   const filteredChapters = book.chapters.filter((chapter) => {
@@ -86,14 +85,10 @@ export const ChapterList: React.FC<ChapterListProps> = ({
     }
 
     if (filterMode === 'unlearned') {
-      // If pilot, check if any section is not done
-      if (pilotSet.has(chapter.id)) {
-        return chapter.sections.some((s) => {
-          const item = store.progress[s.id];
-          return !item || (item.status !== 'done' && item.status !== 'master');
-        });
-      }
-      return true;
+      return chapter.sections.some((s) => {
+        const item = store.progress[s.id];
+        return !item || (item.status !== 'done' && item.status !== 'master');
+      });
     }
 
     return true;
@@ -121,27 +116,22 @@ export const ChapterList: React.FC<ChapterListProps> = ({
             </div>
 
             {partChapters.map((chapter) => {
-              const isPilot = pilotSet.has(chapter.id);
               const isOpen = openChapterIds.has(chapter.id);
               const metaSummary = getChapterMetaSummary(chapter);
 
-              // Progress calculation for pilot chapters
               let completedCount = 0;
-              let totalSections = chapter.sections.length;
-              if (isPilot) {
-                chapter.sections.forEach((s) => {
-                  const status = store.progress[s.id]?.status;
-                  if (status === 'done' || status === 'master') {
-                    completedCount++;
-                  }
-                });
-              }
+              const totalSections = chapter.sections.length;
+              chapter.sections.forEach((s) => {
+                const status = store.progress[s.id]?.status;
+                if (status === 'done' || status === 'master') {
+                  completedCount++;
+                }
+              });
 
-              const countText = !isPilot
-                ? '内容接入中'
-                : completedCount > 0
-                ? `${completedCount} / ${totalSections} 已学`
-                : `0 / ${totalSections} 已学`;
+              const countText =
+                completedCount > 0
+                  ? `${completedCount} / ${totalSections} 已学`
+                  : `0 / ${totalSections} 已学`;
 
               return (
                 <div
@@ -193,46 +183,11 @@ export const ChapterList: React.FC<ChapterListProps> = ({
                         const hasSecMeta =
                           sec.difficulty !== null || sec.priority !== null;
 
-                        if (isPilot) {
-                          return (
-                            <Link
-                              key={sec.id}
-                              to={learnPath(chapter.id, sec.anchor || sec.id)}
-                              className="section-row"
-                            >
-                              <span className="section-row__num">
-                                {sec.number}
-                              </span>
-                              <span className="section-row__title">
-                                {sec.title}
-                              </span>
-                              <span className="section-row__meta">
-                                {hasSecMeta ? (
-                                  <>
-                                    <DifficultyBadge level={sec.difficulty} />
-                                    <PriorityBadge priority={sec.priority} />
-                                  </>
-                                ) : (
-                                  <span className="small muted">标注完善中</span>
-                                )}
-                              </span>
-                              <span className="section-row__status">
-                                <StatusDot status={secStatus} />
-                                <span>{STATUS_LABELS[secStatus]}</span>
-                              </span>
-                              <span className="section-row__time">
-                                {formatMinutes(sec.minutes)}
-                              </span>
-                            </Link>
-                          );
-                        }
-
-                        // Non-pilot chapter section row
                         return (
-                          <div
+                          <Link
                             key={sec.id}
-                            className="section-row section-row--disabled"
-                            title="该章节内容接入中，Phase 1 暂不开放阅读"
+                            to={learnPath(chapter.id, sec.anchor || sec.id)}
+                            className="section-row"
                           >
                             <span className="section-row__num">
                               {sec.number}
@@ -251,13 +206,13 @@ export const ChapterList: React.FC<ChapterListProps> = ({
                               )}
                             </span>
                             <span className="section-row__status">
-                              <span className="dot dot--empty" />
-                              <span>内容接入中</span>
+                              <StatusDot status={secStatus} />
+                              <span>{STATUS_LABELS[secStatus]}</span>
                             </span>
                             <span className="section-row__time">
                               {formatMinutes(sec.minutes)}
                             </span>
-                          </div>
+                          </Link>
                         );
                       })}
                     </div>

@@ -66,15 +66,17 @@ export const ReaderPage: React.FC = () => {
   // scrolled into place; otherwise the first smooth-scroll frame can replace
   // the requested hash with the top section before the target is reached.
   const deepLinkScrollingRef = useRef(false);
+  // Keep scrollspy quiet until every section has been injected and the deep
+  // link target has been aligned; otherwise late sections shift the page and
+  // the spy rewrites the requested hash to the previous section.
+  const deepLinkPendingRef = useRef(false);
+  // Only let scrollspy rewrite the URL after an actual reader gesture. This
+  // keeps deep links stable while late sections (and math layout) settle.
+  const userScrolledRef = useRef(false);
   // Suppress the source page's pending scrollspy writes while React Router is
   // navigating to another chapter; otherwise a stale `#c11-s1` can be written
   // onto the new `/learn/c14` URL.
   const navigatingRef = useRef(false);
-
-  // 1. Check pilot chapter status
-  const pilotSet = useMemo(() => {
-    return new Set(book?.pilotChapterIds || ['c01', 'c08', 'c11', 'c33']);
-  }, [book]);
 
   // Global lightweight TOC lookup for prerequisite/related labels and jumps.
   const sectionLookup = useMemo(() => {
@@ -86,8 +88,6 @@ export const ReaderPage: React.FC = () => {
     }
     return map;
   }, [book]);
-
-  const isPilot = pilotSet.has(chapterId);
 
   // Load Book and Chapter Manifest
   useEffect(() => {
@@ -104,21 +104,14 @@ export const ReaderPage: React.FC = () => {
     setSectionErrors({});
     setLoadingSections(new Set());
     setShowStudyPrompt(false);
+    deepLinkPendingRef.current = Boolean(location.hash);
+    userScrolledRef.current = false;
 
     (async () => {
       try {
         const bookData = await loadBook();
         if (ac.signal.aborted) return;
         setBook(bookData);
-
-        const isPilotChapter = (bookData.pilotChapterIds || ['c01', 'c08', 'c11', 'c33']).includes(
-          chapterId
-        );
-
-        if (!isPilotChapter) {
-          setLoading(false);
-          return;
-        }
 
         const chapData = await loadChapter(chapterId, ac.signal);
         if (ac.signal.aborted) return;
@@ -253,12 +246,20 @@ export const ReaderPage: React.FC = () => {
   useEffect(() => {
     const rawHash = location.hash.replace('#', '');
     if (!rawHash) {
+      deepLinkPendingRef.current = false;
       setIsLocatingTarget(false);
       return;
     }
 
+    const allLoaded =
+      !chapterData ||
+      chapterData.sections.every(
+        (s) => loadedSections[s.id] !== undefined || sectionErrors[s.id] !== undefined
+      );
+
     const el = document.getElementById(rawHash);
     if (el) {
+      deepLinkPendingRef.current = true;
       deepLinkScrollingRef.current = true;
       // The sticky global header (56px) + reader subnav (44px) occupy the top
       // ~100px. Use an explicit offset instead of relying on native hash
@@ -273,11 +274,44 @@ export const ReaderPage: React.FC = () => {
         align('auto');
         el.classList.remove('is-target-highlight');
         deepLinkScrollingRef.current = false;
-        setIsLocatingTarget(false);
+        if (allLoaded) {
+          deepLinkPendingRef.current = false;
+          setIsLocatingTarget(false);
+        }
       }, 900);
       return () => window.clearTimeout(timer);
     }
-  }, [location.hash, loadedSections]);
+
+    if (allLoaded) {
+      deepLinkPendingRef.current = false;
+      setIsLocatingTarget(false);
+    }
+  }, [location.hash, loadedSections, sectionErrors, chapterData]);
+
+  // Mark real reader gestures; programmatic deep-link scrolling must not
+  // trigger scrollspy hash rewrites.
+  useEffect(() => {
+    const mark = () => {
+      userScrolledRef.current = true;
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (
+        ['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', 'Home', 'End', ' '].includes(
+          e.key
+        )
+      ) {
+        mark();
+      }
+    };
+    window.addEventListener('wheel', mark, { passive: true });
+    window.addEventListener('touchmove', mark, { passive: true });
+    window.addEventListener('keydown', onKey);
+    return () => {
+      window.removeEventListener('wheel', mark);
+      window.removeEventListener('touchmove', mark);
+      window.removeEventListener('keydown', onKey);
+    };
+  }, []);
 
   // ScrollSpy to update currentSectionId & store lastLocation
   useEffect(() => {
@@ -290,7 +324,13 @@ export const ReaderPage: React.FC = () => {
 
       throttleTimer = window.setTimeout(() => {
         throttleTimer = null;
-        if (deepLinkScrollingRef.current || navigatingRef.current) return;
+        if (
+          !userScrolledRef.current ||
+          deepLinkScrollingRef.current ||
+          deepLinkPendingRef.current ||
+          navigatingRef.current
+        )
+          return;
 
         const headings = Array.from(
           document.querySelectorAll<HTMLElement>('.section-heading[data-section-id]')
@@ -302,7 +342,8 @@ export const ReaderPage: React.FC = () => {
         let activeId = chapterData.sections[0].id;
         for (let i = headings.length - 1; i >= 0; i--) {
           const h = headings[i];
-          if (h.offsetTop <= triggerPoint) {
+          const hTop = h.getBoundingClientRect().top + window.scrollY;
+          if (hTop <= triggerPoint) {
             const secId = h.getAttribute('data-section-id');
             if (secId) {
               activeId = secId;
@@ -313,7 +354,10 @@ export const ReaderPage: React.FC = () => {
 
         // Check exercises
         const exHeading = document.getElementById('exercises-heading');
-        if (exHeading && exHeading.offsetTop <= triggerPoint) {
+        if (
+          exHeading &&
+          exHeading.getBoundingClientRect().top + window.scrollY <= triggerPoint
+        ) {
           activeId = 'exercises';
         }
 
@@ -530,37 +574,6 @@ export const ReaderPage: React.FC = () => {
     const idx = book.chapters.findIndex((c) => c.id === chapterId);
     return idx >= 0 && idx < book.chapters.length - 1 ? book.chapters[idx + 1] : undefined;
   }, [book, chapterId]);
-
-  // Non-pilot view
-  if (!loading && !isPilot) {
-    return (
-      <main className="shell" id="main-content" style={{ padding: '80px 32px', textAlign: 'center' }}>
-        <div className="kicker">Phase 1 试点计划</div>
-        <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '36px', margin: '16px 0 20px' }}>
-          内容接入中
-        </h1>
-        <p
-          style={{
-            maxWidth: '540px',
-            margin: '0 auto 28px',
-            color: 'var(--ink-secondary)',
-            lineHeight: 1.8,
-            fontSize: '15px',
-          }}
-        >
-          该章节尚未开放阅读。Phase 1 当前开放 4 个试点章：第 1 章（数学语言与实数完备性）、第 8 章（矩阵分解与 PCA）、第 11 章（矩与概率不等式）、第 33 章（无套利与 Greeks）。
-        </p>
-        <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
-          <Link to={syllabusPath()} className="btn btn--primary">
-            返回教材完整目录
-          </Link>
-          <Link to={learnPath('c11')} className="btn btn--secondary">
-            前往第 11 章（试点章）
-          </Link>
-        </div>
-      </main>
-    );
-  }
 
   if (loading) {
     return (
@@ -862,7 +875,7 @@ export const ReaderPage: React.FC = () => {
                 </Link>
               ) : (
                 <Link to={syllabusPath()} className="btn btn--primary">
-                  完成试点章阅读 · 返回教材目录
+                  完成全书阅读 · 返回教材目录
                 </Link>
               )}
             </div>

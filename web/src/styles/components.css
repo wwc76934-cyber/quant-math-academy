@@ -1632,6 +1632,9 @@ details.proof[open] > summary.proof__label::before {
   display: none;
 }
 @media (max-width: 640px) {
+  .reader-top__title {
+    display: none;
+  }
   .article-content {
     font-size: calc(var(--prose-size) - 1px);
   }

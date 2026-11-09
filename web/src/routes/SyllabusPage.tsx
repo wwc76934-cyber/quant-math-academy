@@ -101,9 +101,7 @@ export const SyllabusPage: React.FC = () => {
     if (!book) return 0;
     if (filterMode === 'all') return book.chapters.length;
 
-    const pilotSet = new Set(book.pilotChapterIds || ['c01', 'c08', 'c11', 'c33']);
-
-    return book.chapters.filter((chapter) => {
+    const filtered = book.chapters.filter((chapter) => {
       if (filterMode === 'annotated') {
         return chapter.sections.some(
           (s) => s.difficulty !== null || s.priority !== null
@@ -115,16 +113,14 @@ export const SyllabusPage: React.FC = () => {
         );
       }
       if (filterMode === 'unlearned') {
-        if (pilotSet.has(chapter.id)) {
-          return chapter.sections.some((s) => {
-            const item = store.progress[s.id];
-            return !item || (item.status !== 'done' && item.status !== 'master');
-          });
-        }
-        return true;
+        return chapter.sections.some((s) => {
+          const item = store.progress[s.id];
+          return !item || (item.status !== 'done' && item.status !== 'master');
+        });
       }
       return true;
-    }).length;
+    });
+    return filtered.length;
   }, [book, filterMode, store.progress]);
 
   if (loading) {
@@ -227,8 +223,8 @@ export const SyllabusPage: React.FC = () => {
           }}
         >
           {filteredChapterCount === 0
-            ? '其余章标注完善中，当前所有章节尚未完成 P0/P1 优先级标注。'
-            : '其余章标注完善中，当前仅显示已标注 P0/P1 的试点章节。'}
+            ? '全部章节尚未完成 P0/P1 优先级标注。'
+            : '仅显示已完成 P0/P1 标注的章节；其余章“标注完善中”。'}
         </div>
       )}
 

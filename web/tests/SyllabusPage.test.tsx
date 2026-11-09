@@ -52,7 +52,7 @@ describe('SyllabusPage', () => {
     expect(screen.getByText('期望的定义与性质')).toBeInTheDocument();
   });
 
-  it('displays "内容接入中" for non-pilot chapters', async () => {
+  it('shows every chapter as readable, including unannotated ones', async () => {
     render(
       <StoreProvider>
         <MemoryRouter>
@@ -63,9 +63,15 @@ describe('SyllabusPage', () => {
 
     await screen.findByRole('heading', { level: 1, name: '完整目录' });
 
-    // Non-pilot chapters (e.g. Chapter 2) show "内容接入中" in chapter row
-    const nonPilotNotes = screen.getAllByText('内容接入中');
-    expect(nonPilotNotes.length).toBeGreaterThan(0);
+    expect(screen.queryByText('内容接入中')).not.toBeInTheDocument();
+    expect(screen.getAllByText('0 / 6 已学').length).toBeGreaterThan(0);
+
+    fireEvent.click(
+      screen.getByRole('button', { name: /一元微积分、Taylor 公式与级数/ })
+    );
+    expect(
+      screen.getByRole('link', { name: /函数极限、连续与闭区间性质/ })
+    ).toBeInTheDocument();
   });
 
   it('allows expanding and collapsing chapter rows', async () => {
@@ -103,7 +109,7 @@ describe('SyllabusPage', () => {
 
     // Should indicate filtered count and notice
     expect(screen.getByText(/已筛选/)).toBeInTheDocument();
-    expect(screen.getByText(/其余章标注完善中/)).toBeInTheDocument();
+    expect(screen.getByText(/仅显示已完成 P0\/P1 标注的章节/)).toBeInTheDocument();
 
     // Clear filter
     const clearBtn = screen.getByRole('button', { name: '清除筛选' });

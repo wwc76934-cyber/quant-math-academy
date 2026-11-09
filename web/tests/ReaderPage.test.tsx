@@ -14,6 +14,8 @@ const siteDir = path.resolve(__dirname, '../../content/generated/site');
 const bookJson = JSON.parse(fs.readFileSync(path.join(siteDir, 'book.json'), 'utf-8'));
 const c11Json = JSON.parse(fs.readFileSync(path.join(siteDir, 'chapters/c11.json'), 'utf-8'));
 const c11Exercises = JSON.parse(fs.readFileSync(path.join(siteDir, 'exercises/c11.json'), 'utf-8'));
+const c02Json = JSON.parse(fs.readFileSync(path.join(siteDir, 'chapters/c02.json'), 'utf-8'));
+const c34Json = JSON.parse(fs.readFileSync(path.join(siteDir, 'chapters/c34.json'), 'utf-8'));
 
 // IntersectionObserver mock that allows manual triggering
 let observerCallbacks: Array<(entries: IntersectionObserverEntry[]) => void> = [];
@@ -83,6 +85,20 @@ describe('ReaderPage', () => {
           ok: true,
           status: 200,
           json: async () => c11Json,
+        } as Response;
+      }
+      if (urlStr.includes('chapters/c02.json')) {
+        return {
+          ok: true,
+          status: 200,
+          json: async () => c02Json,
+        } as Response;
+      }
+      if (urlStr.includes('chapters/c34.json')) {
+        return {
+          ok: true,
+          status: 200,
+          json: async () => c34Json,
         } as Response;
       }
       if (urlStr.includes('exercises/c11.json')) {
@@ -172,7 +188,7 @@ describe('ReaderPage', () => {
     );
   });
 
-  it('displays "内容接入中" banner and link to syllabus for non-pilot chapter', async () => {
+  it('renders any chapter in the full book (C02) and marks missing metadata honestly', async () => {
     render(
       <StoreProvider>
         <ToastProvider>
@@ -185,11 +201,64 @@ describe('ReaderPage', () => {
       </StoreProvider>
     );
 
-    expect(await screen.findByText('内容接入中')).toBeInTheDocument();
     expect(
-      screen.getByText(/该章节尚未开放阅读/)
+      await screen.findByRole('heading', {
+        level: 1,
+        name: /一元微积分、Taylor 公式与级数/,
+      })
     ).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: '返回教材完整目录' })).toBeInTheDocument();
+    expect(
+      await screen.findByRole('heading', {
+        level: 2,
+        name: '函数极限、连续与闭区间性质',
+      })
+    ).toBeInTheDocument();
+    expect(screen.queryByText('内容接入中')).not.toBeInTheDocument();
+    expect(screen.getAllByText('标注完善中').length).toBeGreaterThan(0);
+  });
+
+  it('renders C34 without pilot gating', async () => {
+    render(
+      <StoreProvider>
+        <ToastProvider>
+          <MemoryRouter initialEntries={['/learn/c34']}>
+            <Routes>
+              <Route path="/learn/:chapterId" element={<ReaderPage />} />
+            </Routes>
+          </MemoryRouter>
+        </ToastProvider>
+      </StoreProvider>
+    );
+
+    expect(
+      await screen.findByRole('heading', {
+        level: 1,
+        name: /量化策略的数学评估与回测/,
+      })
+    ).toBeInTheDocument();
+    expect(
+      await screen.findByRole('heading', {
+        level: 2,
+        name: '收益序列与绩效指标',
+      })
+    ).toBeInTheDocument();
+  });
+
+  it('shows the error state when a chapter manifest is missing', async () => {
+    render(
+      <StoreProvider>
+        <ToastProvider>
+          <MemoryRouter initialEntries={['/learn/c99']}>
+            <Routes>
+              <Route path="/learn/:chapterId" element={<ReaderPage />} />
+            </Routes>
+          </MemoryRouter>
+        </ToastProvider>
+      </StoreProvider>
+    );
+
+    expect(await screen.findByText(/加载章节失败|404|Not found/i)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /返回教材目录/ })).toBeInTheDocument();
   });
 
   it('updates learning status and persists in store with toast feedback', async () => {
