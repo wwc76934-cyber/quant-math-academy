@@ -68,6 +68,7 @@ export interface SectionMeta {
   difficulty?: DifficultyLevel | number | null;
   priority?: PriorityLevel | null;
   minutes?: number | null;
+  examFrequency?: 'high' | 'medium' | 'low' | 'none' | null;
   prerequisites?: Array<string | { id: string; strength?: 'required' | 'helpful' }>;
   coreConcepts?: string[];
   related?: string[];

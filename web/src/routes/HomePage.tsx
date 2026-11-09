@@ -97,11 +97,23 @@ export const HomePage: React.FC = () => {
     };
   }, [book, store.lastLocation, store.progress, pilotSet]);
 
-  // Next section in pilot chapters for Today panel
+  // Next section in pilot chapters for Today panel.
+  // Prefer the chapter the learner last opened so “today” does not jump back
+  // to chapter 1 while they are reading chapter 11.
   const nextSectionData = useMemo(() => {
     if (!book) return null;
 
-    for (const chapter of pilotChapters) {
+    const ordered = [...pilotChapters];
+    const lastChapterId = store.lastLocation?.chapterId;
+    if (lastChapterId) {
+      const idx = ordered.findIndex((c) => c.id === lastChapterId);
+      if (idx > 0) {
+        const [current] = ordered.splice(idx, 1);
+        ordered.unshift(current);
+      }
+    }
+
+    for (const chapter of ordered) {
       for (const section of chapter.sections) {
         const item = store.progress[section.id];
         if (!item || (item.status !== 'done' && item.status !== 'master')) {
@@ -113,7 +125,7 @@ export const HomePage: React.FC = () => {
       }
     }
     return null;
-  }, [book, pilotChapters, store.progress]);
+  }, [book, pilotChapters, store.progress, store.lastLocation]);
 
   // Part map progress calculation
   const partProgressList = useMemo(() => {

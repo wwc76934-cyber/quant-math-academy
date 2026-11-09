@@ -10,15 +10,19 @@ import { STATUS_LABELS, StatusDot } from '../metadata/StatusDot';
 export interface ReaderSectionInfoProps {
   section?: SectionData | null;
   chapterTitle: string;
+  sectionLookup?: Record<string, { number: string; title: string }>;
   onOpenStatusModal: () => void;
   onScrollToSection: (sectionId: string) => void;
+  onOpenSection?: (sectionId: string) => void;
 }
 
 export const ReaderSectionInfo: React.FC<ReaderSectionInfoProps> = ({
   section,
   chapterTitle,
+  sectionLookup,
   onOpenStatusModal,
   onScrollToSection,
+  onOpenSection,
 }) => {
   const { store } = useStore();
   const [rationaleOpen, setRationaleOpen] = useState(false);
@@ -62,8 +66,16 @@ export const ReaderSectionInfo: React.FC<ReaderSectionInfoProps> = ({
             <b>{formatMinutes(meta?.minutes)}</b>
           </div>
           <div>
-            高频考查
-            <b>{meta?.priority === 'P0' ? '是' : '—'}</b>
+            考查频率
+            <b>
+              {meta?.examFrequency === 'high'
+                ? '高'
+                : meta?.examFrequency === 'medium'
+                ? '中'
+                : meta?.examFrequency === 'low'
+                ? '低'
+                : '—'}
+            </b>
           </div>
           <div>
             学习状态
@@ -115,6 +127,8 @@ export const ReaderSectionInfo: React.FC<ReaderSectionInfoProps> = ({
               const preId = typeof pre === 'string' ? pre : pre.id;
               const strength = typeof pre === 'string' ? 'required' : pre.strength || 'required';
               const preProgress = store.progress[preId]?.status || 'empty';
+              const info = sectionLookup?.[preId];
+              const label = info ? `${info.number} ${info.title}` : preId;
 
               return (
                 <li key={idx}>
@@ -123,10 +137,10 @@ export const ReaderSectionInfo: React.FC<ReaderSectionInfoProps> = ({
                     href={`#${preId}`}
                     onClick={(e) => {
                       e.preventDefault();
-                      onScrollToSection(preId);
+                      (onOpenSection || onScrollToSection)(preId);
                     }}
                   >
-                    {preId}
+                    {label}
                   </a>
                   <span className="tiny">{strength === 'required' ? '必要' : '有益'}</span>
                 </li>
@@ -141,19 +155,23 @@ export const ReaderSectionInfo: React.FC<ReaderSectionInfoProps> = ({
         <div className="rail__block">
           <div className="rail__title">相关知识点</div>
           <ul className="rail-list">
-            {meta.related.slice(0, 6).map((item, idx) => (
-              <li key={idx}>
-                <a
-                  href={`#${item}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    onScrollToSection(item);
-                  }}
-                >
-                  {item}
-                </a>
-              </li>
-            ))}
+            {meta.related.slice(0, 6).map((item, idx) => {
+              const info = sectionLookup?.[item];
+              const label = info ? `${info.number} ${info.title}` : item;
+              return (
+                <li key={idx}>
+                  <a
+                    href={`#${item}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      (onOpenSection || onScrollToSection)(item);
+                    }}
+                  >
+                    {label}
+                  </a>
+                </li>
+              );
+            })}
           </ul>
         </div>
       )}

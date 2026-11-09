@@ -66,10 +66,25 @@ export const ReaderPage: React.FC = () => {
   // scrolled into place; otherwise the first smooth-scroll frame can replace
   // the requested hash with the top section before the target is reached.
   const deepLinkScrollingRef = useRef(false);
+  // Suppress the source page's pending scrollspy writes while React Router is
+  // navigating to another chapter; otherwise a stale `#c11-s1` can be written
+  // onto the new `/learn/c14` URL.
+  const navigatingRef = useRef(false);
 
   // 1. Check pilot chapter status
   const pilotSet = useMemo(() => {
     return new Set(book?.pilotChapterIds || ['c01', 'c08', 'c11', 'c33']);
+  }, [book]);
+
+  // Global lightweight TOC lookup for prerequisite/related labels and jumps.
+  const sectionLookup = useMemo(() => {
+    const map: Record<string, { number: string; title: string }> = {};
+    for (const chapter of book?.chapters || []) {
+      for (const section of chapter.sections) {
+        map[section.id] = { number: section.number, title: section.title };
+      }
+    }
+    return map;
   }, [book]);
 
   const isPilot = pilotSet.has(chapterId);
@@ -156,6 +171,16 @@ export const ReaderPage: React.FC = () => {
     return () => {
       ac.abort();
     };
+  }, [chapterId]);
+
+  // Keep the navigation lock for one beat after a cross-chapter jump so a
+  // pending source-page scrollspy write cannot stamp the old hash onto the new URL.
+  useEffect(() => {
+    if (!navigatingRef.current) return;
+    const timer = window.setTimeout(() => {
+      navigatingRef.current = false;
+    }, 1000);
+    return () => window.clearTimeout(timer);
   }, [chapterId]);
 
   // Section loader with individual state
@@ -265,7 +290,7 @@ export const ReaderPage: React.FC = () => {
 
       throttleTimer = window.setTimeout(() => {
         throttleTimer = null;
-        if (deepLinkScrollingRef.current) return;
+        if (deepLinkScrollingRef.current || navigatingRef.current) return;
 
         const headings = Array.from(
           document.querySelectorAll<HTMLElement>('.section-heading[data-section-id]')
@@ -434,10 +459,24 @@ export const ReaderPage: React.FC = () => {
   const scrollToId = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const top = el.getBoundingClientRect().top + window.scrollY - 170;
+      window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
       window.history.replaceState(null, '', `#${id}`);
       setCurrentSectionId(id);
     }
+  };
+
+  const openSection = (id: string) => {
+    if (!sectionLookup[id]) return;
+    const targetChapter = book?.chapters.find((c) =>
+      c.sections.some((s) => s.id === id)
+    );
+    if (targetChapter && targetChapter.id !== chapterId) {
+      navigatingRef.current = true;
+      navigate(learnPath(targetChapter.id, id));
+      return;
+    }
+    scrollToId(id);
   };
 
   const navigateToPrevSection = () => {
@@ -839,8 +878,10 @@ export const ReaderPage: React.FC = () => {
             <ReaderSectionInfo
               section={activeSection}
               chapterTitle={chapterData.title}
+              sectionLookup={sectionLookup}
               onOpenStatusModal={() => setStatusModalOpen(true)}
               onScrollToSection={scrollToId}
+              onOpenSection={openSection}
             />
           </aside>
         </div>
@@ -951,6 +992,7 @@ export const ReaderPage: React.FC = () => {
               <ReaderSectionInfo
                 section={activeSection}
                 chapterTitle={chapterData.title}
+                sectionLookup={sectionLookup}
                 onOpenStatusModal={() => {
                   setRailDrawerOpen(false);
                   setStatusModalOpen(true);
@@ -958,6 +1000,10 @@ export const ReaderPage: React.FC = () => {
                 onScrollToSection={(id) => {
                   setRailDrawerOpen(false);
                   scrollToId(id);
+                }}
+                onOpenSection={(id) => {
+                  setRailDrawerOpen(false);
+                  openSection(id);
                 }}
               />
             </div>

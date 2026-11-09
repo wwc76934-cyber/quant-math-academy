@@ -137,10 +137,10 @@ describe('ReaderPage', () => {
     ).toBeInTheDocument();
     expect(screen.getAllByText('11.1').length).toBeGreaterThan(0);
 
-    // Section info displays metadata (D2, P0, 45min)
+    // Section info displays metadata (D2, P0, 45 分钟)
     expect(screen.getByText('D2')).toBeInTheDocument();
     expect(screen.getByText('P0')).toBeInTheDocument();
-    expect(screen.getByText('45min')).toBeInTheDocument();
+    expect(screen.getByText('45 分钟')).toBeInTheDocument();
 
     // Learning objective rendered
     expect(screen.getByText(/能陈述数学期望的公理化积分定义/)).toBeInTheDocument();

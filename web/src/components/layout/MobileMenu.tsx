@@ -23,6 +23,7 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
 }) => {
   const drawerRef = useRef<HTMLDivElement>(null);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
+  const wasOpenRef = useRef(false);
 
   // Esc key closes drawer
   useEffect(() => {
@@ -55,9 +56,11 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
-  // Focus management: focus close button on open, return to trigger on close
+  // Focus management: focus close button on open, return to trigger on close.
+  // Do not steal focus on the initial `isOpen=false` mount.
   useEffect(() => {
     if (isOpen) {
+      wasOpenRef.current = true;
       document.body.style.overflow = 'hidden';
       // Small timeout to ensure DOM is ready
       const t = setTimeout(() => {
@@ -67,7 +70,9 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
         clearTimeout(t);
         document.body.style.overflow = '';
       };
-    } else {
+    }
+    if (wasOpenRef.current) {
+      wasOpenRef.current = false;
       triggerRef?.current?.focus();
     }
   }, [isOpen, triggerRef]);

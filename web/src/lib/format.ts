@@ -13,7 +13,7 @@ export function formatMinutes(m: number | null | undefined): string {
   if (m === null || m === undefined || Number.isNaN(m) || m <= 0) {
     return '—';
   }
-  return `${m}min`;
+  return `${m} 分钟`;
 }
 
 export function formatPercentage(pct: number): string {
