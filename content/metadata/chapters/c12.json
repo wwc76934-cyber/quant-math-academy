@@ -1,0 +1,392 @@
+{
+  "schemaVersion": 1,
+  "chapterId": "c12",
+  "title": "联合分布、协方差与次序统计量",
+  "partId": "part-3",
+  "summary": "本章系统阐述多元随机向量的联合概率架构、线性依赖度量与极值统计：从联合分布函数与矩形增量非负性出发，确立边缘密度积分投影与随机变量独立性判据；证明协方差双线性展开、相关系数柯西界与不相关几何反例；建立高维协方差矩阵对称半正定性与多元高斯分布仿射性质；推导多维变换 Jacobian、和的卷积、商分布与极值分布；建立连续独立同分布下次序统计量联合对称密度与均匀 Beta 分布；严格阐述条件密度截面极限与二元正态条件回归；最终落地于投资组合方差二次型、等权分散化收敛界、历史模拟在险价值（VaR）与 Copula 依赖建模。",
+  "whyStudy": "投资组合理论与风险管理的本质是多维依赖性分析：从 Markowitz 资产方差二次型到高斯 Copula 尾部相关性，均以多元联合分布、协方差矩阵与次序统计量为核心工具。掌握本章是通往资产配置、因子风险模型与极值风控的必经之路。",
+  "prerequisites": [
+    "c03-s5",
+    "c05-s2",
+    "c07-s2",
+    "c10-s4"
+  ],
+  "metadataStatus": "reviewed",
+  "reviewed": true,
+  "reviewedBy": "DSH",
+  "reviewedAt": "2026-11-09",
+  "sections": {
+    "c12-s1": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "联合分布",
+        "边缘分布",
+        "矩形概率",
+        "独立",
+        "联合密度"
+      ],
+      "coreConcepts": [
+        "联合分布函数与矩形概率增量",
+        "联合 PMF 与联合 PDF",
+        "边缘分布积分投影",
+        "独立性充要条件乘积分解"
+      ],
+      "applications": [
+        "双资产联合收益分布建模",
+        "资产间统计独立性假设检验",
+        "多变量联合风险暴露边缘投影"
+      ],
+      "prerequisites": [
+        {
+          "id": "c03-s5",
+          "strength": "required"
+        },
+        {
+          "id": "c10-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c12-s2",
+        "c12-s6"
+      ],
+      "learningObjective": "掌握联合 CDF 的矩形增量非负性质，能通过二重积分求解边缘密度并验证随机变量独立性。",
+      "keyFormulas": [
+        "c12-eq-12.1",
+        "c12-eq-12.2",
+        "c12-eq-12.6",
+        "c12-eq-12.8"
+      ],
+      "rationale": "本节系统建立定义12.1联合分布函数(12.1)及定理12.2矩形增量非负性(12.2)，给出联合密度定义与公式(12.6)边缘密度积分投影，并通过例12.1三角区域与定理12.7确立独立性的密度乘积判据(12.8)。这是多资产联合分布建模与统计相关性分析的基石。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c12-s2": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 45,
+      "examFrequency": "high",
+      "tags": [
+        "协方差",
+        "相关系数",
+        "双线性",
+        "柯西不等式",
+        "不相关"
+      ],
+      "coreConcepts": [
+        "协方差定义与消除量纲相关系数",
+        "协方差双线性与方差展开式",
+        "Cauchy-Schwarz 不等式确定相关界",
+        "不相关与独立的本质差异"
+      ],
+      "applications": [
+        "两资产投资组合波动率展开计算",
+        "线性对冲比率与贝塔系数确定",
+        "非线性相关性依赖下不相关性诊断"
+      ],
+      "prerequisites": [
+        {
+          "id": "c05-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c11-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c12-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c12-s3",
+        "c12-s7"
+      ],
+      "learningObjective": "熟练掌握协方差双线性运算与方差展开，深刻理解相关系数的 [-1, 1] 取值界及不相关不等于独立的内涵。",
+      "keyFormulas": [
+        "c12-eq-12.9",
+        "c12-eq-12.10",
+        "c12-eq-12.12",
+        "c12-eq-12.13"
+      ],
+      "rationale": "本节依据定义12.8阐释协方差(12.9)与无量纲相关系数(12.10)，严格证明定理12.9双线性展开(12.12)与定理12.10柯西不等式上界(12.13)，并借例12.3反例辨析不相关与独立本质差异。该节为资产配置与分散化提供了基础度量工具。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c12-s3": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 55,
+      "examFrequency": "high",
+      "tags": [
+        "协方差矩阵",
+        "半正定",
+        "多元正态",
+        "Cholesky",
+        "仿射变换"
+      ],
+      "coreConcepts": [
+        "协方差矩阵结构与对称半正定性",
+        "协方差矩阵退化奇异刻画",
+        "多元正态分布概率密度函数",
+        "多元高斯仿射变换封闭性",
+        "高斯下不相关与独立等价性"
+      ],
+      "applications": [
+        "多资产投资组合均值方差风险度量",
+        "Cholesky 分解生成相关资产多维随机数",
+        "高维因子模型协方差阵奇异性诊断"
+      ],
+      "prerequisites": [
+        {
+          "id": "c05-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c07-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c12-s2",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c12-s7",
+        "c21-s1",
+        "c32-s1"
+      ],
+      "learningObjective": "掌握高维协方差矩阵的对称半正定性证明，掌握多元正态分布密度与仿射性质，能应用 Cholesky 分解生成相关正态场景。",
+      "keyFormulas": [
+        "c12-eq-12.14",
+        "c12-eq-12.15",
+        "c12-eq-12.16",
+        "c12-eq-12.17"
+      ],
+      "rationale": "本节定义高维协方差矩阵(12.14)并由式(12.15)证明对称半正定性，给出多元正态密度(12.16)及仿射性质(12.17)，证明高斯下不相关与独立等价，并以例12.4 Cholesky分解演示相关收益模拟。这是马科维茨组合优化与多元金融风险建模的线性代数与概率交汇点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c12-s4": {
+      "difficulty": "D3",
+      "priority": "P1",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "变量替换",
+        "Jacobian",
+        "卷积",
+        "商分布",
+        "极值分布"
+      ],
+      "coreConcepts": [
+        "多元变量变换 Jacobian 公式",
+        "和的分布与独立卷积公式",
+        "商分布与乘积分布密度积分",
+        "独立变量最大值与最小值分布"
+      ],
+      "applications": [
+        "资产线性组合收益卷积密度计算",
+        "比率指标夏普比率估计量分布推导",
+        "信用多违约点首次到达极值时间"
+      ],
+      "prerequisites": [
+        {
+          "id": "c03-s4",
+          "strength": "required"
+        },
+        {
+          "id": "c03-s5",
+          "strength": "required"
+        },
+        {
+          "id": "c12-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c10-s5",
+        "c12-s5"
+      ],
+      "learningObjective": "掌握多元 Jacobian 变换法则与独立变量求和卷积公式，能熟练推导商分布、Cauchy 分布与极值分布。",
+      "keyFormulas": [
+        "c12-eq-12.18",
+        "c12-eq-12.20",
+        "c12-eq-12.22",
+        "c12-eq-12.24"
+      ],
+      "rationale": "本节确立定理12.18多元雅可比变换公式(12.18)，严格推导定理12.20独立变量和的卷积公式(12.20)、定理12.21商与积分布(12.22)并由此在例12.8导出Cauchy分布，推导定理12.22极值分布(12.24)。这为多资产非线性损益与比率分布推导提供了坚实的分析手段。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c12-s5": {
+      "difficulty": "D3",
+      "priority": "P1",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "次序统计量",
+        "极差",
+        "Beta分布",
+        "连续分布"
+      ],
+      "coreConcepts": [
+        "次序统计量重排与置换对称性",
+        "联合密度 n! 阶乘因子",
+        "第 k 个次序统计量边际密度",
+        "均匀样本次序量 Beta 分布",
+        "指数次序量间距独立性"
+      ],
+      "applications": [
+        "历史模拟法在险价值分位数估计",
+        "非参数稳健收益截尾估计",
+        "量化多头空头极端收益极差监测"
+      ],
+      "prerequisites": [
+        {
+          "id": "c09-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c10-s4",
+          "strength": "required"
+        },
+        {
+          "id": "c12-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c10-s6",
+        "c12-s7",
+        "c19-s3"
+      ],
+      "learningObjective": "理解次序统计量的排列对称性，掌握联合密度公式推导，掌握第 k 个次序统计量密度与均匀样本 Beta 分布性质。",
+      "keyFormulas": [
+        "c12-eq-12.27",
+        "c12-eq-12.28",
+        "c12-eq-12.29",
+        "c12-eq-12.32"
+      ],
+      "rationale": "本节在连续独立同分布假定下定义次序统计量，严格证明定理12.24联合密度对称公式(12.27)，推导定理12.25第k个统计量边际密度(12.29)与定理12.27均匀样本Beta分布(12.32)，并分析指数间距独立性。这是非参数估计、分位数检验与历史VaR估计的理论基石。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c12-s6": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 45,
+      "examFrequency": "high",
+      "tags": [
+        "条件分布",
+        "条件密度",
+        "全概率",
+        "条件期望",
+        "正态分布"
+      ],
+      "coreConcepts": [
+        "连续变量零测集条件化微元极限",
+        "条件密度与条件 CDF 定义",
+        "全概率公式积分连续形式",
+        "条件期望回归函数",
+        "二元正态条件期望线性解析式"
+      ],
+      "applications": [
+        "市场公共因子下个股收益条件预测",
+        "因子暴露下的条件风险价值计算",
+        "动态对冲组合条件损益均值回归"
+      ],
+      "prerequisites": [
+        {
+          "id": "c03-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c12-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c09-s3",
+        "c13-s1",
+        "c20-s1"
+      ],
+      "learningObjective": "掌握连续型随机变量条件密度的极限定义，能熟练运用连续全概率公式与二元正态条件期望线性表达式。",
+      "keyFormulas": [
+        "c12-eq-12.34",
+        "c12-eq-12.35",
+        "c12-eq-12.36",
+        "c12-eq-12.37"
+      ],
+      "rationale": "本节通过微元截面极限引入定义12.29条件密度公式(12.34)，证明命题12.30积分形式全概率公式(12.35)，阐明条件期望回归函数(12.36)，并推导定理12.31二元正态条件期望线性解析式(12.37)。这是后续研究随机分析鞅论、投影定理及统计回归模型的关键桥梁。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c12-s7": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 55,
+      "examFrequency": "high",
+      "tags": [
+        "投资组合",
+        "分散化",
+        "在险价值",
+        "Copula",
+        "Sklar定理",
+        "非参数"
+      ],
+      "coreConcepts": [
+        "组合期望与方差二次型展开",
+        "等权组合非系统性风险分散化上界",
+        "高维协方差估计奇异性挑战",
+        "在险价值 VaR 与历史模拟估计",
+        "Copula 定义与 Sklar 分离定理"
+      ],
+      "applications": [
+        "Markowitz 均值—方差最优资产配置",
+        "等权与非等权投资组合方差极值优化",
+        "历史模拟 VaR 抽样不确定性区间估计",
+        "多资产非高斯非线性尾部 Copula 建模"
+      ],
+      "prerequisites": [
+        {
+          "id": "c10-s6",
+          "strength": "required"
+        },
+        {
+          "id": "c12-s3",
+          "strength": "required"
+        },
+        {
+          "id": "c12-s5",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c15-s4",
+        "c16-s1",
+        "c34-s1"
+      ],
+      "learningObjective": "掌握投资组合方差二次型与等权分散化收敛界，掌握历史模拟 VaR 估计量渐近性质，深刻理解 Copula 与 Sklar 定理对依赖结构的分离建模。",
+      "keyFormulas": [
+        "c12-eq-12.38",
+        "c12-eq-12.39",
+        "c12-eq-12.40",
+        "c12-eq-12.43"
+      ],
+      "rationale": "本节将多维概率理论落地于量化投资：建立组合方差二次型(12.38)并导出等权分散化收敛公式(12.39)，推导式(12.40)在险价值及历史模拟估计量渐近性质，系统引入定义12.32与Sklar定理(12.43)实现边缘与依赖解耦。这是现代量化组合构建、极端风控与非线性相关性分析的集大成者。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    }
+  }
+}

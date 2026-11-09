@@ -1,0 +1,306 @@
+{
+  "schemaVersion": 1,
+  "chapterId": "c10",
+  "title": "随机变量、常见分布与变量变换",
+  "partId": "part-3",
+  "summary": "本章系统阐述实值随机变量、经典概率分布族与变量变换理论：从 Borel σ-代数可测映射定义出发严格确立累积分布函数（CDF）的右连续与跳跃性质；辨析离散型概率质量函数与连续型概率密度函数，剖析混合型点质量；覆盖二项、Poisson、几何与超几何离散族，以及指数无记忆性、正态、Gamma 与 Beta 连续族；系统建立 CDF 变换法与严格单调 Jacobian 密度公式；最后全面拓展广义逆分位数逆采样、有限混合、截断分布与 Pareto 重尾幂律分析。",
+  "whyStudy": "随机变量是概率论与金融市场建模的分析核心：资产收益率、订单流间隔以及期权非线性损益均需以随机变量及其变换形式表达，熟练掌握连续与重尾分布族性质是建立风险价值（VaR）、极值风控与衍生品定价的数学前提。",
+  "prerequisites": [
+    "c02-s4",
+    "c09-s2"
+  ],
+  "metadataStatus": "reviewed",
+  "reviewed": true,
+  "reviewedBy": "DSH",
+  "reviewedAt": "2026-11-09",
+  "sections": {
+    "c10-s1": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 40,
+      "examFrequency": "high",
+      "tags": [
+        "随机变量",
+        "Borel代数",
+        "像测度",
+        "分布函数",
+        "右连续"
+      ],
+      "coreConcepts": [
+        "随机变量可测函数本质",
+        "Borel σ-代数与诱导像测度",
+        "累积分布函数 CDF 定义",
+        "CDF 单调不减与右连续性",
+        "点质量与跃度分析"
+      ],
+      "applications": [
+        "随机试验数值化可测特征提取",
+        "量化因子取值区间概率测度诱导",
+        "非降概率分布函数边界约束校验"
+      ],
+      "prerequisites": [
+        {
+          "id": "c01-s4",
+          "strength": "helpful"
+        },
+        {
+          "id": "c09-s2",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c10-s2",
+        "c10-s6"
+      ],
+      "learningObjective": "理解随机变量作为可测映射的本质，掌握像测度与累积分布函数的性质，能严格证明 CDF 的右连续性。",
+      "keyFormulas": [
+        "c10-eq-10.1",
+        "c10-eq-10.2"
+      ],
+      "rationale": "本节从实轴Borel代数出发建立定义10.1随机变量的可测函数本质与定义10.2像测度，严格给出定义10.3累积分布函数(10.2)并证明定理10.4的单调性、右连续性与跳跃性质。该节是连接抽象测度空间与实值随机变量分析的公理化地基。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c10-s2": {
+      "difficulty": "D1",
+      "priority": "P0",
+      "minutes": 35,
+      "examFrequency": "medium",
+      "tags": [
+        "离散分布",
+        "连续分布",
+        "质量函数",
+        "密度函数",
+        "混合分布"
+      ],
+      "coreConcepts": [
+        "概率质量函数 PMF",
+        "概率密度函数 PDF 与绝对连续性",
+        "密度非点概率解释",
+        "混合型随机变量"
+      ],
+      "applications": [
+        "资产违约离散事件概率建模",
+        "连续收益率概率密度曲线刻画",
+        "含违约吸收跳跃资产混合收益分布"
+      ],
+      "prerequisites": [
+        {
+          "id": "c02-s4",
+          "strength": "required"
+        },
+        {
+          "id": "c10-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c10-s3",
+        "c10-s4"
+      ],
+      "learningObjective": "清晰区分 PMF 与 PDF 的本质差异，能准确从分布函数跳跃与斜率中识别离散点质量与连续密度。",
+      "keyFormulas": [],
+      "rationale": "本节明确区分离散随机变量的概率质量函数与绝对连续变量的概率密度函数，澄清密度不同于点概率的核心概念，并通过例10.1演示如何由分布函数识别跳跃点质量与连续密度。这是概率论由抽象概念走向具体分布计算的分类基石。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c10-s3": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "二项分布",
+        "超几何分布",
+        "泊松分布",
+        "几何分布",
+        "负二项分布"
+      ],
+      "coreConcepts": [
+        "Bernoulli 试验与二项分布",
+        "超几何分布无放回抽样区别",
+        "几何分布等待时间",
+        "负二项分布成功次数",
+        "Poisson 分布与罕见事件极限"
+      ],
+      "applications": [
+        "信用违约事件发生频数计数",
+        "高频交易微观订单到达点过程",
+        "有限标的池无放回抽样回测检验"
+      ],
+      "prerequisites": [
+        {
+          "id": "c09-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c10-s2",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c10-s4",
+        "c24-s2"
+      ],
+      "learningObjective": "熟练掌握 Bernoulli、二项、超几何、几何与 Poisson 分布模型，掌握 Poisson 极限定理的推导与应用场景。",
+      "keyFormulas": [
+        "c10-eq-10.3",
+        "c10-eq-10.4"
+      ],
+      "rationale": "本节系统建立Bernoulli、二项分布公式(10.3)、超几何分布、几何分布与负二项分布模型，推导Poisson分布(10.4)并证明定理10.5稀有事件Poisson极限定理。这组离散分布是微观结构订单流、违约事件计数与高频离散建模的基础工具箱。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c10-s4": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "均匀分布",
+        "指数分布",
+        "正态分布",
+        "Gamma分布",
+        "Beta分布",
+        "无记忆性"
+      ],
+      "coreConcepts": [
+        "均匀分布与尺度变换",
+        "指数分布与失效率恒定无记忆性",
+        "标准正态分布与 Gauss 积分",
+        "Gamma 分布形状速率参数化",
+        "Beta 分布区间积分归一化"
+      ],
+      "applications": [
+        "期权标的资产收益率高斯基准假定",
+        "金融等待时间与违约强度建模",
+        "贝叶斯共轭先验分布族构建"
+      ],
+      "prerequisites": [
+        {
+          "id": "c02-s5",
+          "strength": "required"
+        },
+        {
+          "id": "c10-s2",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c10-s5",
+        "c11-s2",
+        "c12-s3"
+      ],
+      "learningObjective": "掌握均匀、指数、正态、Gamma 与 Beta 分布密度结构，掌握指数无记忆性定理与正态标准化计算。",
+      "keyFormulas": [
+        "c10-eq-10.5",
+        "c10-eq-10.6",
+        "c10-eq-10.7",
+        "c10-eq-10.8"
+      ],
+      "rationale": "本节详细阐述均匀分布、指数分布密度(10.5)及其定理10.6无记忆性，推导正态分布密度(10.6)，以及Gamma分布(10.7)与Beta分布(10.8)参数族与积分归一化。该连续分布族是衍生品定价、跳跃等待时间与贝叶斯共轭推断的核心支柱。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c10-s5": {
+      "difficulty": "D2",
+      "priority": "P1",
+      "minutes": 45,
+      "examFrequency": "high",
+      "tags": [
+        "变量变换",
+        "Jacobian",
+        "对数正态",
+        "卡方分布"
+      ],
+      "coreConcepts": [
+        "CDF 事件转化分析法",
+        "严格单调映射反函数导数",
+        "一维变换 Jacobian 密度修正",
+        "多对一非单调映射分段求解"
+      ],
+      "applications": [
+        "股票对数收益指数变换推导资产价格分布",
+        "正态变量平方导出卡方自由度1分布",
+        "非线性衍生品到期支付收益概率转换"
+      ],
+      "prerequisites": [
+        {
+          "id": "c02-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c10-s4",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c12-s4"
+      ],
+      "learningObjective": "熟练掌握 CDF 法与一维单调变换公式，能准确推导正态变量指数与平方等典型非线性变换后的概率密度。",
+      "keyFormulas": [
+        "c10-eq-10.9"
+      ],
+      "rationale": "本节系统阐述随机变量变换的CDF分析法，通过例10.2推导平方变换导出卡方密度，严格证明定理10.7严格单调变换公式(10.9)并解释雅可比拉伸因子，给出例10.3对数正态分布解析推导。这是推导衍生资产收益与极端变换分布的分析工具。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c10-s6": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 55,
+      "examFrequency": "high",
+      "tags": [
+        "分位数",
+        "广义逆",
+        "混合分布",
+        "截断分布",
+        "重尾分布",
+        "Pareto分布"
+      ],
+      "coreConcepts": [
+        "广义逆分位数函数定义",
+        "逆变换采样基本原理",
+        "有限混合分布凸组合",
+        "条件截断分布归一化",
+        "Pareto 幂律衰减与重尾特征"
+      ],
+      "applications": [
+        "金融风险管理在险价值 VaR 计算",
+        "资产极端危机重尾幂律风险度量",
+        "多市场状态转换混合高斯模拟"
+      ],
+      "prerequisites": [
+        {
+          "id": "c10-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c10-s4",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c11-s3",
+        "c12-s7",
+        "c34-s2"
+      ],
+      "learningObjective": "掌握广义逆分位数函数与逆变换采样，深刻理解有限混合、截断分布与 Pareto 重尾幂律的数学刻画及量化风控意义。",
+      "keyFormulas": [
+        "c10-eq-10.10",
+        "c10-eq-10.11",
+        "c10-eq-10.12",
+        "c10-eq-10.13"
+      ],
+      "rationale": "本节建立式(10.10)广义逆分位数函数与逆变换采样，定义式(10.11)混合分布及式(10.12)截断分布，深入剖析式(10.13)Pareto幂律与Cauchy重尾分布，结合例10.4对比混合与截断的尾部异质性。这是量化金融建模肥尾资产收益与在险价值的风控理论根基。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    }
+  }
+}
