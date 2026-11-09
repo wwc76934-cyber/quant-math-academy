@@ -1,23 +1,29 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { AppFooter } from './components/layout/AppFooter';
 import { AppHeader } from './components/layout/AppHeader';
 import { SkipLink } from './components/layout/SkipLink';
 import { StoreProvider, useStore } from './features/store/store';
-import { GraphPage } from './routes/GraphPage';
-import { HomePage } from './routes/HomePage';
-import { NotFoundPage } from './routes/NotFoundPage';
-import { PathDetailPage } from './routes/PathDetailPage';
-import { PathsPage } from './routes/PathsPage';
-import { PracticePage } from './routes/PracticePage';
-import { PracticeSessionPage } from './routes/PracticeSessionPage';
-import { NotesPage } from './routes/NotesPage';
-import { ProgressPage } from './routes/ProgressPage';
-import { ReaderPage } from './routes/ReaderPage';
-import { SearchPage } from './routes/SearchPage';
-import { SyllabusPage } from './routes/SyllabusPage';
-import { WrongBookPage } from './routes/WrongBookPage';
 import { ToastProvider } from './components/reader/Toast';
+
+// Eager routes for fast initial landing and syllabus overview
+import { HomePage } from './routes/HomePage';
+import { SyllabusPage } from './routes/SyllabusPage';
+import { NotFoundPage } from './routes/NotFoundPage';
+
+// Lazy loaded routes for heavy features
+const ReaderPage = React.lazy(() => import('./routes/ReaderPage').then((m) => ({ default: m.ReaderPage })));
+const SearchPage = React.lazy(() => import('./routes/SearchPage').then((m) => ({ default: m.SearchPage })));
+const GraphPage = React.lazy(() => import('./routes/GraphPage').then((m) => ({ default: m.GraphPage })));
+const PathsPage = React.lazy(() => import('./routes/PathsPage').then((m) => ({ default: m.PathsPage })));
+const PathDetailPage = React.lazy(() => import('./routes/PathDetailPage').then((m) => ({ default: m.PathDetailPage })));
+const PracticePage = React.lazy(() => import('./routes/PracticePage').then((m) => ({ default: m.PracticePage })));
+const PracticeSessionPage = React.lazy(() =>
+  import('./routes/PracticeSessionPage').then((m) => ({ default: m.PracticeSessionPage }))
+);
+const WrongBookPage = React.lazy(() => import('./routes/WrongBookPage').then((m) => ({ default: m.WrongBookPage })));
+const ProgressPage = React.lazy(() => import('./routes/ProgressPage').then((m) => ({ default: m.ProgressPage })));
+const NotesPage = React.lazy(() => import('./routes/NotesPage').then((m) => ({ default: m.NotesPage })));
 
 const StorageAlerts: React.FC = () => {
   const { storageAvailable, storageCorrupted, clearCorruptedNotice } = useStore();
@@ -77,6 +83,36 @@ const StorageAlerts: React.FC = () => {
   return null;
 };
 
+const AcademicPageLoading: React.FC = () => (
+  <main
+    className="shell"
+    role="status"
+    aria-label="页面载入中"
+    style={{
+      padding: '48px 24px',
+      maxWidth: '960px',
+      margin: '0 auto',
+      fontFamily: 'var(--font-sans)',
+      color: 'var(--ink-secondary)',
+    }}
+  >
+    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+      <span
+        style={{
+          display: 'inline-block',
+          width: '16px',
+          height: '16px',
+          border: '2px solid var(--border)',
+          borderTopColor: 'var(--accent)',
+          borderRadius: '50%',
+          animation: 'spin 0.8s linear infinite',
+        }}
+      />
+      <span style={{ fontSize: '14px', letterSpacing: '0.02em' }}>正在载入页面...</span>
+    </div>
+  </main>
+);
+
 const MainLayout: React.FC = () => {
   const location = useLocation();
   const isReader = location.pathname.startsWith('/learn');
@@ -87,21 +123,23 @@ const MainLayout: React.FC = () => {
       <StorageAlerts />
       <AppHeader />
       <div style={{ flex: 1 }}>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/syllabus" element={<SyllabusPage />} />
-          <Route path="/learn/:chapterId" element={<ReaderPage />} />
-          <Route path="/paths" element={<PathsPage />} />
-          <Route path="/paths/:mode" element={<PathDetailPage />} />
-          <Route path="/practice" element={<PracticePage />} />
-          <Route path="/practice/wrong" element={<WrongBookPage />} />
-          <Route path="/practice/:chapterId" element={<PracticeSessionPage />} />
-          <Route path="/notes" element={<NotesPage />} />
-          <Route path="/progress" element={<ProgressPage />} />
-          <Route path="/search" element={<SearchPage />} />
-          <Route path="/graph" element={<GraphPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
+        <Suspense fallback={<AcademicPageLoading />}>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/syllabus" element={<SyllabusPage />} />
+            <Route path="/learn/:chapterId" element={<ReaderPage />} />
+            <Route path="/paths" element={<PathsPage />} />
+            <Route path="/paths/:mode" element={<PathDetailPage />} />
+            <Route path="/practice" element={<PracticePage />} />
+            <Route path="/practice/wrong" element={<WrongBookPage />} />
+            <Route path="/practice/:chapterId" element={<PracticeSessionPage />} />
+            <Route path="/notes" element={<NotesPage />} />
+            <Route path="/progress" element={<ProgressPage />} />
+            <Route path="/search" element={<SearchPage />} />
+            <Route path="/graph" element={<GraphPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </Suspense>
       </div>
       {!isReader && <AppFooter />}
     </div>

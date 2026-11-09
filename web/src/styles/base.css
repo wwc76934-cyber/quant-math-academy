@@ -70,19 +70,65 @@ img, svg {
   }
 }
 
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* Print base */
 @media print {
   body {
-    background: #ffffff;
-    color: #000000;
-    font-size: 12pt;
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 11pt;
     line-height: 1.5;
   }
-  .topbar, .mobile-drawer, .app-footer, .search-btn, .theme-toggle {
+  .topbar,
+  .mobile-drawer,
+  .app-footer,
+  .search-btn,
+  .theme-toggle,
+  .reader-top,
+  .book-toc,
+  .rail,
+  .article-actions,
+  .reader-bottom-bar,
+  .mobile-bottom-bar,
+  .toast-container,
+  .reader-notes,
+  .reader-exercises,
+  .skip-link,
+  [role="alert"] {
     display: none !important;
   }
   a {
-    color: #000000;
-    text-decoration: none;
+    color: #000000 !important;
+    text-decoration: none !important;
+  }
+  a::after {
+    content: none !important;
+  }
+  .theorem,
+  .definition,
+  .example,
+  .proof,
+  .lemma,
+  .corollary,
+  .proposition,
+  .env-block,
+  .exercise-card {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .equation,
+  .math-display {
+    overflow-x: visible !important;
+    white-space: normal !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
   }
 }
