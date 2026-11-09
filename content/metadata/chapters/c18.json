@@ -1,0 +1,306 @@
+{
+  "schemaVersion": 1,
+  "chapterId": "c18",
+  "title": "数值方法与 Monte Carlo",
+  "partId": "part-4",
+  "summary": "本章系统阐述科学计算与量化金融数值模拟的核心分析与算法工具：从浮点数模型、机器精度与相消误差代数变形出发，建立函数条件数与矩阵病态相对误差界；推导二分法收敛界、Newton-Raphson 导数切线迭代与割线法，解析期权隐含波动率高效反演；通过泰勒展开对比前向与中心差分，阐明截断与舍入误差权衡下的最优扰动步长选取；分析复化梯形与 Simpson 数值积分代数精度及高维维数灾难；系统建立 Monte Carlo 估计量无偏性、置信区间与四大方差缩减利器（对偶变量、控制变量、分层抽样与重要性抽样）；最后规范量化数值算法的无套利边界、网格收敛与交叉检验原则。",
+  "whyStudy": "数值方法与 Monte Carlo 模拟是量化金融连接解析公式与复杂现实市场的生命线：从无法获得解析解的奇异期权与多资产路径依赖衍生品高维模拟估值，到隐含波动率 Black-Scholes 极速反解，再到偏微分方程 Greeks 敏感度差分计算，掌握数值精度控制、条件数病态防范与方差缩减技术是每一位量化宽客的核心硬技能。",
+  "prerequisites": [
+    "c02-s6",
+    "c05-s1",
+    "c12-s2",
+    "c14-s6"
+  ],
+  "metadataStatus": "reviewed",
+  "reviewed": true,
+  "reviewedBy": "DSH",
+  "reviewedAt": "2026-11-09",
+  "sections": {
+    "c18-s1": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 40,
+      "examFrequency": "high",
+      "tags": [
+        "浮点误差",
+        "机器精度",
+        "相消误差",
+        "条件数",
+        "数值稳定性"
+      ],
+      "coreConcepts": [
+        "IEEE 754 浮点模型与机器精度界",
+        "减法灾难性相消机制与代数等价变形消除",
+        "函数条件数与算法后向稳定性定义",
+        "矩阵条件数对线性方程组解相对误差的放大界"
+      ],
+      "applications": [
+        "高维样本协方差矩阵求逆病态误差防范",
+        "极深实值期权到期损益小概率贴现数值下溢预防",
+        "微小时间步长资产对数收益率累加精度保全"
+      ],
+      "prerequisites": [
+        {
+          "id": "c04-s4",
+          "strength": "required"
+        },
+        {
+          "id": "c05-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c18-s2",
+        "c18-s3"
+      ],
+      "learningObjective": "掌握浮点误差产生机理与灾难性相消消除变形，掌握条件数定义，能定量评估矩阵条件数对线性系统数值解精度的破坏。",
+      "keyFormulas": [
+        "c18-eq-18.1",
+        "c18-eq-18.2",
+        "c18-eq-18.3",
+        "c18-eq-18.4"
+      ],
+      "rationale": "本节从式(18.1)浮点模型出发揭示减法灾难性相消并给出式(18.3)代数重构方案，建立定义18.1函数条件数(18.2)与后向稳定性，证明线性方程组式(18.4)相对误差条件数放大界。这是量化高精度数值计算避免精度崩溃与矩阵求逆失真的底层防线。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c18-s2": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 45,
+      "examFrequency": "high",
+      "tags": [
+        "求根方法",
+        "二分法",
+        "牛顿求根",
+        "割线法",
+        "隐含波动率"
+      ],
+      "coreConcepts": [
+        "二分法区间包围绝对收敛上界",
+        "Newton-Raphson 切线一阶导数迭代格式",
+        "割线法差商逼近与超线性收敛",
+        "期权 Vega 导数反算 Black-Scholes 隐含波动率"
+      ],
+      "applications": [
+        "期权市场全行权价期限隐式波动率曲面实时反演",
+        "固定收益债券到期收益率 YTM 现金流折现反算",
+        "无套利定价模型未知隐含结构参数标定"
+      ],
+      "prerequisites": [
+        {
+          "id": "c02-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c17-s3",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c18-s3",
+        "c27-s2"
+      ],
+      "learningObjective": "掌握二分法、Newton 法与割线法求根原理与收敛阶差异，能熟练运用 Newton 算法反演 Black-Scholes 期权隐含波动率。",
+      "keyFormulas": [
+        "c18-eq-18.5",
+        "c18-eq-18.6",
+        "c18-eq-18.7"
+      ],
+      "rationale": "本节建立定理18.2二分法确定性误差收缩上界(18.5)，推导式(18.6) Newton-Raphson切线求根格式与式(18.7)割线法，并借例18.1展示Vega导数加速反求期权隐含波动率。该方法族是现代金融衍生品定价中反解不可逆非线性隐式参数的核心数值引擎。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c18-s3": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 40,
+      "examFrequency": "high",
+      "tags": [
+        "有限差分",
+        "中心差分",
+        "截断误差",
+        "舍入误差",
+        "Greeks计算"
+      ],
+      "coreConcepts": [
+        "前向差分一阶精度展开推导",
+        "中心差分对称消去奇次项实现二阶精度",
+        "截断误差与浮点舍入误差的反向权衡机制",
+        "最优扰动步长 h 的立方根选取原则"
+      ],
+      "applications": [
+        "黑盒衍生品定价引擎 Delta 与 Gamma 敏感度数值计算",
+        "复杂交易策略目标函数梯度有限差分数值近似与核验",
+        "偏微分方程金融定价空间网格离散化"
+      ],
+      "prerequisites": [
+        {
+          "id": "c02-s6",
+          "strength": "required"
+        },
+        {
+          "id": "c18-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c18-s4",
+        "c27-s1"
+      ],
+      "learningObjective": "掌握前向差分与中心差分的精度阶数推导，深刻理解截断与舍入误差的权衡原理，掌握最优扰动步长的计算方法。",
+      "keyFormulas": [
+        "c18-eq-18.8",
+        "c18-eq-18.9"
+      ],
+      "rationale": "本节通过泰勒展开对比式(18.8)前向差分与式(18.9)中心差分的高阶误差消除机制，严格推导截断误差与浮点舍入误差权衡下的最优差分步长选择准则。这是量化衍生品定价中数值计算一阶与二阶希腊字母（Delta/Gamma）的标准工程手段。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c18-s4": {
+      "difficulty": "D2",
+      "priority": "P1",
+      "minutes": 40,
+      "examFrequency": "medium",
+      "tags": [
+        "数值积分",
+        "梯形法则",
+        "Simpson法则",
+        "误差阶",
+        "维数灾难"
+      ],
+      "coreConcepts": [
+        "复化梯形公式结构与二阶代数精度",
+        "Simpson 抛物线插值四阶高精度积分",
+        "自适应网格细化策略",
+        "高维网格指数爆炸的维数灾难本质"
+      ],
+      "applications": [
+        "Carr-Madan 傅里叶特征函数快速数值求逆期权定价",
+        "标准正态与重尾累积分布函数高精度数值求积",
+        "多资产低维联合概率积分"
+      ],
+      "prerequisites": [
+        {
+          "id": "c02-s4",
+          "strength": "required"
+        },
+        {
+          "id": "c18-s3",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c18-s5",
+        "c27-s3"
+      ],
+      "learningObjective": "掌握复化梯形与 Simpson 数值积分公式及其误差阶，深刻理解确定性网格求积在高维下的维数灾难瓶颈。",
+      "keyFormulas": [
+        "c18-eq-18.10",
+        "c18-eq-18.11",
+        "c18-eq-18.12"
+      ],
+      "rationale": "本节系统建立式(18.10)梯形法则及其式(18.11)误差阶上界，推导式(18.12) Simpson四阶代数精度积分公式，并通过例18.2展示密度积分与高维网格维数灾难瓶颈。该节阐明了低维确定性求积的高效性，并奠定了向高维随机模拟过渡的动机。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c18-s5": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 55,
+      "examFrequency": "high",
+      "tags": [
+        "MonteCarlo",
+        "方差缩减",
+        "对偶变量",
+        "控制变量",
+        "似然比采样"
+      ],
+      "coreConcepts": [
+        "Monte Carlo 样本均值估计量与 1/√N 统计误差收敛",
+        "对偶变量法利用负相关消除方差",
+        "最优控制变量系数解析解与方差消除比",
+        "分层抽样按概率权重划分层内方差",
+        "似然比测度变换与极端事件加速"
+      ],
+      "applications": [
+        "美式与百慕大期权、路径依赖亚式期权高维蒙特卡罗定价",
+        "信用衍生品深度虚值极罕见违约事件加速采样估值",
+        "资产组合全景压力测试与极值在险价值（VaR）模拟"
+      ],
+      "prerequisites": [
+        {
+          "id": "c12-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c14-s6",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c18-s6",
+        "c27-s4"
+      ],
+      "learningObjective": "掌握 Monte Carlo 模拟的基本统计性质与置信区间，熟练推导对偶变量、最优控制变量与似然比采样的方差缩减公式并应用于金融模拟。",
+      "keyFormulas": [
+        "c18-eq-18.13",
+        "c18-eq-18.16",
+        "c18-eq-18.19",
+        "c18-eq-18.22"
+      ],
+      "rationale": "本节建立式(18.13) Monte Carlo估计量与误差置信区间，系统推导命题18.3对偶变量方差缩减(18.16)、命题18.4最优控制变量解析解(18.19)与分层抽样，并构建式(18.22)似然比测度变换采样。这组方差缩减利器是高维衍生品定价突破收敛瓶颈的核心工业级技术。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c18-s6": {
+      "difficulty": "D2",
+      "priority": "P1",
+      "minutes": 35,
+      "examFrequency": "medium",
+      "tags": [
+        "数值核验",
+        "收敛检验",
+        "交叉验证",
+        "无套利边界",
+        "模型风控"
+      ],
+      "coreConcepts": [
+        "理论极值与无套利上界硬约束核验",
+        "网格步长与抽样规模单调收敛测试",
+        "异构数值算法（PDE vs MC vs 树模型）交叉印证",
+        "量纲一致性与异常值压力测试"
+      ],
+      "applications": [
+        "量化实盘衍生品复杂定价库代码上线前金标准回归测试",
+        "高频量化回测引擎数值截断与下溢熔断监控",
+        "多源行情异常值导致模型发散的风控防御"
+      ],
+      "prerequisites": [
+        {
+          "id": "c18-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c18-s5",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c33-s4",
+        "c34-s3"
+      ],
+      "learningObjective": "掌握量化数值计算的四大核验准则，建立对复杂算法输出边界与收敛性的交叉防御意识，规范模型风控流程。",
+      "keyFormulas": [],
+      "rationale": "本节系统建立量化数值计算的四大核验准则：阐明无套利渐近边界硬约束校验、样本规模翻倍收敛速度检验、多元异构算法交叉比对以及量纲直觉一致性。该节为消除数值算法隐藏缺陷与保障生产系统计算鲁棒性确立了严密的风控规范。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    }
+  }
+}

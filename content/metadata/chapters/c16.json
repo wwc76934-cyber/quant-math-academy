@@ -1,0 +1,306 @@
+{
+  "schemaVersion": 1,
+  "chapterId": "c16",
+  "title": "Lagrange、KKT、对偶与敏感性",
+  "partId": "part-4",
+  "summary": "本章系统阐述约束最优化理论核心架构：从切空间投影与 LICQ 约束规格出发严格推导 Lagrange 乘子方程；建立包含平稳性、原始与对偶可行性及互补松弛的 Karush-Kuhn-Tucker（KKT）必要与充分条件，解析注水算法；系统定义 Lagrange 对偶函数并证明其恒凹性与弱对偶下界；结合 Slater 严格可行性条件与几何分离超平面证明凸规划强对偶定理；基于扰动值函数确立乘子的影子价格与敏感性微积分；最后全面落脚于原对偶维数转换、核技巧与投资组合凸松弛计算。",
+  "whyStudy": "约束最优化是量化投资组合构建与结构化定价的核心理论底座：从带持仓上限与禁止卖空的马科维茨组合到风险预算与因子跟踪误差控制，从支持向量机对偶核化到交易换手率约束的影子价格归因，熟练掌握 KKT 条件、对偶分解与敏感性分析是每一位量化研究员不可或缺的数学基本功。",
+  "prerequisites": [
+    "c03-s3",
+    "c05-s2",
+    "c15-s1",
+    "c15-s2"
+  ],
+  "metadataStatus": "reviewed",
+  "reviewed": true,
+  "reviewedBy": "DSH",
+  "reviewedAt": "2026-11-09",
+  "sections": {
+    "c16-s1": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 45,
+      "examFrequency": "high",
+      "tags": [
+        "无约束优化",
+        "等式约束",
+        "Lagrange乘子",
+        "LICQ",
+        "切空间"
+      ],
+      "coreConcepts": [
+        "无约束一阶平稳性与二阶半正定条件",
+        "约束切空间正交性几何直观",
+        "线性无关约束规格 LICQ",
+        "Lagrange 乘子方程推导"
+      ],
+      "applications": [
+        "马科维茨全投资等式约束投资组合最优权重解析求解",
+        "多因子中性化正交投影构造",
+        "主成分分析最大方差单位球面等式约束求解"
+      ],
+      "prerequisites": [
+        {
+          "id": "c03-s3",
+          "strength": "required"
+        },
+        {
+          "id": "c05-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c15-s2",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c16-s2",
+        "c16-s3"
+      ],
+      "learningObjective": "掌握无约束驻点与二阶条件，深刻理解等式约束切空间正交性与 LICQ 条件，熟练运用 Lagrange 乘子法求解典型线性与二次规划。",
+      "keyFormulas": [
+        "c16-eq-16.2",
+        "c16-eq-16.3"
+      ],
+      "rationale": "本节系统建立定理16.1无约束一阶驻点与二阶半正定条件(16.2)，基于定义16.2 LICQ约束规格证明等式约束切空间正交性与Lagrange乘子方程(16.3)，并借例16.1推导全投资等式约束组合解析解。该节奠定了现代约束最优化分析的微积分基石。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c16-s2": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "KKT条件",
+        "互补松弛",
+        "对偶可行性",
+        "注水算法",
+        "平稳性"
+      ],
+      "coreConcepts": [
+        "Lagrangian 目标构造",
+        "KKT 四大核心必要条件体系",
+        "互补松弛与起作用活动集",
+        "凸规划下 KKT 充分充要性",
+        "非负资产配置注水算法"
+      ],
+      "applications": [
+        "禁止卖空非负权重马科维茨均值方差组合精确求解",
+        "持仓比例上限与跟踪误差受限组合优化",
+        "支持向量机分类器对偶与支持向量确定"
+      ],
+      "prerequisites": [
+        {
+          "id": "c15-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c16-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c16-s3",
+        "c16-s4",
+        "c17-s4"
+      ],
+      "learningObjective": "掌握 KKT 必要与充分条件，深入理解互补松弛准则对边界约束的筛选机制，能熟练推导注水算法等典型不等式约束问题。",
+      "keyFormulas": [
+        "c16-eq-16.4",
+        "c16-eq-16.5",
+        "c16-eq-16.6"
+      ],
+      "rationale": "本节构造式(16.4)拉格朗日函数，推导定理16.3 Karush-Kuhn-Tucker必要条件(16.5)与互补松弛准则，证明定理16.4凸问题充分充要性，并通过例16.2推导非负资产配置的注水算法(16.6)。KKT条件是现代量化金融处理不等式边界约束的通用理论工具。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c16-s3": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 45,
+      "examFrequency": "high",
+      "tags": [
+        "Lagrange对偶",
+        "弱对偶",
+        "对偶间隙",
+        "凹函数",
+        "对偶问题"
+      ],
+      "coreConcepts": [
+        "Lagrange 对偶函数定义与结构",
+        "仿射逐点下确界保证对偶恒凹性",
+        "弱对偶定理与对偶下界性质",
+        "对偶间隙定义与非凸松弛界"
+      ],
+      "applications": [
+        "非凸量化整数与持仓阈值约束的凸松弛下界评估",
+        "分布式大规模资产配置对偶子梯度分解",
+        "迭代优化求解器收敛进度停止阈值监控"
+      ],
+      "prerequisites": [
+        {
+          "id": "c15-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c16-s2",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c16-s4",
+        "c16-s5"
+      ],
+      "learningObjective": "掌握 Lagrange 对偶函数构造及其恒凹性证明，理解弱对偶定理与对偶间隙概念，能独立推导二次约束二次规划的对偶形式。",
+      "keyFormulas": [
+        "c16-eq-16.7",
+        "c16-eq-16.8",
+        "c16-eq-16.9"
+      ],
+      "rationale": "本节引入定义16.5 Lagrange对偶函数(16.7)并严格论证其作为仿射族逐点下确界恒为凹函数，定义对偶问题(16.8)，证明定理16.6弱对偶定理下界性(16.9)并给出例16.3二次对偶。弱对偶为量化非凸规划提供了普适的凸松弛下界与数值算法收敛判据。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c16-s4": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "Slater条件",
+        "强对偶",
+        "严格可行",
+        "零对偶间隙",
+        "凸规划"
+      ],
+      "coreConcepts": [
+        "强对偶性与零对偶间隙",
+        "Slater 严格可行内点约束规格",
+        "基于分离超平面的强对偶几何证明框架",
+        "强对偶成立但对偶解不可达的反例"
+      ],
+      "applications": [
+        "带杠杆与流动性约束投资组合强对偶可解性验证",
+        "风险平价模型风险预算凸规划对偶等价求解",
+        "半正定规划 SDP 零间隙数值求解"
+      ],
+      "prerequisites": [
+        {
+          "id": "c15-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c16-s3",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c16-s5",
+        "c17-s4"
+      ],
+      "learningObjective": "掌握强对偶性的几何内涵，掌握 Slater 严格内点条件的验证，理解分离超平面在对偶可解性证明中的核心地位。",
+      "keyFormulas": [
+        "c16-eq-16.10"
+      ],
+      "rationale": "本节深入探讨零对偶间隙的强对偶性，严格阐述定理16.7凸问题强对偶定理与式(16.10) Slater严格可行内点条件，借助分离超平面揭示强对偶几何机制，并以例16.4辨析对偶不可达的退化情形。这是保证量化凸优化能通过对偶算法精确求解的理论基准。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c16-s5": {
+      "difficulty": "D2",
+      "priority": "P1",
+      "minutes": 40,
+      "examFrequency": "high",
+      "tags": [
+        "影子价格",
+        "敏感性分析",
+        "扰动值函数",
+        "边际成本",
+        "乘子解释"
+      ],
+      "coreConcepts": [
+        "扰动最优值函数定义与凸性",
+        "Lagrange 乘子作为边际成本（影子价格）偏导数解释",
+        "包络定理在优化中的应用",
+        "起作用约束变化导致的值函数非光滑拐点"
+      ],
+      "applications": [
+        "量化投资组合行业暴露硬约束放宽价值边际测算",
+        "交易换手率约束对组合净夏普比率的折价评估",
+        "多因子持仓限制影子价格风险归因"
+      ],
+      "prerequisites": [
+        {
+          "id": "c03-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c16-s3",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c16-s6",
+        "c32-s3"
+      ],
+      "learningObjective": "深刻理解 Lagrange 乘子的影子价格与敏感性微积分含义，能定量评估放宽交易与风控约束对投资组合收益目标的边际提升。",
+      "keyFormulas": [
+        "c16-eq-16.11",
+        "c16-eq-16.12"
+      ],
+      "rationale": "本节定义式(16.11)扰动最优值函数，严格证明定理16.8最优乘子关于约束边界的偏导数关系(16.12)，确立Lagrange乘子的影子价格与边际成本经济学内涵，并剖析约束切换引发的非光滑折角。这为量化组合中评估风控约束成本与边际收益折价提供了理论工具。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c16-s6": {
+      "difficulty": "D2",
+      "priority": "P1",
+      "minutes": 35,
+      "examFrequency": "medium",
+      "tags": [
+        "计算对偶",
+        "维数转换",
+        "核技巧",
+        "凸松弛",
+        "稀疏约束"
+      ],
+      "coreConcepts": [
+        "原问题与对偶问题计算复杂度翻转机制",
+        "样本量与参数维数差异下的对偶求解优势",
+        "SVM 对偶形式中的核内积表示",
+        "投资组合基数 L0/持仓数量硬约束的凸松弛"
+      ],
+      "applications": [
+        "大规模资产池均值方差对偶极小化提速求解",
+        "非线性市场微观结构特征核化分类与回归",
+        "换手率惩罚下的大规模再平衡快速凸近似算法"
+      ],
+      "prerequisites": [
+        {
+          "id": "c16-s3",
+          "strength": "required"
+        },
+        {
+          "id": "c16-s4",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c17-s1",
+        "c32-s1"
+      ],
+      "learningObjective": "掌握对偶维数转换带来的工程计算优势，理解核方法与内积结构的关系，理解组合基数约束的凸松弛边界。",
+      "keyFormulas": [],
+      "rationale": "本节系统阐释对偶理论在量化计算工程中的核心价值：剖析原对偶维数翻转带来的计算提速机制，阐明对偶表达中的核技巧与内积依赖，并探讨组合投资基数约束的对偶凸松弛边界与模型适用性。该节将抽象对偶分析转化为高效实盘算法设计的工程指南。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    }
+  }
+}

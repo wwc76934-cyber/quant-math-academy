@@ -37,24 +37,24 @@ describe('T09 知识关系图构建器与校验测试套件', () => {
 
     const manifest = JSON.parse(fs.readFileSync(MANIFEST_PATH, 'utf8'));
     assert.equal(manifest.totalNodes, 219);
-    assert.equal(manifest.annotatedNodes, 94);
-    assert.equal(manifest.unannotatedNodes, 125);
-    assert.equal(manifest.prerequisiteEdges, 183);
+    assert.equal(manifest.annotatedNodes, 113);
+    assert.equal(manifest.unannotatedNodes, 106);
+    assert.equal(manifest.prerequisiteEdges, 225);
     assert.equal(manifest.maxPrerequisiteDepth, 3);
     assert.deepEqual(manifest.warnings, []);
   });
 
-  test('2. 节点总数严格为 219，94 个标注节点，覆盖全部 34 章', () => {
+  test('2. 节点总数严格为 219，113 个标注节点，覆盖全部 34 章', () => {
     const { graphJson } = buildGraphData(bookData, metadataList);
 
     assert.equal(graphJson.nodes.length, 219, '全书必须恰好有 219 个知识点节点');
-    assert.equal(graphJson.stats.annotatedNodes, 94, '当前有 94 个已评审标注节点');
-    assert.equal(graphJson.stats.unannotatedNodes, 125, '其余 125 个节点为未标注');
+    assert.equal(graphJson.stats.annotatedNodes, 113, '当前有 113 个已评审标注节点');
+    assert.equal(graphJson.stats.unannotatedNodes, 106, '其余 106 个节点为未标注');
 
     // 校验每个节点字段
     const chapterIdSet = new Set();
     const annotatedChapterIds = [
-      'c01', 'c02', 'c03', 'c04', 'c05', 'c06', 'c07', 'c08', 'c09', 'c10', 'c11', 'c12', 'c13', 'c14', 'c15', 'c33'
+      'c01', 'c02', 'c03', 'c04', 'c05', 'c06', 'c07', 'c08', 'c09', 'c10', 'c11', 'c12', 'c13', 'c14', 'c15', 'c16', 'c17', 'c18', 'c33'
     ];
     for (const node of graphJson.nodes) {
       assert.ok(node.id, '节点 id 必须存在');
@@ -80,7 +80,7 @@ describe('T09 知识关系图构建器与校验测试套件', () => {
   test('3. 先修子图是严格 DAG（0 环）', () => {
     const { graphJson } = buildGraphData(bookData, metadataList);
     assert.equal(graphJson.stats.hasCycles, false);
-    assert.equal(graphJson.stats.prerequisiteEdges, 183);
+    assert.equal(graphJson.stats.prerequisiteEdges, 225);
   });
 
   test('4. 环路检测：人为注入循环先修必须报错并输出环路路径', () => {
@@ -175,12 +175,12 @@ describe('T09 知识关系图构建器与校验测试套件', () => {
   test('9. 未标注章节不生成虚假关联边', () => {
     const { graphJson } = buildGraphData(bookData, metadataList);
 
-    // c16 是未标注章
-    const c16s1 = graphJson.nodeMap['c16-s1'];
-    assert.equal(c16s1.annotated, false);
+    // c19 是未标注章
+    const c19s1 = graphJson.nodeMap['c19-s1'];
+    assert.equal(c19s1.annotated, false);
 
     // c16-s1 不应有由其主动发出的先修边
-    const c16Edges = graphJson.prerequisiteEdges.filter((e) => e.to === 'c16-s1');
+    const c16Edges = graphJson.prerequisiteEdges.filter((e) => e.to === 'c19-s1');
     assert.equal(c16Edges.length, 0, '未标注节不生成入向先修边');
   });
 });
