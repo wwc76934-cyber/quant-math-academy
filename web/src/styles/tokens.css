@@ -43,6 +43,7 @@
 
   /* Prose Defaults */
   --prose-size: 18px;
+  --prose-leading: 1.9;
   --measure: 38em;
 }
 

@@ -8,6 +8,7 @@ import React, {
   useState,
 } from 'react';
 import {
+  DEFAULT_STORE,
   loadStore,
   saveStoreDirect,
 } from './storage';
@@ -15,12 +16,21 @@ import {
   ExerciseRecord,
   ExerciseStatus,
   FontSizeSetting,
+  ImportStoreSummary,
+  LastLocation,
+  LineHeightSetting,
   MeasureSetting,
+  NoteRecord,
+  PathSetting,
   ProofDefaultSetting,
+  ReviewRecord,
   SectionProgressItem,
   StoreContextValue,
   StoreV1,
   ThemeSetting,
+  UserActivityItem,
+  UserBookmarks,
+  UserSettings,
 } from './types';
 
 const StoreContext = createContext<StoreContextValue | null>(null);
@@ -36,6 +46,12 @@ const MEASURE_MAP: Record<MeasureSetting, string> = {
   narrow: '34em',
   standard: '38em',
   wide: '40em',
+};
+
+const LINE_HEIGHT_MAP: Record<LineHeightSetting, string> = {
+  compact: '1.75',
+  standard: '1.9',
+  loose: '2.1',
 };
 
 function applyThemeToDocument(resolved: 'light' | 'dark') {
@@ -94,6 +110,15 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({
       );
     }
   }, [store.settings.measure]);
+
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      document.documentElement.style.setProperty(
+        '--prose-leading',
+        LINE_HEIGHT_MAP[store.settings.lineHeight] || '1.9'
+      );
+    }
+  }, [store.settings.lineHeight]);
 
   // Listen to system dark mode preference change
   useEffect(() => {
@@ -203,6 +228,19 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({
     [updateStore]
   );
 
+  const setLineHeight = useCallback(
+    (lineHeight: LineHeightSetting) => {
+      updateStore((prev) => ({
+        ...prev,
+        settings: {
+          ...prev.settings,
+          lineHeight,
+        },
+      }));
+    },
+    [updateStore]
+  );
+
   const setFocus = useCallback(
     (focus: boolean) => {
       updateStore((prev) => ({
@@ -306,7 +344,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 
   const logActivity = useCallback(
-    (act: { type: 'status' | 'read' | 'copy' | 'exercise'; targetId: string; detail?: string }) => {
+    (act: { type: 'status' | 'read' | 'copy' | 'exercise' | 'note'; targetId: string; detail?: string }) => {
       updateStore((prev) => ({
         ...prev,
         activity: [
@@ -535,6 +573,217 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({
     [updateStore]
   );
 
+  const setNote = useCallback(
+    (sectionId: string, text: string) => {
+      updateStore((prev) => {
+        const trimmed = text.trim();
+        const nextNotes = { ...prev.notes };
+        const now = new Date().toISOString();
+
+        if (!trimmed) {
+          delete nextNotes[sectionId];
+        } else {
+          nextNotes[sectionId] = {
+            text,
+            updatedAt: now,
+          };
+        }
+
+        const nextActivity = [
+          {
+            at: now,
+            type: 'note',
+            targetId: sectionId,
+            detail: trimmed ? 'save' : 'delete',
+          },
+          ...prev.activity,
+        ].slice(0, 200);
+
+        return {
+          ...prev,
+          notes: nextNotes,
+          activity: nextActivity,
+        };
+      });
+    },
+    [updateStore]
+  );
+
+  const deleteNote = useCallback(
+    (sectionId: string) => {
+      updateStore((prev) => {
+        if (!prev.notes[sectionId]) return prev;
+        const nextNotes = { ...prev.notes };
+        delete nextNotes[sectionId];
+        const now = new Date().toISOString();
+        const nextActivity = [
+          {
+            at: now,
+            type: 'note',
+            targetId: sectionId,
+            detail: 'delete',
+          },
+          ...prev.activity,
+        ].slice(0, 200);
+
+        return {
+          ...prev,
+          notes: nextNotes,
+          activity: nextActivity,
+        };
+      });
+    },
+    [updateStore]
+  );
+
+  const importStore = useCallback(
+    (raw: unknown): { success: boolean; error?: string; summary?: ImportStoreSummary } => {
+      try {
+        if (!raw || typeof raw !== 'object') {
+          return { success: false, error: '导入数据必须为有效的 JSON 对象' };
+        }
+
+        let candidate: Record<string, unknown> = raw as Record<string, unknown>;
+        if (candidate.store && typeof candidate.store === 'object') {
+          candidate = candidate.store as Record<string, unknown>;
+        }
+
+        if (candidate.schemaVersion !== 1) {
+          return {
+            success: false,
+            error: `不支持的数据版本 (schemaVersion: ${String(candidate.schemaVersion)})，仅支持 v1 版本`,
+          };
+        }
+
+        if (!candidate.settings || typeof candidate.settings !== 'object') {
+          return { success: false, error: '缺少 settings 配置或结构非法' };
+        }
+
+        // Sanitize progress
+        const safeProgress: Record<string, SectionProgressItem> = {};
+        if (candidate.progress && typeof candidate.progress === 'object') {
+          for (const [k, v] of Object.entries(candidate.progress as Record<string, unknown>)) {
+            if (v && typeof v === 'object' && 'status' in v) {
+              safeProgress[k] = v as SectionProgressItem;
+            }
+          }
+        }
+
+        // Sanitize exercises
+        const safeExercises: Record<string, ExerciseRecord> = {};
+        if (candidate.exercises && typeof candidate.exercises === 'object') {
+          for (const [k, v] of Object.entries(candidate.exercises as Record<string, unknown>)) {
+            if (v && typeof v === 'object' && 'status' in v && typeof (v as ExerciseRecord).chapterId === 'string') {
+              safeExercises[k] = v as ExerciseRecord;
+            }
+          }
+        }
+
+        // Sanitize review
+        const safeReview: Record<string, ReviewRecord> = {};
+        if (candidate.review && typeof candidate.review === 'object') {
+          for (const [k, v] of Object.entries(candidate.review as Record<string, unknown>)) {
+            if (v && typeof v === 'object' && (v as ReviewRecord).kind === 'exercise' && typeof (v as ReviewRecord).dueAt === 'string') {
+              safeReview[k] = v as ReviewRecord;
+            }
+          }
+        }
+
+        // Sanitize notes
+        const safeNotes: Record<string, NoteRecord> = {};
+        if (candidate.notes && typeof candidate.notes === 'object') {
+          for (const [k, v] of Object.entries(candidate.notes as Record<string, unknown>)) {
+            if (
+              v &&
+              typeof v === 'object' &&
+              typeof (v as NoteRecord).text === 'string' &&
+              typeof (v as NoteRecord).updatedAt === 'string' &&
+              !Number.isNaN(Date.parse((v as NoteRecord).updatedAt))
+            ) {
+              safeNotes[k] = {
+                text: (v as NoteRecord).text,
+                updatedAt: (v as NoteRecord).updatedAt,
+              };
+            }
+          }
+        }
+
+        // Sanitize settings
+        const candSettings = candidate.settings as Record<string, unknown>;
+        const safeSettings: UserSettings = {
+          theme: ['light', 'dark', 'system'].includes(candSettings.theme as string)
+            ? (candSettings.theme as ThemeSetting)
+            : DEFAULT_STORE.settings.theme,
+          fontSize: ['sm', 'md', 'lg', 'xl'].includes(candSettings.fontSize as string)
+            ? (candSettings.fontSize as FontSizeSetting)
+            : DEFAULT_STORE.settings.fontSize,
+          measure: ['narrow', 'standard', 'wide'].includes(candSettings.measure as string)
+            ? (candSettings.measure as MeasureSetting)
+            : DEFAULT_STORE.settings.measure,
+          lineHeight: ['compact', 'standard', 'loose'].includes(candSettings.lineHeight as string)
+            ? (candSettings.lineHeight as LineHeightSetting)
+            : DEFAULT_STORE.settings.lineHeight,
+          focus: Boolean(candSettings.focus),
+          proofDefault: ['open', 'closed'].includes(candSettings.proofDefault as string)
+            ? (candSettings.proofDefault as ProofDefaultSetting)
+            : DEFAULT_STORE.settings.proofDefault,
+        };
+
+        const safePath: PathSetting = {
+          active:
+            candidate.path && typeof candidate.path === 'object' && typeof (candidate.path as PathSetting).active === 'string'
+              ? (candidate.path as PathSetting).active
+              : DEFAULT_STORE.path.active,
+        };
+
+        const validatedStore: StoreV1 = {
+          schemaVersion: 1,
+          settings: safeSettings,
+          progress: safeProgress,
+          lastLocation:
+            candidate.lastLocation && typeof candidate.lastLocation === 'object'
+              ? (candidate.lastLocation as LastLocation)
+              : undefined,
+          exercises: safeExercises,
+          notes: safeNotes,
+          bookmarks:
+            candidate.bookmarks && typeof candidate.bookmarks === 'object'
+              ? (candidate.bookmarks as UserBookmarks)
+              : DEFAULT_STORE.bookmarks,
+          review: safeReview,
+          path: safePath,
+          activity: Array.isArray(candidate.activity)
+            ? (candidate.activity as UserActivityItem[]).slice(0, 200)
+            : [],
+        };
+
+        saveStoreDirect(validatedStore);
+        setStore(validatedStore);
+
+        const summary: ImportStoreSummary = {
+          progressCount: Object.values(safeProgress).filter((p) => p.status === 'done' || p.status === 'master').length,
+          exerciseCount: Object.values(safeExercises).filter((e) => e.status !== 'unseen').length,
+          wrongCount: Object.keys(safeReview).length,
+          noteCount: Object.keys(safeNotes).length,
+          activePath: safePath.active,
+        };
+
+        return { success: true, summary };
+      } catch (err) {
+        return {
+          success: false,
+          error: err instanceof Error ? err.message : '解析导入数据时发生未知错误',
+        };
+      }
+    },
+    []
+  );
+
+  const resetStore = useCallback(() => {
+    saveStoreDirect(DEFAULT_STORE);
+    setStore(DEFAULT_STORE);
+  }, []);
+
   const clearCorruptedNotice = useCallback(() => {
     setStorageCorrupted(false);
   }, []);
@@ -547,6 +796,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({
       setTheme,
       setFontSize,
       setMeasure,
+      setLineHeight,
       setFocus,
       setProofDefault,
       updateSectionProgress,
@@ -556,6 +806,10 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({
       removeWrongExercise,
       markExerciseMastered,
       reviewWrongExercise,
+      setNote,
+      deleteNote,
+      importStore,
+      resetStore,
       logActivity,
       clearCorruptedNotice,
       resolvedTheme,
@@ -567,6 +821,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({
       setTheme,
       setFontSize,
       setMeasure,
+      setLineHeight,
       setFocus,
       setProofDefault,
       updateSectionProgress,
@@ -576,6 +831,10 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({
       removeWrongExercise,
       markExerciseMastered,
       reviewWrongExercise,
+      setNote,
+      deleteNote,
+      importStore,
+      resetStore,
       logActivity,
       clearCorruptedNotice,
       resolvedTheme,

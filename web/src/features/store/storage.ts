@@ -1,4 +1,4 @@
-import { ExerciseRecord, ReviewRecord, StoreV1 } from './types';
+import { ExerciseRecord, NoteRecord, ReviewRecord, StoreV1 } from './types';
 
 export const STORAGE_KEY = 'qma:store:v1';
 export const CORRUPT_KEY_PREFIX = 'qma:store:corrupt:';
@@ -9,6 +9,7 @@ export const DEFAULT_STORE: StoreV1 = {
     theme: 'system',
     fontSize: 'lg',
     measure: 'standard',
+    lineHeight: 'standard',
     focus: false,
     proofDefault: 'open',
   },
@@ -93,6 +94,25 @@ export function loadStore(): { store: StoreV1; corrupted: boolean; available: bo
       }
     }
 
+    // Sanitize notes safely
+    const safeNotes: Record<string, NoteRecord> = {};
+    if (parsed.notes && typeof parsed.notes === 'object') {
+      for (const [key, val] of Object.entries(parsed.notes)) {
+        if (
+          val &&
+          typeof val === 'object' &&
+          typeof (val as NoteRecord).text === 'string' &&
+          typeof (val as NoteRecord).updatedAt === 'string' &&
+          !Number.isNaN(Date.parse((val as NoteRecord).updatedAt))
+        ) {
+          safeNotes[key] = {
+            text: (val as NoteRecord).text,
+            updatedAt: (val as NoteRecord).updatedAt,
+          };
+        }
+      }
+    }
+
     // Merge with defaults to ensure all fields are present
     const store: StoreV1 = {
       ...DEFAULT_STORE,
@@ -100,9 +120,13 @@ export function loadStore(): { store: StoreV1; corrupted: boolean; available: bo
       settings: {
         ...DEFAULT_STORE.settings,
         ...(parsed.settings || {}),
+        lineHeight: ['compact', 'standard', 'loose'].includes(parsed.settings?.lineHeight)
+          ? parsed.settings.lineHeight
+          : DEFAULT_STORE.settings.lineHeight,
       },
       progress: parsed.progress || {},
       exercises: safeExercises,
+      notes: safeNotes,
       review: safeReview,
       bookmarks: {
         ...DEFAULT_STORE.bookmarks,

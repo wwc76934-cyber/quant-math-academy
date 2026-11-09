@@ -1,16 +1,30 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useToast } from '../components/reader/Toast';
 import { loadBook } from '../features/content/loadBook';
 import { Book } from '../features/content/types';
 import { useStore } from '../features/store/store';
+import { ImportStoreSummary } from '../features/store/types';
 import { formatDisplayTitle, formatPercentage } from '../lib/format';
-import { learnPath, practicePath } from '../lib/paths';
+import { learnPath, notesPath, practicePath } from '../lib/paths';
 
 export const ProgressPage: React.FC = () => {
-  const { store } = useStore();
+  const { store, importStore, resetStore } = useStore();
+  const { showToast } = useToast();
   const [book, setBook] = useState<Book | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Data management state
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [pendingImport, setPendingImport] = useState<{
+    raw: unknown;
+    summary: ImportStoreSummary;
+    filename: string;
+  } | null>(null);
+  const [importError, setImportError] = useState<string | null>(null);
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
+  const [resetInput, setResetInput] = useState('');
 
   useEffect(() => {
     let cancelled = false;
@@ -137,6 +151,141 @@ export const ProgressPage: React.FC = () => {
       };
     });
   }, [book, store.progress, store.exercises, store.review]);
+
+  const noteCount = useMemo(() => Object.keys(store.notes || {}).length, [store.notes]);
+
+  const handleExport = () => {
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const d = new Date();
+    const ts = `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}-${pad(d.getHours())}${pad(d.getMinutes())}`;
+    const filename = `qma-backup-${ts}.json`;
+    const payload = {
+      schemaVersion: 1,
+      exportedAt: d.toISOString(),
+      app: 'quant-math-academy',
+      store,
+    };
+    const jsonStr = JSON.stringify(payload, null, 2);
+    const blob = new Blob([jsonStr], { type: 'application/json' });
+    if (typeof URL !== 'undefined' && typeof URL.createObjectURL === 'function') {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+    showToast('学习数据已导出下载');
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Reset input so re-selecting same file triggers change
+    e.target.value = '';
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const text = event.target?.result;
+        if (typeof text !== 'string') {
+          setImportError('读取文件内容失败');
+          return;
+        }
+        const parsed = JSON.parse(text);
+        if (!parsed || typeof parsed !== 'object') {
+          setImportError('导入文件必须为有效 JSON 格式');
+          return;
+        }
+
+        let candidate: Record<string, unknown> = parsed;
+        if (candidate.store && typeof candidate.store === 'object') {
+          candidate = candidate.store as Record<string, unknown>;
+        }
+
+        if (candidate.schemaVersion !== 1) {
+          setImportError(`版本不兼容 (schemaVersion: ${String(candidate?.schemaVersion)})，仅支持 v1 版本`);
+          return;
+        }
+
+        if (!candidate.settings || typeof candidate.settings !== 'object') {
+          setImportError('缺少 settings 配置或结构非法');
+          return;
+        }
+
+        const progressCount =
+          candidate.progress && typeof candidate.progress === 'object'
+            ? Object.values(candidate.progress as Record<string, { status?: string }>).filter(
+                (p) => p?.status === 'done' || p?.status === 'master'
+              ).length
+            : 0;
+
+        const exerciseCount =
+          candidate.exercises && typeof candidate.exercises === 'object'
+            ? Object.values(candidate.exercises as Record<string, { status?: string }>).filter(
+                (ex) => ex?.status && ex.status !== 'unseen'
+              ).length
+            : 0;
+
+        const wrongCount =
+          candidate.review && typeof candidate.review === 'object'
+            ? Object.keys(candidate.review).length
+            : 0;
+
+        const nc =
+          candidate.notes && typeof candidate.notes === 'object'
+            ? Object.keys(candidate.notes).length
+            : 0;
+
+        const activePath =
+          candidate.path &&
+          typeof candidate.path === 'object' &&
+          typeof (candidate.path as { active?: string }).active === 'string'
+            ? (candidate.path as { active: string }).active
+            : 'none';
+
+        setPendingImport({
+          raw: parsed,
+          filename: file.name,
+          summary: {
+            progressCount,
+            exerciseCount,
+            wrongCount,
+            noteCount: nc,
+            activePath,
+          },
+        });
+        setImportError(null);
+      } catch (err) {
+        setImportError(err instanceof Error ? err.message : '文件解析失败，请检查是否为合法 JSON');
+      }
+    };
+    reader.onerror = () => {
+      setImportError('读取文件遇到错误');
+    };
+    reader.readAsText(file);
+  };
+
+  const handleConfirmImport = () => {
+    if (!pendingImport) return;
+    const res = importStore(pendingImport.raw);
+    if (res.success) {
+      showToast('数据恢复成功！');
+      setPendingImport(null);
+    } else {
+      setImportError(res.error || '导入失败');
+    }
+  };
+
+  const handleResetStore = () => {
+    resetStore();
+    setShowResetConfirm(false);
+    setResetInput('');
+    showToast('已清空学习数据并重置为初始状态');
+  };
 
   if (loading) {
     return (
@@ -397,7 +546,97 @@ export const ProgressPage: React.FC = () => {
         )}
       </section>
 
-      {/* 4. Chapter Progress Table */}
+      {/* 4. My Notes Section */}
+      <section aria-labelledby="notes-section-heading" style={{ marginBottom: '40px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '16px' }}>
+          <div>
+            <h2 id="notes-section-heading" style={{ fontSize: '20px', fontFamily: 'var(--font-serif)', margin: '0 0 4px', fontWeight: 600, color: 'var(--ink)' }}>
+              我的笔记
+            </h2>
+            <p style={{ margin: 0, fontSize: '13px', color: 'var(--ink-muted)' }}>
+              已在 {noteCount} 节记录学习推导与心得，支持纯文本编辑与快速跳转。
+            </p>
+          </div>
+          <Link
+            to={notesPath()}
+            style={{ fontSize: '13px', color: 'var(--accent, #1a56db)', textDecoration: 'none', fontWeight: 500 }}
+          >
+            查看全部笔记 ({noteCount}) →
+          </Link>
+        </div>
+
+        {noteCount === 0 ? (
+          <div
+            data-testid="notes-empty-card"
+            style={{
+              background: 'var(--bg-card, #ffffff)',
+              border: '1px dashed var(--border, #e5e5e0)',
+              borderRadius: '6px',
+              padding: '28px 20px',
+              textAlign: 'center',
+            }}
+          >
+            <p style={{ margin: '0 0 8px', fontSize: '15px', color: 'var(--ink-secondary)', fontWeight: 500 }}>
+              还没有记录任何笔记
+            </p>
+            <p style={{ margin: '0 0 16px', fontSize: '13px', color: 'var(--ink-muted)' }}>
+              在阅读各章节知识点时，可在正文底部随时记录推导心得、考点备忘或疑问。
+            </p>
+            <Link
+              to="/syllabus"
+              className="btn btn--secondary"
+              style={{
+                display: 'inline-block',
+                padding: '6px 16px',
+                fontSize: '13px',
+                border: '1px solid var(--border)',
+                borderRadius: '4px',
+                textDecoration: 'none',
+                color: 'var(--ink)',
+              }}
+            >
+              浏览章节教材
+            </Link>
+          </div>
+        ) : (
+          <div
+            data-testid="notes-summary-card"
+            style={{
+              background: 'var(--bg-card, #ffffff)',
+              border: '1px solid var(--border, #e5e5e0)',
+              borderRadius: '6px',
+              padding: '16px 20px',
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div>
+                <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--ink)' }}>
+                  已累计记录 {noteCount} 节笔记
+                </span>
+                <span style={{ marginLeft: '12px', fontSize: '12px', color: 'var(--ink-muted)' }}>
+                  纯文本保存在本地，换设备前建议导出备份。
+                </span>
+              </div>
+              <Link
+                to={notesPath()}
+                className="btn btn--secondary"
+                style={{
+                  padding: '6px 14px',
+                  fontSize: '13px',
+                  border: '1px solid var(--border)',
+                  borderRadius: '4px',
+                  textDecoration: 'none',
+                  color: 'var(--ink)',
+                }}
+              >
+                前往笔记管理页 →
+              </Link>
+            </div>
+          </div>
+        )}
+      </section>
+
+      {/* 5. Chapter Progress Table */}
       <section aria-labelledby="chapter-progress-heading">
         <div style={{ marginBottom: '16px' }}>
           <h2 id="chapter-progress-heading" style={{ fontSize: '20px', fontFamily: 'var(--font-serif)', margin: '0 0 4px', fontWeight: 600, color: 'var(--ink)' }}>
@@ -530,7 +769,361 @@ export const ProgressPage: React.FC = () => {
         </div>
       </section>
 
-      {/* 5. Storage Note */}
+      {/* 6. Data Management & Backup */}
+      <section
+        aria-labelledby="data-management-heading"
+        style={{
+          marginTop: '48px',
+          borderTop: '1px solid var(--border, #e5e5e0)',
+          paddingTop: '32px',
+        }}
+      >
+        <div style={{ marginBottom: '20px' }}>
+          <h2 id="data-management-heading" style={{ fontSize: '20px', fontFamily: 'var(--font-serif)', margin: '0 0 4px', fontWeight: 600, color: 'var(--ink)' }}>
+            数据管理与备份
+          </h2>
+          <p style={{ margin: 0, fontSize: '13px', color: 'var(--ink-muted)' }}>
+            所有学习记录保存在当前浏览器本地（LocalStorage），无云端存储。更换设备或清理浏览器缓存前请务必导出备份。
+          </p>
+        </div>
+
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gap: '16px',
+            marginBottom: '24px',
+          }}
+        >
+          {/* Export Card */}
+          <div
+            style={{
+              background: 'var(--bg-card, #ffffff)',
+              border: '1px solid var(--border, #e5e5e0)',
+              borderRadius: '6px',
+              padding: '20px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+            }}
+          >
+            <div>
+              <h3 style={{ margin: '0 0 8px', fontSize: '15px', fontWeight: 600, color: 'var(--ink)' }}>
+                导出学习数据
+              </h3>
+              <p style={{ margin: '0 0 16px', fontSize: '13px', color: 'var(--ink-secondary)', lineHeight: 1.5 }}>
+                导出包含阅读进度、习题答题、错题复习队列与笔记的完整 JSON 备份文件（schemaVersion: 1）。
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={handleExport}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                padding: '8px 16px',
+                background: 'var(--accent, #1a56db)',
+                color: '#ffffff',
+                border: 'none',
+                borderRadius: '4px',
+                fontSize: '13px',
+                fontWeight: 500,
+                cursor: 'pointer',
+              }}
+            >
+              导出备份 (JSON)
+            </button>
+          </div>
+
+          {/* Import Card */}
+          <div
+            style={{
+              background: 'var(--bg-card, #ffffff)',
+              border: '1px solid var(--border, #e5e5e0)',
+              borderRadius: '6px',
+              padding: '20px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+            }}
+          >
+            <div>
+              <h3 style={{ margin: '0 0 8px', fontSize: '15px', fontWeight: 600, color: 'var(--ink)' }}>
+                恢复/导入备份
+              </h3>
+              <p style={{ margin: '0 0 16px', fontSize: '13px', color: 'var(--ink-secondary)', lineHeight: 1.5 }}>
+                从导出的 JSON 文件恢复进度。导入前会严格校验数据格式并展示摘要预览，确认后覆盖本机数据。
+              </p>
+            </div>
+            <div>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".json,application/json"
+                style={{ display: 'none' }}
+                onChange={handleFileSelect}
+                data-testid="file-import-input"
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  setImportError(null);
+                  fileInputRef.current?.click();
+                }}
+                style={{
+                  width: '100%',
+                  padding: '8px 16px',
+                  background: 'transparent',
+                  color: 'var(--ink)',
+                  border: '1px solid var(--border, #e5e5e0)',
+                  borderRadius: '4px',
+                  fontSize: '13px',
+                  fontWeight: 500,
+                  cursor: 'pointer',
+                }}
+              >
+                选择备份文件导入...
+              </button>
+            </div>
+          </div>
+
+          {/* Reset / Clear Card */}
+          <div
+            style={{
+              background: 'var(--bg-card, #ffffff)',
+              border: '1px solid var(--border, #e5e5e0)',
+              borderRadius: '6px',
+              padding: '20px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+            }}
+          >
+            <div>
+              <h3 style={{ margin: '0 0 8px', fontSize: '15px', fontWeight: 600, color: 'var(--warning, #c9510c)' }}>
+                清空本机记录
+              </h3>
+              <p style={{ margin: '0 0 16px', fontSize: '13px', color: 'var(--ink-secondary)', lineHeight: 1.5 }}>
+                重置阅读进度、练习错题与笔记，恢复至初始默认配置。操作不可逆，需二次确认。
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setShowResetConfirm(true);
+                setResetInput('');
+              }}
+              style={{
+                padding: '8px 16px',
+                background: 'transparent',
+                color: 'var(--warning, #c9510c)',
+                border: '1px solid var(--warning, #c9510c)',
+                borderRadius: '4px',
+                fontSize: '13px',
+                fontWeight: 500,
+                cursor: 'pointer',
+              }}
+            >
+              清空本机记录...
+            </button>
+          </div>
+        </div>
+
+        {/* Import Error Message */}
+        {importError && (
+          <div
+            role="alert"
+            data-testid="import-error-alert"
+            style={{
+              padding: '12px 16px',
+              background: '#fdf2f2',
+              border: '1px solid #f8b4b4',
+              borderRadius: '6px',
+              color: '#9b1c1c',
+              fontSize: '13px',
+              marginBottom: '20px',
+            }}
+          >
+            <strong>导入校验失败：</strong>{importError}
+          </div>
+        )}
+
+        {/* Import Preview Modal / Confirmation Box */}
+        {pendingImport && (
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="import-preview-title"
+            data-testid="import-preview-modal"
+            style={{
+              background: 'var(--bg-subtle, #f6f6f4)',
+              border: '2px solid var(--accent, #1a56db)',
+              borderRadius: '6px',
+              padding: '20px',
+              marginBottom: '24px',
+            }}
+          >
+            <h3 id="import-preview-title" style={{ margin: '0 0 8px', fontSize: '16px', color: 'var(--ink)' }}>
+              确认导入备份数据
+            </h3>
+            <p style={{ margin: '0 0 16px', fontSize: '13px', color: 'var(--ink-secondary)' }}>
+              文件 <code>{pendingImport.filename}</code> 校验通过（schemaVersion: 1）。
+              <strong style={{ color: 'var(--warning, #c9510c)', marginLeft: '4px' }}>
+                确认后将完全覆盖当前本机的学习记录与笔记！
+              </strong>
+            </p>
+
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
+                gap: '12px',
+                marginBottom: '16px',
+                background: 'var(--bg-card, #ffffff)',
+                padding: '12px 16px',
+                borderRadius: '4px',
+                border: '1px solid var(--border, #e5e5e0)',
+              }}
+            >
+              <div>
+                <span style={{ fontSize: '11px', color: 'var(--ink-muted)', display: 'block' }}>已学节数</span>
+                <strong style={{ fontSize: '16px', color: 'var(--ink)' }}>{pendingImport.summary.progressCount} 节</strong>
+              </div>
+              <div>
+                <span style={{ fontSize: '11px', color: 'var(--ink-muted)', display: 'block' }}>已练习题</span>
+                <strong style={{ fontSize: '16px', color: 'var(--ink)' }}>{pendingImport.summary.exerciseCount} 题</strong>
+              </div>
+              <div>
+                <span style={{ fontSize: '11px', color: 'var(--ink-muted)', display: 'block' }}>错题本</span>
+                <strong style={{ fontSize: '16px', color: 'var(--ink)' }}>{pendingImport.summary.wrongCount} 题</strong>
+              </div>
+              <div>
+                <span style={{ fontSize: '11px', color: 'var(--ink-muted)', display: 'block' }}>节笔记</span>
+                <strong style={{ fontSize: '16px', color: 'var(--ink)' }}>{pendingImport.summary.noteCount} 条</strong>
+              </div>
+              <div>
+                <span style={{ fontSize: '11px', color: 'var(--ink-muted)', display: 'block' }}>当前学习路径</span>
+                <strong style={{ fontSize: '16px', color: 'var(--ink)' }}>{pendingImport.summary.activePath}</strong>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+              <button
+                type="button"
+                onClick={() => setPendingImport(null)}
+                style={{
+                  padding: '6px 14px',
+                  background: 'transparent',
+                  border: '1px solid var(--border)',
+                  borderRadius: '4px',
+                  fontSize: '13px',
+                  cursor: 'pointer',
+                  color: 'var(--ink)',
+                }}
+              >
+                取消
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmImport}
+                data-testid="confirm-import-btn"
+                style={{
+                  padding: '6px 16px',
+                  background: 'var(--accent, #1a56db)',
+                  color: '#ffffff',
+                  border: 'none',
+                  borderRadius: '4px',
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                }}
+              >
+                确认覆盖并恢复
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Reset Confirmation Dialog */}
+        {showResetConfirm && (
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="reset-dialog-title"
+            data-testid="reset-confirm-modal"
+            style={{
+              background: '#fdf2f2',
+              border: '2px solid var(--warning, #c9510c)',
+              borderRadius: '6px',
+              padding: '20px',
+              marginBottom: '24px',
+            }}
+          >
+            <h3 id="reset-dialog-title" style={{ margin: '0 0 8px', fontSize: '16px', color: 'var(--warning, #c9510c)' }}>
+              高危操作：清空所有本机数据
+            </h3>
+            <p style={{ margin: '0 0 12px', fontSize: '13px', color: 'var(--ink)', lineHeight: 1.5 }}>
+              该操作将彻底清空当前浏览器的全部学习进度、习题作答历史、错题复习队列与所写笔记，并将排版设置重置为默认值。此操作无法撤销。
+            </p>
+            <p style={{ margin: '0 0 12px', fontSize: '13px', color: 'var(--ink-secondary)' }}>
+              请输入 <strong>清空</strong> 以确认操作：
+            </p>
+            <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+              <input
+                type="text"
+                value={resetInput}
+                onChange={(e) => setResetInput(e.target.value)}
+                placeholder="输入 清空"
+                data-testid="reset-confirm-input"
+                style={{
+                  padding: '6px 10px',
+                  fontSize: '13px',
+                  border: '1px solid var(--border, #ccc)',
+                  borderRadius: '4px',
+                  width: '160px',
+                }}
+              />
+              <button
+                type="button"
+                onClick={handleResetStore}
+                disabled={resetInput.trim() !== '清空'}
+                data-testid="reset-confirm-btn"
+                style={{
+                  padding: '6px 16px',
+                  background: resetInput.trim() === '清空' ? 'var(--warning, #c9510c)' : '#ccc',
+                  color: '#ffffff',
+                  border: 'none',
+                  borderRadius: '4px',
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  cursor: resetInput.trim() === '清空' ? 'pointer' : 'not-allowed',
+                }}
+              >
+                确认清空
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowResetConfirm(false)}
+                style={{
+                  padding: '6px 12px',
+                  background: 'transparent',
+                  border: '1px solid var(--border)',
+                  borderRadius: '4px',
+                  fontSize: '13px',
+                  cursor: 'pointer',
+                  color: 'var(--ink)',
+                }}
+              >
+                取消
+              </button>
+            </div>
+          </div>
+        )}
+      </section>
+
+      {/* 7. Storage Note */}
       <footer
         style={{
           marginTop: '40px',

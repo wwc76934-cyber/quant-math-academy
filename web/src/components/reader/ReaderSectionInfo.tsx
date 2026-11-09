@@ -60,6 +60,7 @@ export const ReaderSectionInfo: React.FC<ReaderSectionInfoProps> = ({
   const meta = section.meta;
   const progress: SectionProgressStatus = store.progress[section.id]?.status || 'empty';
   const hasMeta = meta !== null && meta !== undefined;
+  const hasNote = Boolean(store.notes[section.id]?.text);
 
   // Graph ancestors and citations for current section
   const ancestors = graphData?.ancestors?.[section.id] || [];
@@ -82,6 +83,20 @@ export const ReaderSectionInfo: React.FC<ReaderSectionInfoProps> = ({
             />
           ) : null}
           {hasMeta && meta.priority ? <PriorityBadge priority={meta.priority} /> : null}
+          {hasNote && (
+            <span
+              className="badge"
+              style={{
+                fontSize: '10px',
+                height: '18px',
+                background: 'var(--bg-elevated)',
+                border: '1px solid var(--border)',
+                color: 'var(--ink)',
+              }}
+            >
+              有笔记
+            </span>
+          )}
           {!hasMeta && <span className="small muted">标注完善中</span>}
         </div>
 

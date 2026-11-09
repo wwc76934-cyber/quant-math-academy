@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { useStore } from '../../features/store/store';
 import {
   FontSizeSetting,
+  LineHeightSetting,
   MeasureSetting,
   ProofDefaultSetting,
   ThemeSetting,
@@ -20,6 +21,7 @@ export const ReaderSettingsModal: React.FC<ReaderSettingsModalProps> = ({
     store,
     setFontSize,
     setMeasure,
+    setLineHeight,
     setProofDefault,
     setFocus,
     setTheme,
@@ -52,6 +54,12 @@ export const ReaderSettingsModal: React.FC<ReaderSettingsModalProps> = ({
     { value: 'narrow', label: '紧凑', desc: '30em' },
     { value: 'standard', label: '标准', desc: '34em' },
     { value: 'wide', label: '宽幅', desc: '40em' },
+  ];
+
+  const lineHeights: Array<{ value: LineHeightSetting; label: string; desc: string }> = [
+    { value: 'compact', label: '紧凑', desc: '1.75' },
+    { value: 'standard', label: '标准', desc: '1.9' },
+    { value: 'loose', label: '宽松', desc: '2.1' },
   ];
 
   const proofOptions: Array<{ value: ProofDefaultSetting; label: string }> = [
@@ -130,6 +138,29 @@ export const ReaderSettingsModal: React.FC<ReaderSettingsModalProps> = ({
                 <span>{m.label}</span>
                 <span className="tiny" style={{ fontSize: '9px', opacity: 0.8 }}>
                   {m.desc}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Line Height */}
+        <div style={{ marginBottom: '20px' }}>
+          <div className="rail__title" style={{ marginBottom: '8px' }}>
+            正文行距
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
+            {lineHeights.map((l) => (
+              <button
+                key={l.value}
+                type="button"
+                className={`chip ${store.settings.lineHeight === l.value ? 'chip--active' : ''}`}
+                style={{ justifyContent: 'center', height: '32px' }}
+                onClick={() => setLineHeight(l.value)}
+              >
+                <span>{l.label}</span>
+                <span className="tiny" style={{ fontSize: '9px', opacity: 0.8 }}>
+                  {l.desc}
                 </span>
               </button>
             ))}

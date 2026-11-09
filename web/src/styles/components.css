@@ -1163,7 +1163,7 @@
 .article-content {
   font-family: var(--font-serif);
   font-size: var(--prose-size);
-  line-height: 1.9;
+  line-height: var(--prose-leading, 1.9);
   max-width: var(--measure);
   margin: 0 auto;
 }

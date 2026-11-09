@@ -5,12 +5,14 @@
 export type ThemeSetting = 'light' | 'dark' | 'system';
 export type FontSizeSetting = 'sm' | 'md' | 'lg' | 'xl';
 export type MeasureSetting = 'narrow' | 'standard' | 'wide';
+export type LineHeightSetting = 'compact' | 'standard' | 'loose';
 export type ProofDefaultSetting = 'open' | 'closed';
 
 export interface UserSettings {
   theme: ThemeSetting;
   fontSize: FontSizeSetting;
   measure: MeasureSetting;
+  lineHeight: LineHeightSetting;
   focus: boolean;
   proofDefault: ProofDefaultSetting;
 }
@@ -69,13 +71,26 @@ export interface ReviewRecord {
   lastAt: string;
 }
 
+export interface NoteRecord {
+  text: string;
+  updatedAt: string;
+}
+
+export interface ImportStoreSummary {
+  progressCount: number;
+  exerciseCount: number;
+  wrongCount: number;
+  noteCount: number;
+  activePath: string;
+}
+
 export interface StoreV1 {
   schemaVersion: 1;
   settings: UserSettings;
   progress: Record<string, SectionProgressItem>;
   lastLocation?: LastLocation;
   exercises: Record<string, ExerciseRecord>;
-  notes: Record<string, unknown>;
+  notes: Record<string, NoteRecord>;
   bookmarks: UserBookmarks;
   review: Record<string, ReviewRecord>;
   path: PathSetting;
@@ -89,6 +104,7 @@ export interface StoreContextValue {
   setTheme: (theme: ThemeSetting) => void;
   setFontSize: (fontSize: FontSizeSetting) => void;
   setMeasure: (measure: MeasureSetting) => void;
+  setLineHeight: (lineHeight: LineHeightSetting) => void;
   setFocus: (focus: boolean) => void;
   setProofDefault: (proofDefault: ProofDefaultSetting) => void;
   updateSectionProgress: (
@@ -104,7 +120,11 @@ export interface StoreContextValue {
   removeWrongExercise: (exerciseId: string) => void;
   markExerciseMastered: (exerciseId: string) => void;
   reviewWrongExercise: (exerciseId: string, correct: boolean) => void;
-  logActivity: (activity: { type: 'status' | 'read' | 'copy' | 'exercise'; targetId: string; detail?: string }) => void;
+  setNote: (sectionId: string, text: string) => void;
+  deleteNote: (sectionId: string) => void;
+  importStore: (raw: unknown) => { success: boolean; error?: string; summary?: ImportStoreSummary };
+  resetStore: () => void;
+  logActivity: (activity: { type: 'status' | 'read' | 'copy' | 'exercise' | 'note'; targetId: string; detail?: string }) => void;
   clearCorruptedNotice: () => void;
   resolvedTheme: 'light' | 'dark';
 }

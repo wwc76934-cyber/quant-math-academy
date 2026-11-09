@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { ReaderBookToc } from '../components/reader/ReaderBookToc';
 import { ReaderExercises } from '../components/reader/ReaderExercises';
+import { ReaderNotes } from '../components/reader/ReaderNotes';
 import { ReaderPageToc } from '../components/reader/ReaderPageToc';
 import { ReaderSectionInfo } from '../components/reader/ReaderSectionInfo';
 import { ReaderSettingsModal } from '../components/reader/ReaderSettingsModal';
@@ -752,10 +753,13 @@ export const ReaderPage: React.FC = () => {
                   </div>
 
                   {htmlContent ? (
-                    <div
-                      className="article-content"
-                      dangerouslySetInnerHTML={{ __html: htmlContent }}
-                    />
+                    <>
+                      <div
+                        className="article-content"
+                        dangerouslySetInnerHTML={{ __html: htmlContent }}
+                      />
+                      <ReaderNotes sectionId={section.id} />
+                    </>
                   ) : isSecLoading ? (
                     <div
                       style={{

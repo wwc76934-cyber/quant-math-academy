@@ -11,6 +11,7 @@ import { PathDetailPage } from './routes/PathDetailPage';
 import { PathsPage } from './routes/PathsPage';
 import { PracticePage } from './routes/PracticePage';
 import { PracticeSessionPage } from './routes/PracticeSessionPage';
+import { NotesPage } from './routes/NotesPage';
 import { ProgressPage } from './routes/ProgressPage';
 import { ReaderPage } from './routes/ReaderPage';
 import { SearchPage } from './routes/SearchPage';
@@ -95,6 +96,7 @@ const MainLayout: React.FC = () => {
           <Route path="/practice" element={<PracticePage />} />
           <Route path="/practice/wrong" element={<WrongBookPage />} />
           <Route path="/practice/:chapterId" element={<PracticeSessionPage />} />
+          <Route path="/notes" element={<NotesPage />} />
           <Route path="/progress" element={<ProgressPage />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/graph" element={<GraphPage />} />

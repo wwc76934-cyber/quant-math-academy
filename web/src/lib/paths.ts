@@ -30,6 +30,10 @@ export function progressPath(): string {
   return '/progress';
 }
 
+export function notesPath(): string {
+  return '/notes';
+}
+
 export function searchPath(query?: string): string {
   return query ? `/search?q=${encodeURIComponent(query)}` : '/search';
 }
