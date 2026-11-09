@@ -641,7 +641,7 @@ export const ReaderPage: React.FC = () => {
       )}
 
       {/* 2. Reader Three-column Grid */}
-      <main className="reader">
+      <main className="reader" id="main-content">
         <div className="reader-grid">
           {/* Left Column: Full Book TOC */}
           <ReaderBookToc

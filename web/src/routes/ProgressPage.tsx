@@ -1076,6 +1076,7 @@ export const ProgressPage: React.FC = () => {
                 value={resetInput}
                 onChange={(e) => setResetInput(e.target.value)}
                 placeholder="输入 清空"
+                aria-label="输入“清空”以确认清空所有本机数据"
                 data-testid="reset-confirm-input"
                 style={{
                   padding: '6px 10px',
