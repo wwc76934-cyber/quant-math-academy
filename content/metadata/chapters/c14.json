@@ -1,0 +1,323 @@
+{
+  "schemaVersion": 1,
+  "chapterId": "c14",
+  "title": "随机变量收敛、大数定律与中心极限定理",
+  "partId": "part-3",
+  "summary": "本章系统阐述随机变量序列的渐近极限理论与统计学极限定理体系：建立依概率收敛、几乎必然收敛、L^p 均方收敛与弱收敛（依分布收敛）四种收敛模式及其蕴含强弱关系网络；通过 Portmanteau 定理、Lévy 连续性定理、Slutsky 定理与连续映射定理构建弱收敛演算工具箱；严格推导独立同分布弱大数定律与 Kolmogorov 强大数定律，阐明样本均值一致性；证明 Lindeberg-Lévy 中心极限定理与 Lindeberg-Feller 稀疏条件；引入 Berry-Esseen 定理定量给出有限样本逼近误差界；最后落地于蒙特卡罗 1/√N 收敛阶、置信区间构造、Delta 方法以及金融重尾模型风险。",
+  "whyStudy": "极限定理是数理统计推断与金融工程数值模拟的理论支柱：无论是蒙特卡罗期权定价的一致性与标准误估计，还是量化策略历史回测中夏普比率的大样本渐近置信区间，均以大数定律与中心极限定理为数理根据；深刻理解收敛速率与有限样本误差边界更是防范金融模型风险的前提。",
+  "prerequisites": [
+    "c01-s4",
+    "c11-s3",
+    "c11-s4"
+  ],
+  "metadataStatus": "reviewed",
+  "reviewed": true,
+  "reviewedBy": "DSH",
+  "reviewedAt": "2026-11-09",
+  "sections": {
+    "c14-s1": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 45,
+      "examFrequency": "high",
+      "tags": [
+        "依概率收敛",
+        "几乎必然收敛",
+        "Lp收敛",
+        "弱收敛",
+        "收敛模式"
+      ],
+      "coreConcepts": [
+        "依概率收敛定义与概率度量",
+        "几乎必然收敛（强收敛）的样本轨道视角",
+        "L^p 均值收敛与高阶可积性",
+        "依分布收敛（弱收敛）与分布函数连续点",
+        "收敛模式强弱蕴含网络与反例"
+      ],
+      "applications": [
+        "参数估计量弱一致性与强一致性严格分类",
+        "蒙特卡罗模拟样本均值不同意义下的收敛判别",
+        "离散时间微观订单流向连续扩散过程弱极限过渡"
+      ],
+      "prerequisites": [
+        {
+          "id": "c01-s4",
+          "strength": "required"
+        },
+        {
+          "id": "c10-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c11-s4",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c14-s2",
+        "c14-s3"
+      ],
+      "learningObjective": "掌握四种收敛模式的严格数学定义与直观差异，掌握收敛性之间的蕴含关系网络，能独立构造典型不蕴含反例。",
+      "keyFormulas": [
+        "c14-eq-14.1",
+        "c14-eq-14.2",
+        "c14-eq-14.3",
+        "c14-eq-14.4"
+      ],
+      "rationale": "本节系统建立定义14.1依概率收敛(14.1)、定义14.2几乎必然收敛(14.2)、定义14.3之Lp收敛(14.3)与定义14.4弱收敛(14.4)，证明定理14.5收敛强弱蕴含网络，并以例14.1与例14.2滑动区间反例辨析收敛差异。这是现代渐近统计与极限理论的分类语言地基。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c14-s2": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "弱收敛",
+        "Portmanteau",
+        "Slutsky定理",
+        "连续映射",
+        "特征函数"
+      ],
+      "coreConcepts": [
+        "Portmanteau 定理五大等价刻画",
+        "有界连续函数期望与弱收敛",
+        "Lévy 连续性定理连接特征函数与弱收敛",
+        "Slutsky 代数运算法则",
+        "连续映射定理 CMT"
+      ],
+      "applications": [
+        "学生化 t 统计量消去未知方差渐近正态证明",
+        "期权非线性到期回报渐近分布连续映射推导",
+        "广义矩估计 GMM 统计量极限分布推演"
+      ],
+      "prerequisites": [
+        {
+          "id": "c11-s3",
+          "strength": "required"
+        },
+        {
+          "id": "c14-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c14-s4",
+        "c19-s2"
+      ],
+      "learningObjective": "掌握 Portmanteau 弱收敛等价刻画，熟练运用 Lévy 连续性定理、Slutsky 定理与连续映射定理进行大样本统计推导。",
+      "keyFormulas": [
+        "c14-eq-14.6",
+        "c14-eq-14.7",
+        "c14-eq-14.8",
+        "c14-eq-14.9"
+      ],
+      "rationale": "本节深入探讨定理14.6 Portmanteau弱收敛五大等价刻画(14.6)，确立定理14.7 Lévy连续性定理(14.7)连接特征函数与弱收敛，严格推导命题14.8 Slutsky定理与连续映射定理并给出例14.3学生化t统计量渐近正态证明(14.9)。该节是构建大样本统计推断的工具枢纽。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c14-s3": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 45,
+      "examFrequency": "high",
+      "tags": [
+        "大数定律",
+        "弱大数定律",
+        "强大数定律",
+        "一致性",
+        "样本均值"
+      ],
+      "coreConcepts": [
+        "独立同分布样本均值估计量",
+        "弱大数定律 WLLN 与特征函数展开证明",
+        "Kolmogorov 强大数定律 SLLN 框架",
+        "独立不同分布 Markov 条件",
+        "Bernstein 多项式一致逼近定理"
+      ],
+      "applications": [
+        "蒙特卡罗模拟数值积分点估计强一致性证明",
+        "量化多因子历史平均超额收益可靠性验证",
+        "长期财富增长几何平均遍历性收敛分析"
+      ],
+      "prerequisites": [
+        {
+          "id": "c11-s4",
+          "strength": "required"
+        },
+        {
+          "id": "c14-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c14-s4",
+        "c18-s1"
+      ],
+      "learningObjective": "掌握弱大数定律与强大数定律的数学条件与结论，理解一阶矩存在是收敛的核心前提，领会样本均值逼近总体均值的大样本原理。",
+      "keyFormulas": [
+        "c14-eq-14.10",
+        "c14-eq-14.14",
+        "c14-eq-14.16",
+        "c14-eq-14.17"
+      ],
+      "rationale": "本节通过特征函数展开严格证明定理14.9独立同分布弱大数定律(14.10)，系统给出定理14.10 Kolmogorov强大数定律(14.14)与命题14.11独立不同分布Markov条件(14.16)，并借例14.4推导Bernstein算子一致逼近(14.17)。这是蒙特卡罗估值与样本估计一致性的核心根基。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c14-s4": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "中心极限定理",
+        "渐近正态",
+        "Lindeberg",
+        "根号n标度",
+        "特征函数"
+      ],
+      "coreConcepts": [
+        "方差守恒视角下的 √n 标度唯一性",
+        "Lindeberg-Lévy 独立同分布中心极限定理",
+        "特征函数 Taylor 二阶逼近高斯密度证明",
+        "Lindeberg 稀疏条件消除个别极端项",
+        "Lyapunov 充分条件"
+      ],
+      "applications": [
+        "大量资产独立特异收益聚合的高斯逼近",
+        "回测策略历史夏普比率渐近置信区间构建",
+        "投资组合多期累积损益的扩散极限建模"
+      ],
+      "prerequisites": [
+        {
+          "id": "c11-s3",
+          "strength": "required"
+        },
+        {
+          "id": "c14-s2",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c14-s5",
+        "c14-s6",
+        "c19-s1"
+      ],
+      "learningObjective": "掌握 √n 归一化的方差守恒本质，掌握 Lindeberg-Lévy 中心极限定理的特征函数证明，理解 Lindeberg 稀疏条件的几何与统计内涵。",
+      "keyFormulas": [
+        "c14-eq-14.19",
+        "c14-eq-14.20",
+        "c14-eq-14.21",
+        "c14-eq-14.23"
+      ],
+      "rationale": "本节阐释根号n标度方差守恒本质，借特征函数二阶展开严谨证明定理14.12 Lindeberg-Lévy中心极限定理(14.19/14.20)，进一步给出定理14.13 Lindeberg条件(14.21)与Lyapunov充分条件(14.23)。该节奠定了现代数理统计渐近正态推断与风险测度的全局理论基石。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c14-s5": {
+      "difficulty": "D3",
+      "priority": "P1",
+      "minutes": 40,
+      "examFrequency": "medium",
+      "tags": [
+        "收敛速率",
+        "Berry-Esseen",
+        "偏度影响",
+        "样本量预算",
+        "误差上界"
+      ],
+      "coreConcepts": [
+        "渐近理论有限样本误差缺失的局限",
+        "三阶绝对中心矩与 Berry-Esseen 比",
+        "分布函数一致误差显式上界 O(1/√n)",
+        "偏态分布对正态逼近速度的拖累机制"
+      ],
+      "applications": [
+        "蒙特卡罗有限抽样模拟精度显式界限控制",
+        "非对称偏态资产损益有限样本高斯近似风险度量",
+        "小样本量化回测统计检验显著性失真校正"
+      ],
+      "prerequisites": [
+        {
+          "id": "c11-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c14-s4",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c14-s6",
+        "c18-s2"
+      ],
+      "learningObjective": "深刻领会有限样本与渐近极限的差异，掌握 Berry-Esseen 定理一致误差上界计算，能根据偏度评估 CLT 近似质量。",
+      "keyFormulas": [
+        "c14-eq-14.24"
+      ],
+      "rationale": "本节针对有限样本下渐近正态失效风险，详细推导定理14.14 Berry-Esseen定理(14.24)，给出由三阶绝对矩构成的分布函数一致误差显式上界，并通过例14.7解析偏斜分布对正态逼近速度的拖累。这为量化数值模拟的有限样本量预算与精度控制提供了定量的分析工具。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c14-s6": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 45,
+      "examFrequency": "high",
+      "tags": [
+        "蒙特卡罗",
+        "置信区间",
+        "样本量估算",
+        "Delta方法",
+        "回测评估"
+      ],
+      "coreConcepts": [
+        "蒙特卡罗模拟标准误公式",
+        "1/√N 误差收缩律与置信区间构造",
+        "目标精度与抽样次数预算公式",
+        "Delta 方法传递样本矩的渐近正态性",
+        "金融肥尾突破极限定理的模型风险"
+      ],
+      "applications": [
+        "衍生品蒙特卡罗估值所需样本量精准规划",
+        "策略回测夏普比率标准误与显著性检验",
+        "极端厚尾资产收益下高斯假设破产风险防范"
+      ],
+      "prerequisites": [
+        {
+          "id": "c14-s3",
+          "strength": "required"
+        },
+        {
+          "id": "c14-s4",
+          "strength": "required"
+        },
+        {
+          "id": "c14-s5",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c18-s1",
+        "c23-s3",
+        "c31-s1"
+      ],
+      "learningObjective": "熟练运用极限定理推导蒙特卡罗误差与所需样本量，掌握 Delta 方法在夏普比率等非线性统计量上的应用，识别肥尾模型风险边界。",
+      "keyFormulas": [
+        "c14-eq-14.25",
+        "c14-eq-14.26"
+      ],
+      "rationale": "本节将极限定理全面落地于量化金融实践：推导式(14.25)蒙特卡罗标准误与置信区间，结合式(14.26)解析模拟所需样本量预算公式，结合例14.8阐明Delta方法在夏普比率检验中的应用，并警示重尾突破正态的理论边界。这是量化算法评估与模型风控的实践纲领。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    }
+  }
+}

@@ -1,0 +1,270 @@
+{
+  "schemaVersion": 1,
+  "chapterId": "c15",
+  "title": "凸集、凸函数与共轭工具",
+  "partId": "part-4",
+  "summary": "本章系统阐述凸分析基础几何与代数工具体系：从凸集定义与有限凸组合封闭性出发，剖析凸锥与非负仿射伸缩，证明闭凸集正交投影引理与严格分离超平面定理；通过上方图（epigraph）等价性确立凸函数定义，严格推导一阶切平面支撑不等式与二阶 Hessian 半正定充要判据，总结保凸运算规则；借助有限维次梯度切平面证明 Jensen 不等式，揭示算术复合增长率偏差与风险厌恶凹性内涵；系统建立 Fenchel 共轭变换、Fenchel-Young 不等式、正定二次型共轭逆表示以及对偶范数理论；最后全面落地于局部最优即全局最优的最优化性质、Lagrange 对偶灵敏度与量化模型风险反思。",
+  "whyStudy": "凸分析是现代凸优化算法与量化投资组合理论的共同数学语言：从 Markowitz 均值—方差资产配置的全局最优性保证，到无套利资产定价基本定理（FTAP）的分离超平面构造，从 Lasso 稀疏因子选股的对偶范数表达到 CVaR 风险预算凸松弛，掌握凸集、凸函数与共轭分析是迈入量化优化实盘算法的基石。",
+  "prerequisites": [
+    "c03-s3",
+    "c05-s2",
+    "c07-s2",
+    "c11-s1"
+  ],
+  "metadataStatus": "reviewed",
+  "reviewed": true,
+  "reviewedBy": "DSH",
+  "reviewedAt": "2026-11-09",
+  "sections": {
+    "c15-s1": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 45,
+      "examFrequency": "high",
+      "tags": [
+        "凸集",
+        "凸组合",
+        "凸锥",
+        "分离超平面",
+        "投影定理"
+      ],
+      "coreConcepts": [
+        "凸集定义与线段连通性",
+        "有限凸组合封闭性归纳法证明",
+        "凸锥定义与非负仿射伸缩",
+        "闭凸集上的唯一正交投影",
+        "点与闭凸集的严格分离超平面定理"
+      ],
+      "applications": [
+        "资产配置允许借贷与做空限制的可行域约束",
+        "无套利资产定价基本定理 FTAP 鞅测度分离构造",
+        "期货期权保证金交易约束凸锥"
+      ],
+      "prerequisites": [
+        {
+          "id": "c04-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c05-s2",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c15-s2",
+        "c16-s1",
+        "c33-s1"
+      ],
+      "learningObjective": "掌握凸集与凸锥定义及其有限封闭性质，掌握闭凸集正交投影引理，能严格证明分离超平面定理并理解其经济学无套利含义。",
+      "keyFormulas": [
+        "c15-eq-15.1",
+        "c15-eq-15.2",
+        "c15-eq-15.3"
+      ],
+      "rationale": "本节基于定义15.1确立凸集(15.1)与有限凸组合封闭性，引入定义15.4凸锥，推导引理15.5闭凸集正交投影(15.2)，并严格证明定理15.6严格分离超平面定理(15.3)。该分离性质是现代数学金融构建无套利测度与最优化可行域的几何基石。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c15-s2": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 45,
+      "examFrequency": "high",
+      "tags": [
+        "凸函数",
+        "上方图",
+        "一阶判别",
+        "二阶判别",
+        "Hessian"
+      ],
+      "coreConcepts": [
+        "凸函数弦割线不等式定义",
+        "上方图 epigraph 凸集等价刻画",
+        "一阶可微切平面切下界判据",
+        "二阶 Hessian 矩阵半正定充要判据",
+        "保持凸性的代数运算"
+      ],
+      "applications": [
+        "多资产投资组合方差目标函数凸性校验",
+        "极大似然估计负对数似然损失曲面严格凸性判别",
+        "量化机器学习自定义凸损失目标设计"
+      ],
+      "prerequisites": [
+        {
+          "id": "c03-s3",
+          "strength": "required"
+        },
+        {
+          "id": "c07-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c15-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c15-s3",
+        "c15-s4",
+        "c16-s2"
+      ],
+      "learningObjective": "熟练掌握凸函数的上方图等价定义，掌握一阶梯度支撑与二阶 Hessian 半正定判别法，掌握保凸运算法则。",
+      "keyFormulas": [
+        "c15-eq-15.4",
+        "c15-eq-15.5"
+      ],
+      "rationale": "本节给出定义15.7凸函数弦割线条件(15.4)与上方图等价刻画，严格推导定理15.8一阶切平面支撑判别式(15.5)与定理15.9二阶Hessian半正定充要判据，并总结保凸代数运算。这是判断量化目标函数可解性与全局最优化性质的核心判定工具箱。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c15-s3": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 40,
+      "examFrequency": "high",
+      "tags": [
+        "Jensen不等式",
+        "次梯度",
+        "期望",
+        "凸函数",
+        "风险厌恶"
+      ],
+      "coreConcepts": [
+        "有限维凸函数次梯度切平面存在性",
+        "期望线性消去一阶扰动的证明框架",
+        "Jensen 不等式严格成立条件",
+        "凹函数期望效用折价",
+        "相对熵与 KL 散度非负性"
+      ],
+      "applications": [
+        "期权凸到期支付推导期权时间价值非负性",
+        "投资者风险厌恶期望效用凹性风险折溢价分析",
+        "波动率拖累复合算术收益率几何平均损耗估算"
+      ],
+      "prerequisites": [
+        {
+          "id": "c11-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c15-s2",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c13-s3",
+        "c15-s5",
+        "c31-s2"
+      ],
+      "learningObjective": "掌握基于次梯度支撑线的 Jensen 不等式严格证明，理解凸组合向概率期望的推广，掌握其在风险溢价与期权定价中的概率应用。",
+      "keyFormulas": [
+        "c15-eq-15.6"
+      ],
+      "rationale": "本节借助有限维凸函数次梯度切平面支撑性质，严密证明定理15.10 Jensen不等式(15.6)，并结合例15.3揭示其在算术期望与几何复合增长率偏差中的概率内涵。该结论是衍生品期权凸性定价、效用风险厌恶与信息论散度非负性的理论源泉。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c15-s4": {
+      "difficulty": "D3",
+      "priority": "P1",
+      "minutes": 50,
+      "examFrequency": "medium",
+      "tags": [
+        "Fenchel共轭",
+        "对偶范数",
+        "Young不等式",
+        "二次型共轭",
+        "对偶问题"
+      ],
+      "coreConcepts": [
+        "Fenchel 共轭变换定义与逐点上确界保凸性",
+        "正定二次型共轭矩阵求逆解析推导",
+        "Fenchel-Young 基础不等式",
+        "对偶范数几何与 Holder 不等式",
+        "范数共轭与对偶单位球指示函数"
+      ],
+      "applications": [
+        "Lasso 与 Ridge 正则化稀疏因子回归对偶重构",
+        "稳健资产组合极端最坏分布扰动对偶展开",
+        "最优传输与 Wasserstein 距离对偶公式构建"
+      ],
+      "prerequisites": [
+        {
+          "id": "c05-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c07-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c15-s2",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c16-s3",
+        "c17-s2"
+      ],
+      "learningObjective": "理解 Fenchel 共轭变换的几何与代数结构，熟练推导二次型共轭函数，掌握对偶范数与范数共轭性质。",
+      "keyFormulas": [
+        "c15-eq-15.7",
+        "c15-eq-15.8",
+        "c15-eq-15.9",
+        "c15-eq-15.10"
+      ],
+      "rationale": "本节系统建立定义15.11 Fenchel共轭变换(15.7)，以例15.4严格推导正定二次型共轭逆表示，证明式(15.8) Fenchel-Young不等式，并确立定义15.12对偶范数(15.9/15.10)与范数共轭命题15.13。这是构建约束优化Lagrange对偶与正则化稀疏估计的高阶分析利器。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    },
+    "c15-s5": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 35,
+      "examFrequency": "medium",
+      "tags": [
+        "全局最优",
+        "局部最优",
+        "凸优化",
+        "模型风险",
+        "投资组合"
+      ],
+      "coreConcepts": [
+        "凸集上局部极小必为全局最优解证明",
+        "严格凸函数全局最优解唯一性",
+        "对偶变量边际影子价格与敏感度分析",
+        "数学最优化与金融参数估计误差模型风险辨析"
+      ],
+      "applications": [
+        "Markowitz 均值—方差资产组合全局数值快速求解",
+        "在险价值 CVaR 条件风险极小化凸规划转化",
+        "因子权重对协方差估计噪声扰动敏感度诊断"
+      ],
+      "prerequisites": [
+        {
+          "id": "c15-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c15-s2",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c16-s1",
+        "c16-s4",
+        "c32-s2"
+      ],
+      "learningObjective": "严格理解凸优化中局部最优等价于全局最优的几何证明，掌握解的唯一性条件，能理性区分数学优化可解性与金融模型风险。",
+      "keyFormulas": [],
+      "rationale": "本节严格证明凸集上凸函数的局部最优解必为全局最优解及严格凸下解的唯一性，阐释凸对偶提供的灵敏度与影子价格分析，并警示数学凸解与金融参数估计误差模型风险的本质差异。该节为后续凸优化算法与真实量化资产配置确立了方法论纲领。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-09"
+    }
+  }
+}
