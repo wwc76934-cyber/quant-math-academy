@@ -15,7 +15,7 @@ import {
   formatPartNumber,
   formatPercentage,
 } from '../lib/format';
-import { learnPath, pathsPath, syllabusPath } from '../lib/paths';
+import { learnPath, pathsPath, practicePath, progressPath, syllabusPath } from '../lib/paths';
 
 export const HomePage: React.FC = () => {
   const { store } = useStore();
@@ -164,6 +164,20 @@ export const HomePage: React.FC = () => {
     }
     return null;
   }, [book, readableChapters, store.progress, store.lastLocation, activePath]);
+
+  // Practice & review stats for Today panel
+  const dueReviewsCount = useMemo(() => {
+    const nowIso = new Date().toISOString();
+    return Object.values(store.review).filter((r) => r.dueAt <= nowIso).length;
+  }, [store.review]);
+
+  const wrongCount = useMemo(() => {
+    return Object.keys(store.review).length;
+  }, [store.review]);
+
+  const practicedExercisesCount = useMemo(() => {
+    return Object.values(store.exercises).filter((e) => e.status !== 'unseen').length;
+  }, [store.exercises]);
 
   // Part map progress calculation
   const partProgressList = useMemo(() => {
@@ -410,23 +424,41 @@ export const HomePage: React.FC = () => {
           <div className="today__row">
             <span className="label">待复习</span>
             <span className="value">
-              复习将在 Phase 3 开放
-              <small>基于艾宾浩斯遗忘曲线的复习队列</small>
+              {dueReviewsCount > 0 ? (
+                <>
+                  {dueReviewsCount} 道题目今日到期
+                  <small>错题本共 {wrongCount} 道 · 基于间隔复习</small>
+                </>
+              ) : (
+                <>
+                  今日无待复习题目
+                  <small>错题本共 {wrongCount} 道 · 保持复习节奏</small>
+                </>
+              )}
             </span>
-            <span className="arrow muted" title="Phase 3 开放" aria-hidden="true">
+            <Link to={progressPath()} className="arrow" aria-label="查看待复习列表">
               →
-            </span>
+            </Link>
           </div>
 
           <div className="today__row">
             <span className="label">练习</span>
             <span className="value">
-              全书共 {totalExercisesCount} 题
-              <small>练习系统与错题本即将在 Phase 3 开放</small>
+              {practicedExercisesCount > 0 ? (
+                <>
+                  已练习 {practicedExercisesCount} / {totalExercisesCount} 题
+                  <small>覆盖全书 34 章节练习题库</small>
+                </>
+              ) : (
+                <>
+                  全书共 {totalExercisesCount} 题
+                  <small>进入章节题库与演练模式</small>
+                </>
+              )}
             </span>
-            <span className="arrow muted" title="Phase 3 开放" aria-hidden="true">
+            <Link to={practicePath()} className="arrow" aria-label="前往练习页面">
               →
-            </span>
+            </Link>
           </div>
         </aside>
       </div>

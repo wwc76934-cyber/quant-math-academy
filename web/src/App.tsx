@@ -4,15 +4,18 @@ import { AppFooter } from './components/layout/AppFooter';
 import { AppHeader } from './components/layout/AppHeader';
 import { SkipLink } from './components/layout/SkipLink';
 import { StoreProvider, useStore } from './features/store/store';
-import { FeaturePlaceholder } from './routes/FeaturePlaceholder';
 import { GraphPage } from './routes/GraphPage';
 import { HomePage } from './routes/HomePage';
 import { NotFoundPage } from './routes/NotFoundPage';
 import { PathDetailPage } from './routes/PathDetailPage';
 import { PathsPage } from './routes/PathsPage';
+import { PracticePage } from './routes/PracticePage';
+import { PracticeSessionPage } from './routes/PracticeSessionPage';
+import { ProgressPage } from './routes/ProgressPage';
 import { ReaderPage } from './routes/ReaderPage';
 import { SearchPage } from './routes/SearchPage';
 import { SyllabusPage } from './routes/SyllabusPage';
+import { WrongBookPage } from './routes/WrongBookPage';
 import { ToastProvider } from './components/reader/Toast';
 
 const StorageAlerts: React.FC = () => {
@@ -89,36 +92,10 @@ const MainLayout: React.FC = () => {
           <Route path="/learn/:chapterId" element={<ReaderPage />} />
           <Route path="/paths" element={<PathsPage />} />
           <Route path="/paths/:mode" element={<PathDetailPage />} />
-          <Route
-            path="/practice"
-            element={
-              <FeaturePlaceholder
-                featureName="练习与题解"
-                phase="Phase 3"
-                description="全书 698 道精选练习题、分步解答与错题本即将在 Phase 3 开放。"
-              />
-            }
-          />
-          <Route
-            path="/practice/:chapterId"
-            element={
-              <FeaturePlaceholder
-                featureName="章节练习"
-                phase="Phase 3"
-                description="本章练习题与解答即将在 Phase 3 开放。"
-              />
-            }
-          />
-          <Route
-            path="/progress"
-            element={
-              <FeaturePlaceholder
-                featureName="学习进度与数据管理"
-                phase="Phase 3"
-                description="全书学习统计、知识点掌握度矩阵与本地 JSON 数据导入/导出即将在 Phase 3 开放。"
-              />
-            }
-          />
+          <Route path="/practice" element={<PracticePage />} />
+          <Route path="/practice/wrong" element={<WrongBookPage />} />
+          <Route path="/practice/:chapterId" element={<PracticeSessionPage />} />
+          <Route path="/progress" element={<ProgressPage />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/graph" element={<GraphPage />} />
           <Route path="*" element={<NotFoundPage />} />

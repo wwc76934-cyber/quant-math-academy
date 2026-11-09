@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { loadExercises } from '../../features/content/loadChapter';
 import { ExerciseData } from '../../features/content/types';
+import { useStore } from '../../features/store/store';
 import { Button } from '../ui/Button';
 import { useToast } from './Toast';
 
@@ -14,6 +15,7 @@ export const ReaderExercises: React.FC<ReaderExercisesProps> = ({
   exerciseCount,
 }) => {
   const { showToast } = useToast();
+  const { store, markExercise } = useStore();
   const sentinelRef = useRef<HTMLDivElement>(null);
   const [data, setData] = useState<ExerciseData | null>(null);
   const [loading, setLoading] = useState(false);
@@ -61,8 +63,14 @@ export const ReaderExercises: React.FC<ReaderExercisesProps> = ({
     });
   };
 
-  const handlePhase3Notice = () => {
-    showToast('该功能将在 Phase 3（题解与自适应复习）中正式开放');
+  const handleMarkCorrect = (exId: string, exNumber: number) => {
+    markExercise(exId, { chapterId, number: exNumber, correct: true });
+    showToast('已标记做对');
+  };
+
+  const handleMarkWrong = (exId: string, exNumber: number) => {
+    markExercise(exId, { chapterId, number: exNumber, correct: false });
+    showToast('已加入错题本与复习队列');
   };
 
   return (
@@ -152,22 +160,22 @@ export const ReaderExercises: React.FC<ReaderExercisesProps> = ({
                   {isExpanded ? '收起解析' : '展开解析'}
                 </Button>
                 <Button
-                  variant="ghost"
+                  variant={store.exercises[ex.id]?.status === 'correct' ? 'primary' : 'ghost'}
                   size="sm"
-                  disabled
-                  onClick={handlePhase3Notice}
-                  title="Phase 3 开放"
+                  onClick={() => handleMarkCorrect(ex.id, ex.number)}
+                  aria-pressed={store.exercises[ex.id]?.status === 'correct'}
+                  title="标记此题已做对"
                 >
-                  标记做对
+                  {store.exercises[ex.id]?.status === 'correct' ? '✓ 已做对' : '标记做对'}
                 </Button>
                 <Button
-                  variant="ghost"
+                  variant={store.exercises[ex.id]?.status === 'wrong' ? 'secondary' : 'ghost'}
                   size="sm"
-                  disabled
-                  onClick={handlePhase3Notice}
-                  title="Phase 3 开放"
+                  onClick={() => handleMarkWrong(ex.id, ex.number)}
+                  aria-pressed={store.exercises[ex.id]?.status === 'wrong'}
+                  title="标记做错，加入错题本与复习计划"
                 >
-                  加入错题
+                  {store.exercises[ex.id]?.status === 'wrong' ? '✕ 已在错题本' : '加入错题'}
                 </Button>
               </div>
 

@@ -1,4 +1,4 @@
-import { StoreV1 } from './types';
+import { ExerciseRecord, ReviewRecord, StoreV1 } from './types';
 
 export const STORAGE_KEY = 'qma:store:v1';
 export const CORRUPT_KEY_PREFIX = 'qma:store:corrupt:';
@@ -63,6 +63,36 @@ export function loadStore(): { store: StoreV1; corrupted: boolean; available: bo
       throw new Error('Invalid store structure or unsupported schemaVersion');
     }
 
+    // Sanitize exercises safely (fault-tolerant against malformed records)
+    const safeExercises: Record<string, ExerciseRecord> = {};
+    if (parsed.exercises && typeof parsed.exercises === 'object') {
+      for (const [key, val] of Object.entries(parsed.exercises)) {
+        if (
+          val &&
+          typeof val === 'object' &&
+          'status' in val &&
+          typeof (val as ExerciseRecord).chapterId === 'string'
+        ) {
+          safeExercises[key] = val as ExerciseRecord;
+        }
+      }
+    }
+
+    // Sanitize review records safely
+    const safeReview: Record<string, ReviewRecord> = {};
+    if (parsed.review && typeof parsed.review === 'object') {
+      for (const [key, val] of Object.entries(parsed.review)) {
+        if (
+          val &&
+          typeof val === 'object' &&
+          (val as ReviewRecord).kind === 'exercise' &&
+          typeof (val as ReviewRecord).dueAt === 'string'
+        ) {
+          safeReview[key] = val as ReviewRecord;
+        }
+      }
+    }
+
     // Merge with defaults to ensure all fields are present
     const store: StoreV1 = {
       ...DEFAULT_STORE,
@@ -72,6 +102,8 @@ export function loadStore(): { store: StoreV1; corrupted: boolean; available: bo
         ...(parsed.settings || {}),
       },
       progress: parsed.progress || {},
+      exercises: safeExercises,
+      review: safeReview,
       bookmarks: {
         ...DEFAULT_STORE.bookmarks,
         ...(parsed.bookmarks || {}),

@@ -48,15 +48,36 @@ export interface UserActivityItem {
   detail?: string;
 }
 
+export type ExerciseStatus = 'unseen' | 'correct' | 'wrong';
+
+export interface ExerciseRecord {
+  status: ExerciseStatus;
+  chapterId: string;
+  number: number;
+  attempts: number;
+  lastAt: string;
+}
+
+export interface ReviewRecord {
+  kind: 'exercise';
+  exerciseId: string;
+  chapterId: string;
+  number: number;
+  dueAt: string;
+  intervalDays: number;
+  correctStreak: number;
+  lastAt: string;
+}
+
 export interface StoreV1 {
   schemaVersion: 1;
   settings: UserSettings;
   progress: Record<string, SectionProgressItem>;
   lastLocation?: LastLocation;
-  exercises: Record<string, unknown>;
+  exercises: Record<string, ExerciseRecord>;
   notes: Record<string, unknown>;
   bookmarks: UserBookmarks;
-  review: Record<string, unknown>;
+  review: Record<string, ReviewRecord>;
   path: PathSetting;
   activity: UserActivityItem[];
 }
@@ -76,7 +97,14 @@ export interface StoreContextValue {
   ) => void;
   setLastLocation: (location: { chapterId: string; sectionId: string; scrollOffset?: number }) => void;
   setActivePath: (pathId: string) => void;
-  logActivity: (activity: { type: 'status' | 'read' | 'copy'; targetId: string; detail?: string }) => void;
+  markExercise: (
+    exerciseId: string,
+    info: { chapterId: string; number: number; correct: boolean }
+  ) => void;
+  removeWrongExercise: (exerciseId: string) => void;
+  markExerciseMastered: (exerciseId: string) => void;
+  reviewWrongExercise: (exerciseId: string, correct: boolean) => void;
+  logActivity: (activity: { type: 'status' | 'read' | 'copy' | 'exercise'; targetId: string; detail?: string }) => void;
   clearCorruptedNotice: () => void;
   resolvedTheme: 'light' | 'dark';
 }

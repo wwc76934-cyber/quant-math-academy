@@ -12,6 +12,8 @@ import {
   saveStoreDirect,
 } from './storage';
 import {
+  ExerciseRecord,
+  ExerciseStatus,
   FontSizeSetting,
   MeasureSetting,
   ProofDefaultSetting,
@@ -304,7 +306,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 
   const logActivity = useCallback(
-    (act: { type: 'status' | 'read' | 'copy'; targetId: string; detail?: string }) => {
+    (act: { type: 'status' | 'read' | 'copy' | 'exercise'; targetId: string; detail?: string }) => {
       updateStore((prev) => ({
         ...prev,
         activity: [
@@ -315,6 +317,220 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({
           ...prev.activity,
         ].slice(0, 200),
       }));
+    },
+    [updateStore]
+  );
+
+  const markExercise = useCallback(
+    (
+      exerciseId: string,
+      info: { chapterId: string; number: number; correct: boolean }
+    ) => {
+      updateStore((prev) => {
+        const now = new Date().toISOString();
+        const prevEx = prev.exercises[exerciseId];
+        const nextAttempts = (prevEx?.attempts || 0) + 1;
+        const nextStatus: ExerciseStatus = info.correct ? 'correct' : 'wrong';
+
+        const nextExercises: Record<string, ExerciseRecord> = {
+          ...prev.exercises,
+          [exerciseId]: {
+            status: nextStatus,
+            chapterId: info.chapterId,
+            number: info.number,
+            attempts: nextAttempts,
+            lastAt: now,
+          },
+        };
+
+        const nextReview = { ...prev.review };
+
+        if (!info.correct) {
+          // 答错：加入复习队列，dueAt = +1 天，intervalDays = 1，correctStreak = 0
+          const dueAt = new Date(Date.now() + 86400000).toISOString();
+          nextReview[exerciseId] = {
+            kind: 'exercise',
+            exerciseId,
+            chapterId: info.chapterId,
+            number: info.number,
+            dueAt,
+            intervalDays: 1,
+            correctStreak: 0,
+            lastAt: now,
+          };
+        } else {
+          // 做对：若先前在复习队列中，递增 streak
+          const prevRev = prev.review[exerciseId];
+          if (prevRev) {
+            const nextStreak = (prevRev.correctStreak || 0) + 1;
+            if (nextStreak >= 3) {
+              // 连续答对 3 次，移出复习队列
+              delete nextReview[exerciseId];
+            } else {
+              const days = [1, 3, 7][nextStreak] || 7;
+              const dueAt = new Date(Date.now() + days * 86400000).toISOString();
+              nextReview[exerciseId] = {
+                ...prevRev,
+                correctStreak: nextStreak,
+                intervalDays: days,
+                dueAt,
+                lastAt: now,
+              };
+            }
+          }
+        }
+
+        const nextActivity = [
+          {
+            at: now,
+            type: 'exercise',
+            targetId: exerciseId,
+            detail: info.correct ? 'correct' : 'wrong',
+          },
+          ...prev.activity,
+        ].slice(0, 200);
+
+        return {
+          ...prev,
+          exercises: nextExercises,
+          review: nextReview,
+          activity: nextActivity,
+        };
+      });
+    },
+    [updateStore]
+  );
+
+  const removeWrongExercise = useCallback(
+    (exerciseId: string) => {
+      updateStore((prev) => {
+        const nextReview = { ...prev.review };
+        delete nextReview[exerciseId];
+        const nextExercises = { ...prev.exercises };
+        if (nextExercises[exerciseId]) {
+          nextExercises[exerciseId] = {
+            ...nextExercises[exerciseId],
+            status: 'unseen',
+          };
+        }
+        return {
+          ...prev,
+          exercises: nextExercises,
+          review: nextReview,
+        };
+      });
+    },
+    [updateStore]
+  );
+
+  const markExerciseMastered = useCallback(
+    (exerciseId: string) => {
+      updateStore((prev) => {
+        const now = new Date().toISOString();
+        const nextReview = { ...prev.review };
+        delete nextReview[exerciseId];
+        const nextExercises = { ...prev.exercises };
+        if (nextExercises[exerciseId]) {
+          nextExercises[exerciseId] = {
+            ...nextExercises[exerciseId],
+            status: 'correct',
+            lastAt: now,
+          };
+        }
+        const nextActivity = [
+          {
+            at: now,
+            type: 'exercise',
+            targetId: exerciseId,
+            detail: 'mastered',
+          },
+          ...prev.activity,
+        ].slice(0, 200);
+
+        return {
+          ...prev,
+          exercises: nextExercises,
+          review: nextReview,
+          activity: nextActivity,
+        };
+      });
+    },
+    [updateStore]
+  );
+
+  const reviewWrongExercise = useCallback(
+    (exerciseId: string, correct: boolean) => {
+      updateStore((prev) => {
+        const now = new Date().toISOString();
+        const rev = prev.review[exerciseId];
+        const ex = prev.exercises[exerciseId];
+        const chapterId = rev?.chapterId || ex?.chapterId || '';
+        const number = rev?.number || ex?.number || 1;
+
+        const nextAttempts = (ex?.attempts || 0) + 1;
+        const nextStatus: ExerciseStatus = correct ? 'correct' : 'wrong';
+
+        const nextExercises: Record<string, ExerciseRecord> = {
+          ...prev.exercises,
+          [exerciseId]: {
+            status: nextStatus,
+            chapterId,
+            number,
+            attempts: nextAttempts,
+            lastAt: now,
+          },
+        };
+
+        const nextReview = { ...prev.review };
+        if (correct) {
+          const streak = (rev?.correctStreak || 0) + 1;
+          if (streak >= 3) {
+            delete nextReview[exerciseId];
+          } else {
+            const days = [1, 3, 7][streak] || 7;
+            const dueAt = new Date(Date.now() + days * 86400000).toISOString();
+            nextReview[exerciseId] = {
+              kind: 'exercise',
+              exerciseId,
+              chapterId,
+              number,
+              dueAt,
+              intervalDays: days,
+              correctStreak: streak,
+              lastAt: now,
+            };
+          }
+        } else {
+          const dueAt = new Date(Date.now() + 86400000).toISOString();
+          nextReview[exerciseId] = {
+            kind: 'exercise',
+            exerciseId,
+            chapterId,
+            number,
+            dueAt,
+            intervalDays: 1,
+            correctStreak: 0,
+            lastAt: now,
+          };
+        }
+
+        const nextActivity = [
+          {
+            at: now,
+            type: 'exercise',
+            targetId: exerciseId,
+            detail: correct ? 'review-correct' : 'review-wrong',
+          },
+          ...prev.activity,
+        ].slice(0, 200);
+
+        return {
+          ...prev,
+          exercises: nextExercises,
+          review: nextReview,
+          activity: nextActivity,
+        };
+      });
     },
     [updateStore]
   );
@@ -336,6 +552,10 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({
       updateSectionProgress,
       setLastLocation,
       setActivePath,
+      markExercise,
+      removeWrongExercise,
+      markExerciseMastered,
+      reviewWrongExercise,
       logActivity,
       clearCorruptedNotice,
       resolvedTheme,
@@ -352,6 +572,10 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({
       updateSectionProgress,
       setLastLocation,
       setActivePath,
+      markExercise,
+      removeWrongExercise,
+      markExerciseMastered,
+      reviewWrongExercise,
       logActivity,
       clearCorruptedNotice,
       resolvedTheme,
