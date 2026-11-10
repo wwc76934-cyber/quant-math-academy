@@ -1,0 +1,428 @@
+{
+  "schemaVersion": 1,
+  "chapterId": "c27",
+  "title": "随机微分方程与 Itô 过程",
+  "partId": "part-6",
+  "summary": "本章系统建立随机微分方程（SDE）与Itô过程的完整现代概率分析理论：从连续半鞅分解与漂移、扩散系数的条件矩概率含义出发，给出随机微分方程的严格积分定义与不动点框架；完整证明Picard迭代序列在L2与几乎必然意义下的一致收敛性与强解存在唯一性定理，建立Gronwall不等式矩估计与强弱解概念；应用Itô公式与积分因子法完全求解几何Brown运动、Ornstein-Uhlenbeck均值回复过程与CIR平方根扩散过程，推导平稳分布与Feller边界分类条件；推广一维半鞅微积分至多维Itô公式与相关Brown运动交叉变差；系统呈现资产价格、利率期限结构与Heston随机波动率模型；深入讨论Euler-Maruyama与Milstein数值离散格式的强弱收敛阶；最后建立无穷小生成元算子、Kolmogorov前向（Fokker-Planck）与后向偏微分方程、Feynman-Kac条件期望表示定理及Girsanov等价测度变换定理。",
+  "whyStudy": "随机微分方程（SDE）是现代连续时间量化金融建模的通用核心引擎：资产价格的几何Brown运动是Black-Scholes期权定价的母体；均值回复的OU与CIR过程是固定收益利率期限结构与信用利差的基石；Heston模型更是刻画波动率曲面微笑效应的工业界黄金标准。掌握SDE的Picard存在唯一性、Itô公式微分展开、Feynman-Kac偏微分方程桥梁以及Girsanov风险中性测度变换，是从数理统计迈向衍生品定价、量化做市与连续时间动态对冲的绝对关键纽带。",
+  "prerequisites": [
+    "c02-s5",
+    "c11-s2",
+    "c12-s4",
+    "c25-s1",
+    "c25-s2",
+    "c26-s1",
+    "c26-s2",
+    "c26-s4",
+    "c26-s5"
+  ],
+  "metadataStatus": "reviewed",
+  "reviewed": true,
+  "sections": {
+    "c27-s1": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "Itô过程",
+        "随机微分方程",
+        "漂移系数",
+        "扩散系数",
+        "二阶变差"
+      ],
+      "coreConcepts": [
+        "定义27.1式(27.1)Itô过程与有限变差及连续局部鞅的半鞅正交分解",
+        "二次变差表达式[X]_t=int sigma_s^2 ds与二阶变差高频可估计性",
+        "漂移与扩散系数的条件矩瞬时变化率与L1极限Lebesgue微分定理证明",
+        "定义27.2式(27.2)SDE的严格积分方程定义与解的路径不可区分性",
+        "定理27.3式(27.3)-(27.4)一维Itô公式启发式推导与Taylor展开余项控制"
+      ],
+      "applications": [
+        "连续时间金融资产价格动态瞬时期望收益与瞬时方差率设定",
+        "量化高频交易微观结构中二次变差与已实现波动率的非参数计算"
+      ],
+      "prerequisites": [
+        {
+          "id": "c25-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c26-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c26-s4",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c27-s2",
+        "c27-s3",
+        "c27-s4"
+      ],
+      "learningObjective": "掌握Itô过程定义与半鞅分解，理解漂移和扩散系数的条件矩物理意义，掌握SDE严格积分定义与一维Itô公式展开。",
+      "keyFormulas": [
+        "c27-eq-27.1",
+        "c27-eq-27.2",
+        "c27-eq-27.3",
+        "c27-eq-27.4"
+      ],
+      "rationale": "本节建立定义27.1式(27.1)Itô过程与连续半鞅分解，证明注记漂移与扩散系数的条件均值与方差变差极限率，建立定义27.2式(27.2)SDE严格积分等式，给出定理27.3式(27.3)-(27.4)Itô公式与Taylor展开启发式推导。奠定全章SDE积分定义与计算微积分基础，属P0核心起点与高频考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c27-s2": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 55,
+      "examFrequency": "high",
+      "tags": [
+        "Lipschitz条件",
+        "线性增长条件",
+        "Gronwall引理",
+        "Picard迭代",
+        "强解与弱解"
+      ],
+      "coreConcepts": [
+        "定义27.4式(27.8)Lipschitz条件与线性增长条件的双重作用与反例剖析",
+        "引理27.5式(27.9)Gronwall不等式积分因子的严格证明与常用变体",
+        "定理27.6强解存在唯一性：Picard迭代式(27.10)构造、单纯形阶乘衰减与一致矩界",
+        "应用Doob极大不等式与Itô等距证明解在L2和几乎必然意义下的收敛与初值连续依赖",
+        "定义27.7强解、弱解、路径唯一性与依律唯一性辨析及Yamada-Watanabe定理"
+      ],
+      "applications": [
+        "验证衍生品定价连续时间模型解的全局存在性与防范有限时间爆破",
+        "量化对冲算法中资产路径对初值敏感度与连续数值稳定性的理论保障"
+      ],
+      "prerequisites": [
+        {
+          "id": "c02-s5",
+          "strength": "required"
+        },
+        {
+          "id": "c25-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c27-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c27-s1",
+        "c27-s3",
+        "c27-s7"
+      ],
+      "learningObjective": "深刻掌握Lipschitz与线性增长条件的作用机制，熟练推导Gronwall不等式，完整掌握Picard迭代证明SDE强解存在唯一性的方法。",
+      "keyFormulas": [
+        "c27-eq-27.8",
+        "c27-eq-27.9",
+        "c27-eq-27.10"
+      ],
+      "rationale": "本节建立定义27.4式(27.8)Lipschitz与线性增长条件，严格证明引理27.5式(27.9)Gronwall不等式，在Doob极大不等式与Itô等距下完整证明定理27.6式(27.10)Picard迭代强解存在唯一性与连续依赖性，辨析定义27.7强解弱解与Yamada-Watanabe定理。SDE数理存在性基石，属P0核心考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c27-s3": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "几何Brown",
+        "OU过程",
+        "CIR过程",
+        "Feller条件",
+        "积分因子法"
+      ],
+      "coreConcepts": [
+        "命题27.8式(27.11)几何Brown运动显式对数正态解与式(27.12)矩与方差公式",
+        "波动率拖累1/2 sigma^2的Itô修正来源与离散二阶复合极限机制",
+        "命题27.9式(27.13)Ornstein-Uhlenbeck过程积分因子法求解与均值方差公式",
+        "式(27.14)OU过程指数衰减自协方差函数与平稳双边积分表示",
+        "CIR平方根扩散模型式(27.15)矩递推求解与尺度函数导出Feller非负条件2kappa theta >= xi^2"
+      ],
+      "applications": [
+        "Black-Scholes对数正态股票价格动力学模拟与多期复利几何收益估算",
+        "统计套利配对交易价差均值回复时间与Vasicek/CIR利率期限结构建模"
+      ],
+      "prerequisites": [
+        {
+          "id": "c26-s5",
+          "strength": "required"
+        },
+        {
+          "id": "c27-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c27-s2",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c27-s4",
+        "c27-s6"
+      ],
+      "learningObjective": "熟练求解几何Brown运动与OU过程，深刻掌握波动率拖累的Itô修正，掌握CIR过程矩递推与Feller非负边界判定。",
+      "keyFormulas": [
+        "c27-eq-27.11",
+        "c27-eq-27.12",
+        "c27-eq-27.13",
+        "c27-eq-27.14"
+      ],
+      "rationale": "本节利用对数换元证明命题27.8式(27.11)-(27.12)GBM显式解对数正态矩与波动率拖累，用积分因子法证明命题27.9式(27.13)-(27.14)OU均值回复过程解与平稳协方差函数，利用尺度函数推导CIR过程式(27.15)矩递推与Feller非负条件。量化经典三大SDE显式求解母体，属P0最高频考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c27-s4": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "Itô公式",
+        "半鞅",
+        "乘积法则",
+        "商法则",
+        "随机指数"
+      ],
+      "coreConcepts": [
+        "定理27.10式(27.16)一维连续半鞅Itô公式及其局部化紧致逼近证明",
+        "式(27.17)时间依赖二元函数Itô公式df(t,X_t)与二阶变差偏导展开",
+        "命题27.11式(27.18)连续半鞅乘积法则与式(27.19)商法则的协变差修正项",
+        "定理27.12式(27.22)Doléans-Dade随机指数与指数鞅结构及其均值恒等于1证明"
+      ],
+      "applications": [
+        "衍生品Black-Scholes偏微分方程中由二次变差诱导的Gamma凸性漂移补偿计算",
+        "多资产折现组合价值商过程动态风险对冲比率求解"
+      ],
+      "prerequisites": [
+        {
+          "id": "c26-s5",
+          "strength": "required"
+        },
+        {
+          "id": "c27-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c27-s3",
+        "c27-s5",
+        "c27-s8"
+      ],
+      "learningObjective": "熟练掌握一维与含时Itô公式的严格证明要点，熟练运用乘积法则、商法则与随机指数求解半鞅变换。",
+      "keyFormulas": [
+        "c27-eq-27.16",
+        "c27-eq-27.17",
+        "c27-eq-27.18",
+        "c27-eq-27.22"
+      ],
+      "rationale": "本节严格证明定理27.10式(27.16)-(27.17)连续半鞅一维与含时Itô公式，证明命题27.11式(27.18)-(27.19)乘积法则与商法则协变差修正，严格证明定理27.12式(27.22)随机指数Doléans-Dade鞅解与矩性质。连续随机微积分通用运算规则与鞅变换中枢，属P0必考核心点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c27-s5": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "相关Brown",
+        "二次协变差",
+        "多维Itô",
+        "多维乘积",
+        "协方差结构"
+      ],
+      "coreConcepts": [
+        "定义27.13式(27.23)相关Brown运动构造与二次协变差d[W^i,W^j]_t=rho_ij dt",
+        "定理27.14式(27.24)多维Itô公式与Hessian矩阵二次变差双重和展开",
+        "命题27.15式(27.25)多维内积乘积法则及其极化恒等式证明",
+        "例27.7两个相关几何Brown运动乘积过程的漂移交叉变差rho sigma_1 sigma_2修正"
+      ],
+      "applications": [
+        "多资产组合整体收益与风险暴露中跨资产交叉相关项的动态修正",
+        "多因子连续时间扩散模型中的Cholesky分解与正交因子驱动构造"
+      ],
+      "prerequisites": [
+        {
+          "id": "c04-s4",
+          "strength": "required"
+        },
+        {
+          "id": "c27-s4",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c27-s4",
+        "c27-s6"
+      ],
+      "learningObjective": "掌握相关Brown运动的二次协变差结构，熟练推导多维Itô公式与多维半鞅乘积法则，理解跨因子相关性对系统漂移的代数贡献。",
+      "keyFormulas": [
+        "c27-eq-27.23",
+        "c27-eq-27.24",
+        "c27-eq-27.25"
+      ],
+      "rationale": "本节建立定义27.13式(27.23)相关Brown运动与二次协变差d[W^i,W^j]_t=rho_ij dt，严格证明定理27.14式(27.24)多维Itô公式与Hessian二次变差矩阵补偿，证明命题27.15式(27.25)多维内积乘积法则，在例27.7中推导资产乘积漂移相关修正。多资产连续建模的理论基石，属P0核心高频考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c27-s6": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 45,
+      "examFrequency": "high",
+      "tags": [
+        "Vasicek模型",
+        "CIR模型",
+        "Heston模型",
+        "风险中性测度",
+        "波动率微笑"
+      ],
+      "coreConcepts": [
+        "式(27.26)常数参数资产价格与无风险银行账户连续时间扩散模型",
+        "式(27.27)Vasicek利率模型的高斯均值回复与负利率缺陷剖析",
+        "式(27.28)CIR平方根利率扩散模型的非负保持与非中心卡方条件分布",
+        "式(27.29)Heston随机方差模型：方差CIR扩散、杠杆负相关系数rho与波动率微笑机制",
+        "真实测度P与风险中性测度Q下的漂移改写逻辑与等价鞅测度入口"
+      ],
+      "applications": [
+        "利率互换、国债期货与固定收益衍生品期限结构曲线校准",
+        "股指期权隐含波动率曲面（IV Surface）的Heston随机波动率参数标定"
+      ],
+      "prerequisites": [
+        {
+          "id": "c27-s3",
+          "strength": "required"
+        },
+        {
+          "id": "c27-s5",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c27-s3",
+        "c27-s7",
+        "c27-s8"
+      ],
+      "learningObjective": "掌握量化金融主流SDE模型（Vasicek/CIR/Heston）的数理设定与应用边界，理解真实测度与风险中性测度在漂移设定上的本质差异。",
+      "keyFormulas": [
+        "c27-eq-27.26",
+        "c27-eq-27.27",
+        "c27-eq-27.28",
+        "c27-eq-27.29"
+      ],
+      "rationale": "本节系统建立金融资产连续时间扩散体系：建立式(27.26)股票与无风险银行账户基准，建立式(27.27)Vasicek利率模型与式(27.28)CIR非负平方根扩散，建立式(27.29)Heston随机波动率系统与相关杠杆效应，阐明真实测度与风险中性测度漂移改写。量化资产定价工业界核心构件，属P0核心应用点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c27-s7": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 55,
+      "examFrequency": "high",
+      "tags": [
+        "Euler格式",
+        "Milstein格式",
+        "强收敛",
+        "弱收敛",
+        "数值离散化"
+      ],
+      "coreConcepts": [
+        "定义27.16式(27.30)Euler-Maruyama显式时间离散格式与高斯增量抽样",
+        "定义27.17式(27.31)Milstein格式基于二阶Itô-Taylor展开与多重随机积分修正",
+        "定义27.18式(27.32)强收敛阶（逐路径L2）与弱收敛阶（分布泛函期望）的区别与联系",
+        "定理27.19连续时间插值下Euler-Maruyama格式强收敛阶为0.5与弱收敛阶为1.0的证明",
+        "格点矩一致有界性、网格内位移估计与Gronwall引理在离散误差控制中的应用"
+      ],
+      "applications": [
+        "美式期权与复杂奇异衍生品的Monte Carlo路径离散模拟定价",
+        "高频量化回测模拟器中SDE价格路径生成与步长偏误权衡"
+      ],
+      "prerequisites": [
+        {
+          "id": "c27-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c27-s4",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c27-s2",
+        "c27-s6"
+      ],
+      "learningObjective": "熟练掌握Euler-Maruyama与Milstein数值离散格式，深刻理解强收敛与弱收敛的数学定义，掌握SDE数值格式强半阶收敛性的证明。",
+      "keyFormulas": [
+        "c27-eq-27.30",
+        "c27-eq-27.31",
+        "c27-eq-27.32"
+      ],
+      "rationale": "本节建立定义27.16式(27.30)Euler-Maruyama格式与定义27.17式(27.31)Milstein二阶Itô-Taylor展开格式，给出定义27.18式(27.32)强弱收敛定义，严格证明定理27.19连续插值下Euler格式强收敛阶为0.5与矩控制界。复杂SDE无显式解时数值模拟的理论保障，属P0核心高频考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c27-s8": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 55,
+      "examFrequency": "high",
+      "tags": [
+        "无穷小生成元",
+        "后向方程",
+        "前向方程",
+        "Feynman-Kac",
+        "Girsanov定理"
+      ],
+      "coreConcepts": [
+        "定义27.20式(27.34)无穷小生成元与命题27.21式(27.35)二阶椭圆型偏微分算子表示",
+        "定理27.22式(27.36)Kolmogorov后向PDE终值问题与Markov半群推导",
+        "定理27.23式(27.37)Kolmogorov前向方程（Fokker-Planck）转移密度伴随算子推导",
+        "定理27.24式(27.38)-(27.39)Feynman-Kac定理与式(27.40)贴现局部鞅证明",
+        "Girsanov定理指数鞅测度变换、Novikov条件与漂移变换方程选择"
+      ],
+      "applications": [
+        "通过求解Black-Scholes或局域波动率PDE完成期权数值定价",
+        "衍生品无套利定价中等价鞅测度变换与风险中性漂移调整"
+      ],
+      "prerequisites": [
+        {
+          "id": "c27-s4",
+          "strength": "required"
+        },
+        {
+          "id": "c27-s5",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c27-s4",
+        "c27-s6"
+      ],
+      "learningObjective": "掌握扩散过程无穷小生成元与Kolmogorov正反向方程，熟练推导并应用Feynman-Kac公式，掌握Girsanov测度变换漂移修正原理。",
+      "keyFormulas": [
+        "c27-eq-27.34",
+        "c27-eq-27.35",
+        "c27-eq-27.36",
+        "c27-eq-27.39"
+      ],
+      "rationale": "本节建立定义27.20式(27.34)无穷小生成元与命题27.21式(27.35)微分算子，证明定理27.22式(27.36)Kolmogorov后向PDE与定理27.23前向方程，严格证明定理27.24式(27.38)-(27.39)Feynman-Kac公式，给出Girsanov漂移变换定理。随机分析与偏微分方程纽带，属P0核心压轴点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    }
+  },
+  "reviewedBy": "DSH",
+  "reviewedAt": "2026-11-10"
+}
