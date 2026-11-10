@@ -33,7 +33,7 @@
 - 构建期 `marked` + KaTeX 预渲染；客户端不跑 Markdown/KaTeX
 - 无后端；localStorage 单存储 `qma:store:v1`
 - 路由级代码拆分；首屏 JS gzip ≈75KB
-- 测试：110 Web + 58 内容；`npm audit` 0
+- 测试：113 Web + 58 内容；`npm audit` 0
 
 ## 快速开始
 
