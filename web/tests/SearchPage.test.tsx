@@ -3,6 +3,7 @@ import path from 'node:path';
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { clearGraphCache } from '../src/features/graph/loadGraph';
 import { clearSearchCache } from '../src/features/search/searchEngine';
 import { SearchPage } from '../src/routes/SearchPage';
 
@@ -16,6 +17,7 @@ describe('SearchPage', () => {
   beforeEach(() => {
     localStorage.clear();
     clearSearchCache();
+    clearGraphCache();
     vi.restoreAllMocks();
 
     vi.spyOn(globalThis, 'fetch').mockImplementation(async (url) => {
@@ -40,6 +42,7 @@ describe('SearchPage', () => {
 
   afterEach(() => {
     clearSearchCache();
+    clearGraphCache();
   });
 
   it('renders search input and initial suggestions', async () => {
@@ -171,5 +174,200 @@ describe('SearchPage', () => {
     expect(stats).toHaveTextContent('<script>alert("xss")</script>');
     // Ensure no actual script element was injected into DOM
     expect(document.querySelector('script[src*="xss"], script:not([type])')).toBeNull();
+  });
+
+  it('renders related chips (up to 2, excluding self) when graph has related edges', async () => {
+    const mockGraph = {
+      schemaVersion: 1,
+      stats: {
+        totalNodes: 3,
+        annotatedNodes: 3,
+        unannotatedNodes: 0,
+        prerequisiteEdges: 0,
+        relatedEdges: 4,
+        maxPrerequisiteDepth: 1,
+        hasCycles: false,
+      },
+      nodes: [],
+      nodeMap: {
+        'c01-s2': {
+          id: 'c01-s2',
+          chapterId: 'c01',
+          number: '1.2',
+          title: '证明的基本方法',
+          chapterTitle: '数学语言',
+          difficulty: 'D2',
+          priority: 'P1',
+          annotated: true,
+        },
+        'c01-s3': {
+          id: 'c01-s3',
+          chapterId: 'c01',
+          number: '1.3',
+          title: '集合、函数与确界',
+          chapterTitle: '数学语言',
+          difficulty: 'D1',
+          priority: 'P1',
+          annotated: true,
+        },
+        'c01-s4': {
+          id: 'c01-s4',
+          chapterId: 'c01',
+          number: '1.4',
+          title: '实数完备性',
+          chapterTitle: '数学语言',
+          difficulty: 'D4',
+          priority: 'P3',
+          annotated: true,
+        },
+      },
+      prerequisiteEdges: [],
+      relatedEdges: [
+        { a: 'c01-s1', b: 'c01-s1' }, // self edge (should be excluded)
+        { a: 'c01-s1', b: 'c01-s2' },
+        { a: 'c01-s1', b: 'c01-s3' },
+        { a: 'c01-s1', b: 'c01-s4' }, // 3rd edge (should be limited to max 2)
+      ],
+      incoming: {},
+      ancestors: {},
+      chapterCoverage: [],
+    };
+
+    vi.spyOn(globalThis, 'fetch').mockImplementation(async (url) => {
+      const urlStr = String(url);
+      if (urlStr.includes('index.json')) {
+        return { ok: true, status: 200, json: async () => realDocuments } as Response;
+      }
+      if (urlStr.includes('aliases.json')) {
+        return { ok: true, status: 200, json: async () => realAliases } as Response;
+      }
+      if (urlStr.includes('graph.json')) {
+        return { ok: true, status: 200, json: async () => mockGraph } as Response;
+      }
+      return { ok: false, status: 404 } as Response;
+    });
+
+    render(
+      <MemoryRouter initialEntries={['/search?q=命题']}>
+        <Routes>
+          <Route path="/search" element={<SearchPage />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    await screen.findByRole('status');
+
+    // Chips container should appear
+    const relatedSections = await screen.findAllByLabelText('相关知识点');
+    expect(relatedSections.length).toBeGreaterThan(0);
+    const relatedSection = relatedSections[0];
+
+    // Verify chips: max 2, excluding self
+    const chipLinks = within(relatedSection).getAllByRole('link');
+    expect(chipLinks).toHaveLength(2);
+    expect(chipLinks[0]).toHaveTextContent('相关：1.2 证明的基本方法');
+    expect(chipLinks[0]).toHaveAttribute('href', '/learn/c01#c01-s2');
+    expect(chipLinks[1]).toHaveTextContent('相关：1.3 集合、函数与确界');
+    expect(chipLinks[1]).toHaveAttribute('href', '/learn/c01#c01-s3');
+  });
+
+  it('navigates to /learn/... when a related chip is clicked', async () => {
+    const mockGraph = {
+      schemaVersion: 1,
+      stats: {
+        totalNodes: 1,
+        annotatedNodes: 1,
+        unannotatedNodes: 0,
+        prerequisiteEdges: 0,
+        relatedEdges: 1,
+        maxPrerequisiteDepth: 1,
+        hasCycles: false,
+      },
+      nodes: [],
+      nodeMap: {
+        'c01-s2': {
+          id: 'c01-s2',
+          chapterId: 'c01',
+          number: '1.2',
+          title: '证明的基本方法',
+          chapterTitle: '数学语言',
+          difficulty: 'D2',
+          priority: 'P1',
+          annotated: true,
+        },
+      },
+      prerequisiteEdges: [],
+      relatedEdges: [{ a: 'c01-s1', b: 'c01-s2' }],
+      incoming: {},
+      ancestors: {},
+      chapterCoverage: [],
+    };
+
+    vi.spyOn(globalThis, 'fetch').mockImplementation(async (url) => {
+      const urlStr = String(url);
+      if (urlStr.includes('index.json')) {
+        return { ok: true, status: 200, json: async () => realDocuments } as Response;
+      }
+      if (urlStr.includes('aliases.json')) {
+        return { ok: true, status: 200, json: async () => realAliases } as Response;
+      }
+      if (urlStr.includes('graph.json')) {
+        return { ok: true, status: 200, json: async () => mockGraph } as Response;
+      }
+      return { ok: false, status: 404 } as Response;
+    });
+
+    render(
+      <MemoryRouter initialEntries={['/search?q=命题']}>
+        <Routes>
+          <Route path="/search" element={<SearchPage />} />
+          <Route
+            path="/learn/:chapterId"
+            element={<div data-testid="learn-page">Learn Page Destination</div>}
+          />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    const chips = await screen.findAllByRole('link', { name: '相关：1.2 证明的基本方法' });
+    fireEvent.click(chips[0]);
+
+    expect(await screen.findByTestId('learn-page')).toBeInTheDocument();
+  });
+
+  it('silently ignores graph load failures without showing error or chips while keeping results', async () => {
+    vi.spyOn(globalThis, 'fetch').mockImplementation(async (url) => {
+      const urlStr = String(url);
+      if (urlStr.includes('index.json')) {
+        return { ok: true, status: 200, json: async () => realDocuments } as Response;
+      }
+      if (urlStr.includes('aliases.json')) {
+        return { ok: true, status: 200, json: async () => realAliases } as Response;
+      }
+      if (urlStr.includes('graph.json')) {
+        return { ok: false, status: 500 } as Response;
+      }
+      return { ok: false, status: 404 } as Response;
+    });
+
+    render(
+      <MemoryRouter initialEntries={['/search?q=命题']}>
+        <Routes>
+          <Route path="/search" element={<SearchPage />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    const stats = await screen.findByRole('status');
+    expect(stats).toBeInTheDocument();
+
+    const cards = await screen.findAllByRole('listitem');
+    expect(cards.length).toBeGreaterThan(0);
+
+    // No error alert shown
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+
+    // No related chips shown
+    expect(screen.queryByLabelText('相关知识点')).not.toBeInTheDocument();
   });
 });

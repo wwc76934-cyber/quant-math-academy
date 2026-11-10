@@ -4,6 +4,8 @@ import { DifficultyBadge } from '../components/metadata/DifficultyBadge';
 import { PriorityBadge } from '../components/metadata/PriorityBadge';
 import { Button } from '../components/ui/Button';
 import { DifficultyLevel, PriorityLevel } from '../features/content/types';
+import { loadGraph } from '../features/graph/loadGraph';
+import { GraphNode } from '../features/graph/types';
 import { formatDisplayTitle } from '../lib/format';
 import {
   executeSearch,
@@ -83,6 +85,7 @@ export const SearchPage: React.FC = () => {
   } | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [relatedById, setRelatedById] = useState<Record<string, GraphNode[]>>({});
 
   const inputRef = useRef<HTMLInputElement>(null);
   const resultsRef = useRef<HTMLDivElement>(null);
@@ -235,6 +238,51 @@ export const SearchPage: React.FC = () => {
   useEffect(() => {
     setSelectedIndex(-1);
   }, [debouncedQuery, currentFilters]);
+
+  // Load knowledge graph related edges for results
+  useEffect(() => {
+    if (results.length === 0) {
+      return;
+    }
+
+    let cancelled = false;
+
+    loadGraph()
+      .then((graph) => {
+        if (cancelled) return;
+        const map: Record<string, GraphNode[]> = {};
+        for (const item of results) {
+          const sid = item.sectionId;
+          if (!sid || map[sid]) continue;
+
+          const related: GraphNode[] = [];
+          for (const edge of graph.relatedEdges || []) {
+            let targetId: string | null = null;
+            if (edge.a === sid && edge.b !== sid) {
+              targetId = edge.b;
+            } else if (edge.b === sid && edge.a !== sid) {
+              targetId = edge.a;
+            }
+            if (targetId) {
+              const node = graph.nodeMap?.[targetId];
+              if (node && !related.some((n) => n.id === node.id)) {
+                related.push(node);
+                if (related.length === 2) break;
+              }
+            }
+          }
+          map[sid] = related;
+        }
+        setRelatedById(map);
+      })
+      .catch(() => {
+        // 失败静默，不设置 error
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [results]);
 
   // Keyboard navigation: ArrowUp, ArrowDown, Enter, Esc
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -514,40 +562,56 @@ export const SearchPage: React.FC = () => {
                     const isSelected = selectedIndex === idx;
                     const kindLabel = KIND_NAMES[item.type] || item.type;
                     const badgeClass = `search-badge search-badge--${item.type}`;
+                    const related = item.sectionId ? relatedById[item.sectionId] || [] : [];
 
                     return (
-                      <Link
-                        key={item.id}
-                        id={`result-${item.id}`}
-                        to={`/learn/${item.chapterId}#${item.anchor}`}
-                        className={`search-result-card ${isSelected ? 'is-active' : ''}`}
-                        role="listitem"
-                        tabIndex={0}
-                      >
-                        <div className="search-result-header">
-                          <span className={badgeClass}>{kindLabel}</span>
-                          <span className="search-result-chapter">
-                            {item.chapterId.toUpperCase()}
-                            {item.sectionId ? ` · ${item.sectionId}` : ''}
-                          </span>
-                          {item.difficulty && (
-                            <DifficultyBadge level={item.difficulty as DifficultyLevel} />
-                          )}
-                          {item.priority && (
-                            <PriorityBadge priority={item.priority as PriorityLevel} />
-                          )}
-                        </div>
+                      <div key={item.id} className="search-result-item">
+                        <Link
+                          id={`result-${item.id}`}
+                          to={`/learn/${item.chapterId}#${item.anchor}`}
+                          className={`search-result-card ${isSelected ? 'is-active' : ''}`}
+                          role="listitem"
+                          tabIndex={0}
+                        >
+                          <div className="search-result-header">
+                            <span className={badgeClass}>{kindLabel}</span>
+                            <span className="search-result-chapter">
+                              {item.chapterId.toUpperCase()}
+                              {item.sectionId ? ` · ${item.sectionId}` : ''}
+                            </span>
+                            {item.difficulty && (
+                              <DifficultyBadge level={item.difficulty as DifficultyLevel} />
+                            )}
+                            {item.priority && (
+                              <PriorityBadge priority={item.priority as PriorityLevel} />
+                            )}
+                          </div>
 
-                        <h2 className="search-result-title">
-                          {renderHighlighted(formatDisplayTitle(item.title), item.matchedTerms)}
-                        </h2>
+                          <h2 className="search-result-title">
+                            {renderHighlighted(formatDisplayTitle(item.title), item.matchedTerms)}
+                          </h2>
 
-                        {item.snippet && (
-                          <p className="search-result-snippet">
-                            {renderHighlighted(item.snippet, item.matchedTerms)}
-                          </p>
+                          {item.snippet && (
+                            <p className="search-result-snippet">
+                              {renderHighlighted(item.snippet, item.matchedTerms)}
+                            </p>
+                          )}
+                        </Link>
+
+                        {related.length > 0 && (
+                          <div className="search-related" aria-label="相关知识点">
+                            {related.map((n) => (
+                              <Link
+                                key={n.id}
+                                to={`/learn/${n.chapterId}#${n.id}`}
+                                className="search-related-chip"
+                              >
+                                相关：{n.number} {n.title}
+                              </Link>
+                            ))}
+                          </div>
                         )}
-                      </Link>
+                      </div>
                     );
                   })}
                 </div>
