@@ -124,7 +124,7 @@
     },
     "c26-s3": {
       "difficulty": "D2",
-      "priority": "P0",
+      "priority": "P1",
       "minutes": 45,
       "examFrequency": "high",
       "tags": [
@@ -163,7 +163,7 @@
       "keyFormulas": [
         "c26-eq-26.14"
       ],
-      "rationale": "本节剖析Riemann-Stieltjes积分在无界变差路径下的失效，严格证明式(26.14)左右端点Riemann和收敛至(B_T^2-T)/2与(B_T^2+T)/2并差出二次变差T，阐述左端点Ito约定保证适应可料、鞅性与L2等距的核心动机，推导中点Stratonovich积分与转换公式。奠定随机积分概念动机，属P0核心考点。",
+      "rationale": "本节说明随机积分的构造动机、简单过程积分与可积类，为下一节 Itô 积分构造做铺垫；属理解性内容，核心构造在下一节，按手册校准为 P1。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"
@@ -276,7 +276,7 @@
     },
     "c26-s6": {
       "difficulty": "D2",
-      "priority": "P0",
+      "priority": "P1",
       "minutes": 50,
       "examFrequency": "high",
       "tags": [
@@ -316,14 +316,14 @@
         "c26-eq-26.28",
         "c26-eq-26.29"
       ],
-      "rationale": "本节应用Itô公式严格推导式(26.28)几何Brown运动正值解与式(26.29)对数正态各阶矩，推导随机指数鞅性并证明Novikov充要条件，证明Tanaka公式绝对值次微分展开与局部时占用时间恒等式，证明多维Levy连续局部鞅特征刻画定理。汇集连续时间随机分析核心结论，属P0高频核心点。",
+      "rationale": "本节给出 Itô 公式导出的积分恒等式、矩公式与指数鞅等重要结果，是随机分析常用工具；理解结论与适用条件即可，具体推导可查表，按手册校准为 P1。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"
     },
     "c26-s7": {
       "difficulty": "D2",
-      "priority": "P0",
+      "priority": "P1",
       "minutes": 50,
       "examFrequency": "high",
       "tags": [
@@ -372,7 +372,7 @@
         "c26-eq-26.32",
         "c26-eq-26.34"
       ],
-      "rationale": "本节系统呈现连续时间随机分析在量化实战中的落地：推导式(26.30)对数价格模型与漂移Itô修正，证明定理26.19式(26.31)高频已实现方差依概率收敛于积分方差，给出式(26.32)多资产增长率归因，证明命题26.20式(26.33)-(26.34)离散对冲Gamma误差递推。量化定价与对冲的实战基石，属P0核心压轴点。",
+      "rationale": "本节把 Brown 运动与 Itô 工具用于量化定价、风险与对冲，属应用层；依赖前文构造，需理解模型假设与结论，按手册校准为 P1。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"
