@@ -1,7 +1,7 @@
 # Phase 6 开源准备审计（未发布）
 
 - 日期：2026-11-10
-- 状态：**准备审计完成；公开仓库/发布未执行**
+- 状态：**用户已确认代码 MIT / 正文保留所有权利 / 公开仓库 + Pages；因本机无凭证，尚未推送/部署**
 - 前置：全书 34 章/219 节覆盖完成，D/P 主校准 P0 56.6%、P2+P3 10.0%；110 Web + 58 内容测试通过。
 
 ## 1. 技术就绪度
@@ -87,9 +87,9 @@ KaTeX 已升级到 0.19.1，React Router 已升级到 7.18.5；根与 Web 的 `n
 - [ ] 再跑 build、110+58 测试、4 视口截图、打印 PDF
 - [ ] 确认无密钥/隐私数据/本地缓存进入仓库
 
-## 7. 许可方案
+## 7. 许可方案（已定）
 
-供选择：`OPEN_SOURCE_OPTIONS.md`（A 代码 MIT + 内容 CC BY-NC-SA；B 代码 Apache-2.0 + 内容保留；C 完全开放；D 私有）。不构成法律意见。
+用户已选择：**代码 MIT；教材正文/解答/生成内容 All rights reserved；公开仓库 + GitHub Pages**。文件见 `LICENSE`、`CONTENT_NOTICE.md`、`THIRD_PARTY_NOTICES.md`，部署见 `DEPLOY_GITHUB_PAGES.md`。
 
 ## 8. 需要用户决策
 
