@@ -47,7 +47,7 @@
 
 | 项 | 结果 |
 |---|---|
-| Web 测试 | 113 / 113 |
+| Web 测试 | 117 / 117 |
 | 内容测试 | 58 / 58 |
 | 构建 | 0 error；主 JS gzip 75.29KB |
 | audit | 根/Web 0 vulnerabilities |
