@@ -121,7 +121,7 @@
     },
     "c32-s3": {
       "difficulty": "D3",
-      "priority": "P0",
+      "priority": "P1",
       "minutes": 55,
       "examFrequency": "high",
       "tags": [
@@ -169,14 +169,14 @@
         "c32-eq-32.13",
         "c32-eq-32.14"
       ],
-      "rationale": "本节建立定理32.8式(32.10)-(32.11)GEV极值类型定理与Fréchet/Gumbel/Weibull三大分类，严格推导式(32.12)稀有超阈值Poisson计数极限与式(32.13)GPD，严格证明定理32.9式(32.14)超阈值条件分布向GPD收敛与尺度线性变换，在例32.3验证条件外推。极值统计第一大理论基石，属P0核心高频考点。",
+      "rationale": "本节证明 GEV 三类型与 Poisson 超阈值极限，给出 Pickands-Balkema-de Haan 与 GPD 阈值稳定性；EVT 方向性强，按手册校准为 P1。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"
     },
     "c32-s4": {
       "difficulty": "D3",
-      "priority": "P0",
+      "priority": "P1",
       "minutes": 50,
       "examFrequency": "high",
       "tags": [
@@ -223,14 +223,14 @@
         "c32-eq-32.18",
         "c32-eq-32.19"
       ],
-      "rationale": "本节建立定义32.10式(32.15)-(32.16)似然函数，证明定理32.11式(32.17)GPD偏导得分方程，推导式(32.18)平均超出函数线性检验与阈值稳定性诊断，严格证明定理32.12式(32.19)在xi>-1/2下的Fisher信息逆矩阵与渐近正态方差，给出矩存在条件m xi<1。极值参数辨识与推断统计框架，属P0核心高频考点。",
+      "rationale": "本节推导 GPD 得分方程、平均超出函数与 Fisher 信息，并给出渐近正态方差；属极值参数估计工具，按手册校准为 P1。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"
     },
     "c32-s5": {
       "difficulty": "D3",
-      "priority": "P0",
+      "priority": "P1",
       "minutes": 55,
       "examFrequency": "high",
       "tags": [
@@ -279,14 +279,14 @@
         "c32-eq-32.26",
         "c32-eq-32.27"
       ],
-      "rationale": "本节严格证明定理32.13式(32.20)-(32.21)GPD高分位VaR与ES解析外推公式，建立命题32.14式(32.22)半参数似然分解，在例32.4比较历史模拟缺陷，严格证明定理32.16式(32.25)-(32.27)独立重尾多期风险标度h^xi律与超根号发散，在例32.5对比正态倍数。极值量化风控实操核心计算链，属P0必考点。",
+      "rationale": "本节给出 GPD 高分位 VaR/ES 外推、半参数似然与重尾多期 h^xi 标度；属尾部风险应用，按手册校准为 P1。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"
     },
     "c32-s6": {
       "difficulty": "D3",
-      "priority": "P0",
+      "priority": "P1",
       "minutes": 55,
       "examFrequency": "high",
       "tags": [
@@ -338,16 +338,16 @@
         "c32-eq-32.31",
         "c32-eq-32.32"
       ],
-      "rationale": "本节推导定理32.17式(32.29)正态组合VaR/ES与定理32.18式(32.30)厚尾椭圆标度，利用齐次性严格证明定理32.19式(32.31)边际与成分风险Euler分解并在例32.7验算贡献，严格证明定理32.20式(32.32)生存Copula上尾相依系数与组合极端和夹界。组合尾部相依与风险归因数学枢纽，属P0最高频考点。",
+      "rationale": "本节推导正态/椭圆组合 VaR/ES、Euler 成分风险与 Copula 上尾夹界；属组合风险归因，按手册校准为 P1。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"
     },
     "c32-s7": {
       "difficulty": "D3",
-      "priority": "P0",
+      "priority": "P2",
       "minutes": 55,
-      "examFrequency": "high",
+      "examFrequency": "medium",
       "tags": [
         "监管资本",
         "FRTB",
@@ -394,7 +394,7 @@
       ],
       "learningObjective": "掌握FRTB监管资本转型背景、Kupiec与Christoffersen似然比回测检验、逆压力测试变分求导与等风险贡献凸优化。",
       "keyFormulas": [],
-      "rationale": "本节系统落地监管与风控体系：阐明FRTB采用ES替代VaR的公理化依据，建立Kupiec无条件与Christoffersen独立性卡方检验并在例32.8完成马氏转移诊断，推导相对熵压力测度与最小马氏逆压力闭式，严格证明风险预算等风险贡献的对数凸规划唯一存在性，构建Wasserstein分布鲁棒优化。量化风控实战终极闭环，属P0核心实战点。",
+      "rationale": "本节覆盖 FRTB、Kupiec/Christoffersen 回测、逆压力测试与风险预算；属监管与实践应用，按手册校准为 P2，考频 medium。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"

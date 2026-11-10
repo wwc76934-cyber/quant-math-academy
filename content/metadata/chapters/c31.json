@@ -72,7 +72,7 @@
     },
     "c31-s2": {
       "difficulty": "D2",
-      "priority": "P0",
+      "priority": "P1",
       "minutes": 45,
       "examFrequency": "high",
       "tags": [
@@ -116,7 +116,7 @@
       "keyFormulas": [
         "c31-eq-31.8"
       ],
-      "rationale": "本节严格证明定理31.2主成分在正交约束下的方差最大化性质，建立式(31.8)前K主成分累计解释方差比例EVR与SVD对应关系，剖析协方差与相关矩阵PCA的量纲差异，在例31.2中求解等权与多空特征方向。统计因子提取与降维的核心数学工具，属P0必考高频考点。",
+      "rationale": "本节证明主成分正交方差最大化，给出累计解释方差与 SVD 对应及量纲影响；PCA 是重要降维工具但可由 SVD 实现，按手册校准为 P1。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"
@@ -177,7 +177,7 @@
     },
     "c31-s4": {
       "difficulty": "D2",
-      "priority": "P0",
+      "priority": "P1",
       "minutes": 50,
       "examFrequency": "high",
       "tags": [
@@ -225,14 +225,14 @@
         "c31-eq-31.15",
         "c31-eq-31.16"
       ],
-      "rationale": "本节建立式(31.12)ICIR定义与式(31.13)独立t统计量，推导式(31.14)弱平稳自协方差求和展开与式(31.15)Newey-West HAC长期方差估计，导出式(31.16)AR(1)有效样本量并在例31.4精算自相关下的t值压缩。因子时间序列推断与防止虚假显著的核心，属P0高频考点。",
+      "rationale": "本节建立 ICIR、IC 自协方差展开、Newey-West 长期方差与 AR(1) 有效样本量；属因子时序推断工具，按手册校准为 P1。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"
     },
     "c31-s5": {
       "difficulty": "D2",
-      "priority": "P0",
+      "priority": "P1",
       "minutes": 45,
       "examFrequency": "high",
       "tags": [
@@ -279,7 +279,7 @@
         "c31-eq-31.18",
         "c31-eq-31.19"
       ],
-      "rationale": "本节将因子分组刻画为次序统计量上的组合构造，建立式(31.17)多空收益与式(31.18)单边换手率，推导式(31.19)扣除线性冲击成本的净收益模型并在例31.5计算基点损耗，剖析重叠持有期的机械自相关与HAC修正。因子向实盘组合收益转化的核心链路，属P0核心应用点。",
+      "rationale": "本节把因子分组为组合，给出多空收益、单边换手率、线性成本净收益与重叠期 HAC 修正；属回测到实盘的应用链路，按手册校准为 P1。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"
@@ -340,9 +340,9 @@
     },
     "c31-s7": {
       "difficulty": "D2",
-      "priority": "P0",
+      "priority": "P2",
       "minutes": 45,
-      "examFrequency": "high",
+      "examFrequency": "medium",
       "tags": [
         "因子体系",
         "增量信息",
@@ -391,7 +391,7 @@
       ],
       "learningObjective": "掌握严谨因子研究的七步闭环数学结构，区分统计增量信息、经济可交易性与样本外泛化能力。",
       "keyFormulas": [],
-      "rationale": "本节系统整合因子研究数学结构，建立涵盖严格信息集定义、增量正交投影、度量泛函分离、相容长期方差估计、多重比较校准、purge嵌套时序验证及交易摩擦检验的七步闭环体系，厘清统计显著与经济可实现的边界。因子量化研发端到端验证方法论，属P0核心综合实战点。",
+      "rationale": "本节整合因子研究七步闭环：信息集、增量投影、长期方差、多重比较、purged 验证与交易摩擦；属方法论综述，按手册校准为 P2，考频 medium。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"
