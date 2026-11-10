@@ -119,6 +119,7 @@ export const PathsPage: React.FC = () => {
   return (
     <main
       className="content paths-page"
+      id="main-content"
       style={{
         padding: '36px 24px 64px',
         maxWidth: '1040px',
