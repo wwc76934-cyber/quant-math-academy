@@ -219,7 +219,6 @@ export const PathDetailPage: React.FC = () => {
       </Link>
 
       <PageHeader
-        eyebrow={pathItem.id === 'free' ? '自由阅读' : `路径 ${pathItem.code}`}
         title={pathItem.title}
         lede={pathItem.description}
         actions={
@@ -234,6 +233,10 @@ export const PathDetailPage: React.FC = () => {
       />
 
       <dl className="path-detail__facts">
+        <div>
+          <dt>路径</dt>
+          <dd>{pathItem.id === 'free' ? '自由阅读' : pathItem.code}</dd>
+        </div>
         <div>
           <dt>周期</dt>
           <dd>{pathItem.weeks > 0 ? `${pathItem.weeks} 周` : '不限时间'}</dd>

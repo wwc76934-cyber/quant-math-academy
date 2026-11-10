@@ -161,8 +161,8 @@ export const PracticeSessionPage: React.FC = () => {
 
       <header className="session-head">
         <div>
-          <div className="page-header__eyebrow">第 {chapter?.number || chapterId} 章 · 习题</div>
           <h1>{chapter ? formatDisplayTitle(chapter.title) : chapterId}</h1>
+          <div className="session-head__sub">第 {chapter?.number || chapterId} 章习题</div>
         </div>
         <div className="session-head__count" aria-label={`第 ${currentIndex + 1} 题，共 ${exercises.length} 题`}>
           {currentIndex + 1} / {exercises.length}
@@ -201,7 +201,7 @@ export const PracticeSessionPage: React.FC = () => {
               onClick={() => handleMark(true)}
               aria-pressed={isCorrect}
             >
-              {isCorrect ? '✓ 已做对' : '标记做对'}
+              {isCorrect ? '已做对' : '标记做对'}
             </Button>
             <Button
               variant={isWrong ? 'secondary' : 'ghost'}
@@ -209,7 +209,7 @@ export const PracticeSessionPage: React.FC = () => {
               onClick={() => handleMark(false)}
               aria-pressed={isWrong}
             >
-              {isWrong ? '✕ 已在错题本' : '加入错题'}
+              {isWrong ? '已在错题本' : '加入错题'}
             </Button>
           </div>
         </div>

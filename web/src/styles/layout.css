@@ -1,17 +1,15 @@
-/* Quant Math Academy - Layout Styles */
+/* Quant Math Academy — layout */
 
-/* Skip Link */
 .skip-link {
   position: absolute;
   top: -9999px;
   left: 16px;
   z-index: 1000;
-  padding: 8px 16px;
+  padding: 8px 14px;
   background: var(--ink);
   color: var(--bg);
   border-radius: var(--radius-md);
-  font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: var(--text-label);
   font-weight: 500;
   text-decoration: none;
 }
@@ -19,21 +17,22 @@
   top: 12px;
 }
 
-/* Shell */
 .shell {
-  max-width: 1440px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 32px;
   width: 100%;
 }
 
-/* App Header / Topbar */
+/* ---------- Top bar ---------- */
 .topbar {
   position: sticky;
   top: 0;
   z-index: 50;
-  height: 56px;
-  background: var(--bg);
+  height: var(--topbar-h);
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: saturate(1.4) blur(10px);
+  -webkit-backdrop-filter: saturate(1.4) blur(10px);
   border-bottom: 1px solid var(--line);
 }
 
@@ -44,14 +43,13 @@
   padding: 0 32px;
   display: flex;
   align-items: center;
-  gap: 40px;
+  gap: 36px;
 }
 
 .brand {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  line-height: 1.1;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   color: var(--ink);
   text-decoration: none;
 }
@@ -59,54 +57,62 @@
   text-decoration: none;
   color: var(--ink);
 }
+.brand::before {
+  /* Brand mark: a summation sign set in the math face. */
+  content: "\2211";
+  display: inline-grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-sm);
+  background: var(--ink);
+  color: var(--bg);
+  font-family: var(--font-math);
+  font-size: 17px;
+  line-height: 1;
+}
 .brand__cn {
-  font-family: var(--font-serif);
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 600;
   letter-spacing: 0.02em;
 }
 .brand__en {
-  font-family: var(--font-sans);
-  font-size: 9px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--ink-muted);
-  margin-top: 3px;
+  display: none;
 }
 
 .nav {
   display: flex;
   align-items: center;
-  gap: 26px;
-  margin-left: 8px;
+  gap: 4px;
 }
 .nav a {
-  font-family: var(--font-sans);
-  font-size: 14px;
-  color: var(--ink-secondary);
-  height: 56px;
+  font-size: var(--text-ui);
+  color: var(--ink-muted);
+  height: 32px;
+  padding: 0 12px;
   display: inline-flex;
   align-items: center;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -1px;
+  border-radius: var(--radius-md);
   text-decoration: none;
-  transition: color 0.14s ease, border-color 0.14s ease;
+  transition: color 0.14s ease, background 0.14s ease;
 }
 .nav a:hover {
   color: var(--ink);
+  background: var(--bg-subtle);
   text-decoration: none;
 }
 .nav a.is-active,
 .nav a[aria-current="page"] {
   color: var(--ink);
-  border-bottom-color: var(--accent);
+  font-weight: 500;
+  background: var(--bg-subtle);
 }
 
 .topbar__actions {
   margin-left: auto;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .search-btn {
@@ -114,27 +120,31 @@
   align-items: center;
   gap: 8px;
   height: 32px;
-  padding: 0 10px 0 9px;
+  width: 220px;
+  padding: 0 8px 0 10px;
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
   background: var(--bg-elevated);
-  color: var(--ink-muted);
-  font-family: var(--font-sans);
-  font-size: 12px;
+  color: var(--ink-faint);
+  font-size: var(--text-label);
   cursor: pointer;
   transition: border-color 0.14s ease, color 0.14s ease;
 }
 .search-btn:hover {
   border-color: var(--line-strong);
-  color: var(--ink);
+  color: var(--ink-muted);
+}
+.search-btn .search-label {
+  flex: 1;
+  text-align: left;
 }
 .search-btn kbd {
-  font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: 11px;
   color: var(--ink-faint);
   border: 1px solid var(--line);
-  border-radius: 3px;
-  padding: 1px 4px;
+  border-radius: 4px;
+  padding: 0 5px;
+  line-height: 18px;
 }
 
 .icon-btn {
@@ -146,7 +156,7 @@
   border: 0;
   border-radius: var(--radius-md);
   background: transparent;
-  color: var(--ink-secondary);
+  color: var(--ink-muted);
   cursor: pointer;
   transition: background 0.14s ease, color 0.14s ease;
 }
@@ -154,48 +164,50 @@
   background: var(--bg-subtle);
   color: var(--ink);
 }
+.icon-btn[aria-pressed="true"] {
+  color: var(--accent);
+}
 
 .mobile-menu-trigger {
   display: none;
 }
 
-/* App Footer */
+/* ---------- Footer ---------- */
 .app-footer {
   border-top: 1px solid var(--line);
-  background: var(--bg);
-  padding: 40px 0 56px;
-  margin-top: 64px;
+  padding: 32px 0 48px;
+  margin-top: 80px;
 }
 .app-footer__inner {
-  max-width: 1440px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 32px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 16px 32px;
 }
 .app-footer__info {
-  font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: var(--text-meta);
   color: var(--ink-muted);
-  line-height: 1.6;
+  line-height: 1.7;
+}
+.app-footer__info > div:first-child {
+  color: var(--ink-secondary);
+  font-weight: 500;
+}
+.app-footer__sub {
+  margin-top: 2px;
 }
 .app-footer__links {
   display: flex;
-  gap: 20px;
-  font-family: var(--font-sans);
-  font-size: 12px;
-}
-.app-footer__sub {
-  margin-top: 4px;
-}
-.app-footer__links {
   flex-wrap: wrap;
+  gap: 6px 20px;
+  font-size: var(--text-meta);
 }
 .app-footer__links a {
-  color: var(--ink-secondary);
+  color: var(--ink-muted);
   text-decoration: none;
 }
 .app-footer__links a:hover {
@@ -203,39 +215,42 @@
   text-decoration: underline;
 }
 
-/* Reader Grid Structure (Prepared for T05) */
+/* ---------- Reader frame ---------- */
 .reader-top {
   border-bottom: 1px solid var(--line);
-  background: var(--bg);
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   position: sticky;
-  top: 56px;
+  top: var(--topbar-h);
   z-index: 40;
 }
 .reader-top__inner {
   max-width: 1440px;
   margin: 0 auto;
   padding: 0 32px;
-  height: 44px;
+  height: var(--readerbar-h);
   display: flex;
   align-items: center;
   gap: 16px;
+  position: relative;
 }
 .reader {
-  padding: 40px 0 96px;
+  padding: 48px 0 112px;
 }
 .reader-grid {
   max-width: 1440px;
   margin: 0 auto;
   padding: 0 32px;
   display: grid;
-  grid-template-columns: 264px minmax(0, 1fr) 272px;
-  gap: 48px;
+  grid-template-columns: 248px minmax(0, 1fr) 248px;
+  gap: 56px;
   align-items: start;
 }
 .book-toc {
   position: sticky;
-  top: 116px;
-  max-height: calc(100vh - 136px);
+  top: calc(var(--topbar-h) + var(--readerbar-h) + 24px);
+  max-height: calc(100vh - var(--topbar-h) - var(--readerbar-h) - 48px);
   overflow-y: auto;
   padding-right: 8px;
   scrollbar-width: thin;
@@ -248,28 +263,37 @@
 }
 .rail {
   position: sticky;
-  top: 116px;
-  max-height: calc(100vh - 136px);
+  top: calc(var(--topbar-h) + var(--readerbar-h) + 24px);
+  max-height: calc(100vh - var(--topbar-h) - var(--readerbar-h) - 48px);
   overflow-y: auto;
   padding-left: 4px;
   scrollbar-width: thin;
 }
 
-/* Responsive Layout */
+/* ---------- Responsive ---------- */
 @media (max-width: 1279px) {
   .reader-grid {
-    grid-template-columns: 232px minmax(0, 1fr);
-    gap: 40px;
+    grid-template-columns: 228px minmax(0, 1fr);
+    gap: 44px;
   }
   .rail {
     display: none;
   }
 }
 
+@media (max-width: 1100px) {
+  .search-btn {
+    width: auto;
+  }
+  .search-btn .search-label {
+    flex: none;
+  }
+}
+
 @media (max-width: 1023px) {
   .topbar__inner {
-    gap: 16px;
-    padding: 0 20px;
+    gap: 12px;
+    padding: 0 16px;
   }
   .nav {
     display: none;
@@ -281,7 +305,11 @@
     display: none;
   }
   .search-btn {
-    padding: 0 9px;
+    width: 32px;
+    padding: 0;
+    justify-content: center;
+    border-color: transparent;
+    background: transparent;
   }
   .search-btn kbd {
     display: none;
@@ -306,9 +334,11 @@
     padding-left: 20px;
     padding-right: 20px;
   }
+  .reader {
+    padding-top: 32px;
+  }
   .app-footer__inner {
     flex-direction: column;
-    align-items: flex-start;
   }
 }
 

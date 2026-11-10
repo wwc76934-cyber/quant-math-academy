@@ -1,4 +1,4 @@
-# Phase 6 开源准备审计（未发布）
+# Phase 6 开源准备审计（已发布）
 
 - 日期：2026-11-10
 - 状态：**已发布**；仓库 `https://github.com/wwc76934-cyber/quant-math-academy`；站点 `https://wwc76934-cyber.github.io/quant-math-academy/`；Pages workflow 成功

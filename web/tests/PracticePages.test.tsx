@@ -137,7 +137,7 @@ describe('T12 Practice & Progress Suite', () => {
       const correctBtn = screen.getByRole('button', { name: /标记做对/i });
       fireEvent.click(correctBtn);
       await waitFor(() => {
-        expect(screen.getByRole('button', { name: /✓ 已(标记)?做对/i })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /^已做对$/ })).toBeInTheDocument();
       });
 
       // Navigate to next question
@@ -152,7 +152,7 @@ describe('T12 Practice & Progress Suite', () => {
       const wrongBtn = screen.getByRole('button', { name: /加入错题/i });
       fireEvent.click(wrongBtn);
       await waitFor(() => {
-        expect(screen.getByRole('button', { name: /✕ 已在错题本/i })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /^已在错题本$/ })).toBeInTheDocument();
       });
     });
   });
@@ -349,7 +349,7 @@ describe('T12 Practice & Progress Suite', () => {
       fireEvent.click(markCorrectButtons[0]);
 
       await waitFor(() => {
-        expect(screen.getByRole('button', { name: /✓ 已(标记)?做对/i })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /^已做对$/ })).toBeInTheDocument();
       });
 
       // Mark question 2 wrong
@@ -357,7 +357,7 @@ describe('T12 Practice & Progress Suite', () => {
       fireEvent.click(markWrongButtons[1]);
 
       await waitFor(() => {
-        expect(screen.getByRole('button', { name: /✕ 已在错题本/i })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /^已在错题本$/ })).toBeInTheDocument();
       });
     });
   });

@@ -242,6 +242,13 @@ export const HomePage: React.FC = () => {
             从数学语言、线性代数、概率统计，到随机分析、时间序列与量化研究。
             每节标注难度与优先级，习题附完整解析。
           </p>
+          <div className="masthead__facts">
+            <span>{book.parts.length} 篇</span>
+            <span>{book.chapters.length} 章</span>
+            <span>{totalSections} 节</span>
+            <span>{formatNumber(totalExercisesCount)} 道习题</span>
+            <span>{formatNumber(totalEquations)} 条独立公式</span>
+          </div>
           <form
             className="home-search"
             role="search"
@@ -262,26 +269,6 @@ export const HomePage: React.FC = () => {
             </Button>
           </form>
         </div>
-        <dl className="masthead__meta">
-          <div>
-            <dt>篇 / 章</dt>
-            <dd>
-              {book.parts.length} / {book.chapters.length}
-            </dd>
-          </div>
-          <div>
-            <dt>小节</dt>
-            <dd>{totalSections}</dd>
-          </div>
-          <div>
-            <dt>习题</dt>
-            <dd>{formatNumber(totalExercisesCount)}</dd>
-          </div>
-          <div>
-            <dt>独立公式</dt>
-            <dd>{formatNumber(totalEquations)}</dd>
-          </div>
-        </dl>
       </header>
 
       {/* 2 & 3. Grid: Continue Learning + Today */}
@@ -290,7 +277,6 @@ export const HomePage: React.FC = () => {
           <section className="continue-card" aria-labelledby="continue-heading">
             <div>
               <div className="continue-card__label">
-                <span className="kicker">上次读到</span>
                 {continueData.section.priority && (
                   <PriorityBadge priority={continueData.section.priority} />
                 )}
@@ -302,7 +288,7 @@ export const HomePage: React.FC = () => {
                 {continueData.chapter.label}　{continueData.chapter.title}
               </h2>
               <div className="section">
-                {continueData.section.number} {continueData.section.title}
+                上次读到 {continueData.section.number} {continueData.section.title}
               </div>
               <div className="bar">
                 <i style={{ width: `${continueData.percentage}%` }} />
@@ -322,16 +308,10 @@ export const HomePage: React.FC = () => {
                 </span>
               </div>
             </div>
-            <div className="ring" aria-hidden="true">
-              <span>{continueData.percentage}%</span>
-            </div>
           </section>
         ) : (
           <section className="continue-card continue-card--empty" aria-labelledby="continue-empty-heading">
             <div>
-              <div className="continue-card__label">
-                <span className="kicker">第一次来</span>
-              </div>
               <h2 id="continue-empty-heading">从第 1 章读起，或先选一条路径</h2>
               <div className="section">
                 第 1 章讲数学语言、证明方法与实数完备性，是全书的公共基础。
@@ -485,16 +465,17 @@ export const HomePage: React.FC = () => {
               <div className="path-card__meta">
                 {path.id === 'free' ? (
                   <>
-                    <span>不限进度</span>
-                    <span>全书 {totalSecs} 节</span>
-                    {pct > 0 && <span>已完成 {pct}%</span>}
+                    <span>不限时间</span>
+                    <span>全书 {totalSecs} 节{pct > 0 ? ` · 已完成 ${pct}%` : ''}</span>
                   </>
                 ) : (
                   <>
-                    <span>{path.weeks} 周</span>
-                    <span>每周约 {targetHoursPerWeek} 小时</span>
-                    <span>{path.totalSections} 节</span>
-                    {pct > 0 && <span>已完成 {pct}%</span>}
+                    <span>
+                      {path.weeks} 周 · 每周约 {targetHoursPerWeek} 小时
+                    </span>
+                    <span>
+                      {path.totalSections} 节{pct > 0 ? ` · 已完成 ${pct}%` : ''}
+                    </span>
                   </>
                 )}
               </div>

@@ -4,7 +4,7 @@
 
 > 代码 MIT；教材内容保留所有权利，详见 [CONTENT_NOTICE.md](CONTENT_NOTICE.md)。
 
-![首页](web/screenshots/home-final-1440.png)
+在线阅读：**[wwc76934-cyber.github.io/quant-math-academy](https://wwc76934-cyber.github.io/quant-math-academy/)**
 
 ## 功能
 
@@ -19,13 +19,14 @@
 - **阅读偏好**：主题、字号、版式宽度、行距、专注模式、证明默认折叠。
 - **响应式与打印**：390–1440 无横向溢出；A4 打印样式隐藏导航、黑白正文、公式防裁切。
 
-| 阅读 | 路径 |
-|---|---|
-| ![阅读](web/screenshots/reader-final-1440.png) | ![路径](web/screenshots/paths-1440.png) |
+## 界面
 
-| 练习 | 进度 |
-|---|---|
-| ![练习](web/screenshots/practice-1440.png) | ![进度](web/screenshots/progress-1440.png) |
+- 单一字体家族：英文与数字用自托管的 IBM Plex Sans（400/500/600），中文用系统黑体（苹方 / 微软雅黑等）；公式由 KaTeX 字体排版。
+- 冷白底、近黑正文、一种墨蓝强调色，只用于链接、当前位置和主操作；完整暗色主题。
+- 定理类环境用细边框块，定义用浅底块，例题不加框；证明可折叠，左侧细线标出范围。
+- 设计令牌见 `web/src/styles/tokens.css`。
+
+`web/screenshots/` 里的截图来自上一版界面，仅作历史记录。
 
 ## 技术栈
 
@@ -33,7 +34,7 @@
 - 构建期 `marked` + KaTeX 预渲染；客户端不跑 Markdown/KaTeX
 - 无后端；localStorage 单存储 `qma:store:v1`
 - 路由级代码拆分；首屏 JS gzip ≈75KB
-- 测试：123 Web + 58 内容；`npm audit` 0
+- 测试：123 Web + 58 内容；`npm audit --omit=dev` 0
 
 ## 快速开始
 
@@ -41,7 +42,11 @@
 
 ```bash
 npm ci
+npm run content:inventory
 npm run content:build
+node tools/content/build-search-index.mjs
+npm run content:graph
+npm run content:paths
 npm --prefix web ci
 npm --prefix web run dev
 ```
@@ -99,7 +104,7 @@ cp web/dist/index.html web/dist/404.html   # SPA fallback
 
 - 全书 D/P 已覆盖 219/219；P0 56.6%、P1 33.3%、P2 9.6%、P3 0.5%，优先级仍可校正。
 - 4 个 1.05–1.19MB 单节 DOM 较大（8.7–9.5 万节点）；未拆分，待低端真机验证。
-- 公式收藏/分步推导/可视化未交付。
+- 分步推导与可视化未交付。
 - 打印仅 PDF smoke；无障碍未做完整屏幕阅读器实测。
 - 未做 1,964 页逐字校勘；已完成结构闸门、公式渲染、30 项抽查与 D/P 复核。
 

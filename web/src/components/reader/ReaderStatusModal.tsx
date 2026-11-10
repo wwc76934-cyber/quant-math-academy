@@ -74,7 +74,7 @@ export const ReaderStatusModal: React.FC<ReaderStatusModalProps> = ({
             onClick={onClose}
             aria-label="关闭"
           >
-            ✕
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
           </button>
         </div>
 
@@ -119,7 +119,7 @@ export const ReaderStatusModal: React.FC<ReaderStatusModalProps> = ({
                       marginBottom: '2px',
                     }}
                   >
-                    {STATUS_LABELS[s]} {isSelected && '✓'}
+                    {STATUS_LABELS[s]}{isSelected && '（当前）'}
                   </div>
                   <div
                     style={{

@@ -129,7 +129,6 @@ export const SyllabusPage: React.FC = () => {
       <main className="syllabus shell" id="main-content">
         <header className="syllabus__head">
           <div>
-            <div className="kicker">教材</div>
             <h1>完整目录</h1>
             <p>正在载入目录…</p>
           </div>
@@ -146,7 +145,6 @@ export const SyllabusPage: React.FC = () => {
       <main className="syllabus shell" id="main-content">
         <header className="syllabus__head">
           <div>
-            <div className="kicker">教材</div>
             <h1>完整目录</h1>
           </div>
         </header>

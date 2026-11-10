@@ -58,13 +58,12 @@ describe('HomePage', () => {
     expect(await screen.findByText(/量化数学/)).toBeInTheDocument();
 
     // Scale stats from real book.json
-    expect(screen.getByText('8 / 34')).toBeInTheDocument();
-    expect(screen.getByText('篇 / 章')).toBeInTheDocument();
-    expect(screen.getByText('219')).toBeInTheDocument();
-    expect(screen.getByText('小节')).toBeInTheDocument();
-    expect(screen.getByText('3,276')).toBeInTheDocument();
-    expect(screen.getByText('独立公式')).toBeInTheDocument();
-  });
+    expect(screen.getByText('8 篇')).toBeInTheDocument();
+    expect(screen.getByText('34 章')).toBeInTheDocument();
+    expect(screen.getAllByText('219 节').length).toBeGreaterThan(0);
+    expect(screen.getByText('698 道习题')).toBeInTheDocument();
+    expect(screen.getByText('3,276 条独立公式')).toBeInTheDocument();
+      });
 
   it('renders empty start state when no lastLocation exists', async () => {
     render(

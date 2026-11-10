@@ -166,7 +166,7 @@ export const ReaderExercises: React.FC<ReaderExercisesProps> = ({
                   aria-pressed={store.exercises[ex.id]?.status === 'correct'}
                   title="标记此题已做对"
                 >
-                  {store.exercises[ex.id]?.status === 'correct' ? '✓ 已做对' : '标记做对'}
+                  {store.exercises[ex.id]?.status === 'correct' ? '已做对' : '标记做对'}
                 </Button>
                 <Button
                   variant={store.exercises[ex.id]?.status === 'wrong' ? 'secondary' : 'ghost'}
@@ -175,7 +175,7 @@ export const ReaderExercises: React.FC<ReaderExercisesProps> = ({
                   aria-pressed={store.exercises[ex.id]?.status === 'wrong'}
                   title="标记做错，加入错题本与复习计划"
                 >
-                  {store.exercises[ex.id]?.status === 'wrong' ? '✕ 已在错题本' : '加入错题'}
+                  {store.exercises[ex.id]?.status === 'wrong' ? '已在错题本' : '加入错题'}
                 </Button>
               </div>
 

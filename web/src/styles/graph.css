@@ -25,8 +25,7 @@
   font-family: var(--font-mono);
   font-size: 13px;
   color: var(--accent);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0;
   margin-bottom: 6px;
 }
 
@@ -196,7 +195,7 @@
   font-size: 12px;
   font-weight: 600;
   color: var(--ink-secondary);
-  letter-spacing: 0.04em;
+  letter-spacing: 0;
 }
 
 @media (max-width: 960px) {
@@ -230,9 +229,8 @@
 }
 
 .graph-section-row.is-highlighted {
-  background-color: rgba(194, 87, 55, 0.08);
-  border-left: 4px solid var(--accent);
-  padding-left: 16px;
+  background-color: var(--accent-soft);
+  border-radius: var(--radius-md);
 }
 
 .graph-sec-meta {
@@ -276,9 +274,8 @@
 /* Column headers / titles */
 .graph-col-label {
   display: none;
-  font-size: 11px;
+  font-size: 12px;
   color: var(--ink-muted);
-  text-transform: uppercase;
   margin-bottom: 4px;
   font-weight: 600;
 }
@@ -321,12 +318,12 @@
 }
 
 .graph-chip-strength {
-  font-size: 10px;
+  font-size: 12px;
   opacity: 0.75;
 }
 
 .graph-transitive-note {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--ink-secondary);
   margin-top: 4px;
 }
@@ -341,7 +338,7 @@
 
 .graph-cited-badge {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 12px;
   padding: 2px 7px;
   border-radius: var(--radius-sm);
   background: var(--bg-subtle);

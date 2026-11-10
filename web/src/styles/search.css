@@ -256,14 +256,14 @@
   display: inline-block;
   padding: 2px 8px;
   border-radius: var(--radius-sm);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.02em;
 }
 
 .search-badge--section {
   background: rgba(43, 114, 186, 0.12);
-  color: #2b72ba;
+  color: var(--accent);
 }
 
 .search-badge--theorem,
@@ -278,22 +278,22 @@
 
 .search-badge--example {
   background: rgba(56, 142, 60, 0.12);
-  color: #2e7d32;
+  color: var(--success);
 }
 
 .search-badge--exercise {
   background: rgba(230, 81, 0, 0.12);
-  color: #e65100;
+  color: var(--warning);
 }
 
 .search-badge--solution {
   background: rgba(106, 27, 154, 0.12);
-  color: #6a1b9a;
+  color: var(--ink-secondary);
 }
 
 .search-badge--note {
   background: rgba(117, 117, 117, 0.12);
-  color: #616161;
+  color: var(--ink-muted);
 }
 
 .search-result-chapter {
