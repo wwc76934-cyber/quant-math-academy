@@ -1,0 +1,401 @@
+{
+  "schemaVersion": 1,
+  "chapterId": "c22",
+  "title": "Bayesian 推断与统计决策",
+  "partId": "part-5",
+  "summary": "本章系统建立Bayesian统计推断与统计决策理论框架：从先验分布、似然函数与后验分布的Bayes定理三要素出发，深入推导正态-正态精度凸组合与Beta-二项、Gamma-Poisson、Dirichlet-多项四大共轭族；系统建立后验点估计（均值、中位数、众数）与HPD最高后验密度可信区间，严格推导未来观测量的后验预测分布；在先验构造层面剖析均匀先验悖论，推导基于Fisher信息重参数化不变的Jeffreys先验及参考先验；在统计决策理论视角下，建立损失函数、风险函数与Bayes风险体系，证明平方损失下的后验均值最优性与绝对损失下的中位数决策；深入剖析容许性、极小极大准则与Stein分部积分引理，严格证明高维正态均值估计下James-Stein收缩估计对极大似然估计的一致支配性，揭示经验Bayes机制；详尽阐释MCMC采样算法、Markov链平稳分布与详细平衡条件，证明Metropolis-Hastings与Gibbs抽样的不变性；最后全面结合量化金融，推导逆Wishart协方差正定凸收缩、Black-Litterman主观观点后验融合、均值-方差组合最优后验预测更新与贝叶斯模型平均（BMA）。",
+  "whyStudy": "Bayesian方法与统计决策理论是量化投资中融合先验经济学直觉、量化观点与市场样本数据，克服小样本噪声与参数不确定性的核心利器：从资产预期收益率与协方差矩阵的高维收缩估计（James-Stein与逆Wishart收缩）、Black-Litterman主观投资观点整合，到考虑参数估计风险的最优投资组合决策与多策略Bayesian模型平均（BMA），掌握后验更新、决策损失优化与MCMC计算方法，是量化投资组合经理构建稳健策略与克服样本内过拟合的必修利器。",
+  "prerequisites": [
+    "c10-s2",
+    "c11-s2",
+    "c19-s5",
+    "c19-s6",
+    "c20-s1",
+    "c21-s1"
+  ],
+  "metadataStatus": "reviewed",
+  "reviewed": true,
+  "sections": {
+    "c22-s1": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 55,
+      "examFrequency": "high",
+      "tags": [
+        "Bayes定理",
+        "先验分布",
+        "共轭先验",
+        "正态共轭",
+        "Beta共轭"
+      ],
+      "coreConcepts": [
+        "定义22.1参数先验分布、样本似然模型与边缘似然归一化常数",
+        "定理22.2式(22.1)-(22.2)参数连续/离散后验分布的Bayes定理标准形式",
+        "定义22.3共轭先验分布族的严格代数闭包定义",
+        "定理22.4式(22.3)-(22.4)正态似然与正态先验下的后验精度加和与均值凸组合"
+      ],
+      "applications": [
+        "量化多因子模型中股票alpha预期收益的先验信念与样本数据贝叶斯融合",
+        "高频二值交易胜率估计的Beta-二项在线序贯更新"
+      ],
+      "prerequisites": [
+        {
+          "id": "c10-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c11-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c19-s5",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c22-s2",
+        "c22-s3",
+        "c22-s4"
+      ],
+      "learningObjective": "掌握Bayes定理在参数分布更新中的数学机制，深刻理解共轭先验的代数定义，并能熟练推导正态-正态与Beta-二项等经典共轭模型的后验分布参数更新公式。",
+      "keyFormulas": [
+        "c22-eq-22.1",
+        "c22-eq-22.2",
+        "c22-eq-22.3",
+        "c22-eq-22.4"
+      ],
+      "rationale": "本节建立定义22.1先验与似然模型，证明定理22.2式(22.1)-(22.2)Bayes定理，严格推导定理22.4式(22.3)-(22.4)正态共轭精度相加与凸组合，给出Beta、Gamma与Dirichlet四大经典共轭族。推导严整规范，是Bayesian推断的绝对理论基石，属P0核心高频考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c22-s2": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 45,
+      "examFrequency": "high",
+      "tags": [
+        "后验均值",
+        "可信区间",
+        "HPD区间",
+        "后验预测",
+        "不确定性"
+      ],
+      "coreConcepts": [
+        "定义22.8后验点估计（均值、中位数、众数MAP）与可信区间定义",
+        "最高后验密度（HPD）区间的最短长度性质及其与频率置信区间的哲学辨析",
+        "式(22.10)面向未来未知观测量的后验预测分布积分构造",
+        "式(22.11)正态预测分布的方差膨胀效应与式(22.12)Beta-二项复合预测分布"
+      ],
+      "applications": [
+        "未来一个交易日资产极端收益率与VaR风险测度的后验预测分布评估",
+        "做市商限价单成交概率的后验置信区间与参数不确定性溢价定价"
+      ],
+      "prerequisites": [
+        {
+          "id": "c13-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c20-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c22-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c22-s3",
+        "c22-s4",
+        "c22-s7"
+      ],
+      "learningObjective": "掌握后验点估计与HPD可信区间的推导与数值计算，深刻理解后验预测分布在吸收参数不确定性后的方差放大机制。",
+      "keyFormulas": [
+        "c22-eq-22.10",
+        "c22-eq-22.11",
+        "c22-eq-22.12"
+      ],
+      "rationale": "本节建立定义22.8后验点汇总与区间估计，证明HPD可信区间最短性并辨析置信区别，严格推导式(22.10)后验预测分布、式(22.11)正态预测方差膨胀及式(22.12)Beta-二项预测。将参数推断升华为面向未来的预测分布，概念明晰，属P0高频核心点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c22-s3": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "无信息先验",
+        "Fisher信息",
+        "Jeffreys先验",
+        "重参数化",
+        "参考先验"
+      ],
+      "coreConcepts": [
+        "平坦均匀先验在非线性参数坐标变换下的先验信息泄露与失效机理",
+        "定义22.9式(22.13)-(22.14)基于Fisher信息矩阵平方根的Jeffreys先验构造",
+        "定理证明Jeffreys先验在微分同胚单调坐标变换下的一致重参数化不变性",
+        "位置参数、尺度参数与多参数Jeffreys先验的构造与参考先验思想"
+      ],
+      "applications": [
+        "高频跳跃扩散模型波动率未知先验下的无信息基准建模",
+        "新上市衍生品无历史行情时的客观无先验主观偏置校准"
+      ],
+      "prerequisites": [
+        {
+          "id": "c02-s5",
+          "strength": "required"
+        },
+        {
+          "id": "c19-s6",
+          "strength": "required"
+        },
+        {
+          "id": "c22-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c22-s4",
+        "c22-s5"
+      ],
+      "learningObjective": "理解均匀先验的变换破缺问题，能够运用Fisher信息推导Jeffreys先验并严格验证其在单调重参数化下的不变性。",
+      "keyFormulas": [
+        "c22-eq-22.13",
+        "c22-eq-22.14"
+      ],
+      "rationale": "本节剖析均匀先验变换破缺缺陷，引入定义22.9式(22.13)Fisher信息与式(22.14)Jeffreys先验，严格证明参数重参数化不变性，导出二项、Poisson与正态尺度先验，评述参考先验与弱先验。理论深刻严密，是无信息先验的权威基石，属P0核心考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c22-s4": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "决策理论",
+        "损失函数",
+        "风险函数",
+        "Bayes风险",
+        "后验期望损失"
+      ],
+      "coreConcepts": [
+        "定义22.10-22.11决策空间、动作损失函数与频率风险函数R(theta, d)",
+        "式(22.15)-(22.16)综合先验加权的总体Bayes风险定义",
+        "定理22.12 Bayes决策准则与后验期望损失式(22.17)逐点最小化等价定理",
+        "定理22.13平方损失导出式(22.18)后验均值、绝对损失导出后验中位数与0-1损失导出众数决策"
+      ],
+      "applications": [
+        "考虑非对称惩罚（如低估亏损惩罚重于高估）的量化头寸最优化决策",
+        "离散交易信号开平仓0-1分类损失下的最优贝叶斯决策阈值选择"
+      ],
+      "prerequisites": [
+        {
+          "id": "c11-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c22-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c22-s2",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c22-s2",
+        "c22-s5",
+        "c22-s7"
+      ],
+      "learningObjective": "熟练掌握统计决策理论中损失、风险与Bayes风险的数理定义，能够推导不同经典损失函数（平方、绝对、0-1损失）对应的最优后验决策。",
+      "keyFormulas": [
+        "c22-eq-22.15",
+        "c22-eq-22.16",
+        "c22-eq-22.17",
+        "c22-eq-22.18"
+      ],
+      "rationale": "本节建立定义22.10-22.11损失与式(22.15)-(22.16)风险体系，证明定理22.12后验期望损失式(22.17)逐点优化，严格推导定理22.13平方损失导出式(22.18)后验均值、绝对损失与0-1损失对应准则。决策论推导严谨自洽，属P0核心高频必考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c22-s5": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 55,
+      "examFrequency": "high",
+      "tags": [
+        "容许性",
+        "极小极大",
+        "James-Stein",
+        "Stein恒等式",
+        "经验Bayes"
+      ],
+      "coreConcepts": [
+        "定义22.14决策规则的一致支配性与容许性（Admissibility）",
+        "式(22.21)极小极大准则（Minimax）与常风险容许贝叶斯估计量的极小极大性",
+        "Stein引理（分部积分恒等式）在正态平方风险分析中的数学证明",
+        "定理22.16 James-Stein收缩估计量式(22.23)-(22.24)在维度p>=3时对MLE的一致支配性与经验Bayes解释"
+      ],
+      "applications": [
+        "股票池海量截面alpha因子的James-Stein均值收缩与截面方差缩减",
+        "FOF组合多基金经理历史超额收益均值的经验贝叶斯联合收缩估计"
+      ],
+      "prerequisites": [
+        {
+          "id": "c02-s5",
+          "strength": "required"
+        },
+        {
+          "id": "c12-s4",
+          "strength": "required"
+        },
+        {
+          "id": "c19-s3",
+          "strength": "required"
+        },
+        {
+          "id": "c22-s4",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c22-s1",
+        "c22-s4",
+        "c22-s7"
+      ],
+      "learningObjective": "深刻理解容许性与极小极大准则，能够运用Stein引理严格证明James-Stein收缩估计量在p>=3时的一致优越性，理解经验Bayes思想。",
+      "keyFormulas": [
+        "c22-eq-22.21",
+        "c22-eq-22.22",
+        "c22-eq-22.23",
+        "c22-eq-22.24"
+      ],
+      "rationale": "本节建立定义22.14容许性与式(22.21)最不利先验，证明定理22.15极小极大性，应用Stein分部积分恒等式严格证明定理22.16 James-Stein估计式(22.23)-(22.24)在p>=3时一致支配极大似然，阐明经验Bayes机制。数理推导极具深度，属P0硬核核心考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c22-s6": {
+      "difficulty": "D2",
+      "priority": "P1",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "MCMC",
+        "详细平衡",
+        "MH算法",
+        "Gibbs抽样",
+        "有效样本量"
+      ],
+      "coreConcepts": [
+        "定义22.17连续状态Markov链转移核、不变平稳分布与式(22.25)详细平衡条件",
+        "定理22.18 Metropolis-Hastings算法式(22.26)建议分布与接受率的不变平稳性证明",
+        "命题22.19 Gibbs抽样作为MH多维全条件采样的特例（接受率恒等于1）证明",
+        "式(22.28)MCMC自相关方差膨胀因子、有效样本量（ESS）与收敛诊断Gelman-Rubin准则"
+      ],
+      "applications": [
+        "随机波动率模型（如Heston模型）非共轭隐状态参数后验联合抽样",
+        "贝叶斯神经网络权重参数在复杂非凸损失曲面上的MCMC采样"
+      ],
+      "prerequisites": [
+        {
+          "id": "c14-s6",
+          "strength": "required"
+        },
+        {
+          "id": "c18-s5",
+          "strength": "required"
+        },
+        {
+          "id": "c22-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c22-s1",
+        "c22-s7"
+      ],
+      "learningObjective": "掌握Markov链详细平衡条件，能够证明MH算法与Gibbs抽样的不变目标分布性质，并掌握链的自相关诊断与有效样本量评估。",
+      "keyFormulas": [
+        "c22-eq-22.25",
+        "c22-eq-22.26",
+        "c22-eq-22.27",
+        "c22-eq-22.28"
+      ],
+      "rationale": "本节建立定义22.17转移核与式(22.25)详细平衡，证明定理22.18 MH算法式(22.26)目标分布不变性，证明命题22.19 Gibbs抽样式(22.27)接受率恒为1，推导式(22.28)方差膨胀与ESS。连通非共轭复杂模型后验计算，是量化计算核心工具，属P1高频点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c22-s7": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 55,
+      "examFrequency": "high",
+      "tags": [
+        "逆Wishart",
+        "协方差收缩",
+        "BL模型",
+        "后验预测组合",
+        "模型平均"
+      ],
+      "coreConcepts": [
+        "式(22.29)多维协方差矩阵的逆Wishart共轭先验与正定后验凸组合收缩",
+        "式(22.30)因子载荷矩阵与特质方差的Bayesian分层模型后验更新",
+        "Black-Litterman模型将市场均衡先验与投资者非绝对主观观点进行Bayesian融合",
+        "定理22.20式(22.31)参数不确定性下方差膨胀后验预测最优投资组合与式(22.32)BMA模型平均"
+      ],
+      "applications": [
+        "高维资产池协方差矩阵的Ledoit-Wolf式贝叶斯结构化收缩优化",
+        "主观宏观研判与量化多因子多策略信号的Black-Litterman后验融合配置"
+      ],
+      "prerequisites": [
+        {
+          "id": "c05-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c15-s4",
+          "strength": "required"
+        },
+        {
+          "id": "c21-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c22-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c22-s2",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c21-s7",
+        "c22-s1",
+        "c22-s2",
+        "c22-s5"
+      ],
+      "learningObjective": "全面融通Bayesian方法在资产配置中的前沿应用，掌握逆Wishart协方差收缩、Black-Litterman观点融合以及考虑参数不确定性的均值-方差组合优化。",
+      "keyFormulas": [
+        "c22-eq-22.29",
+        "c22-eq-22.30",
+        "c22-eq-22.31",
+        "c22-eq-22.32"
+      ],
+      "rationale": "本节系统呈现量化实战应用：推导式(22.29)逆Wishart正定协方差凸收缩与式(22.30)因子载荷收缩，严格证明定理22.20式(22.31)后验预测均值-方差最优组合，建立式(22.32)BMA模型平均。将Bayesian推断与现代投资组合深度熔接，属P0核心压轴考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    }
+  },
+  "reviewedBy": "DSH",
+  "reviewedAt": "2026-11-10"
+}
