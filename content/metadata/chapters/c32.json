@@ -1,0 +1,403 @@
+{
+  "schemaVersion": 1,
+  "chapterId": "c32",
+  "title": "风险度量与极值理论",
+  "partId": "part-8",
+  "summary": "本章从货币风险度量公理化与次可加性反例出发，建立期望短缺ES变分优化与对偶表示，深入推导GEV极值类型定理与GPD超阈值极限，给出参数极大似然与高分位闭式外推、多期重尾标度、Euler组合风险归因与FRTB监管回测检验闭环。",
+  "whyStudy": "量化风控与审慎监管要求不仅刻画正常波动，更要精确度量低频极端危机。掌握一致性公理、极值理论渐近极限、尾部外推与逆压力测试，是现代量化金融与风险架构师的核心基本功。",
+  "prerequisites": [
+    "c11-s2",
+    "c12-s1",
+    "c19-s3"
+  ],
+  "metadataStatus": "reviewed",
+  "reviewed": true,
+  "reviewedBy": "DSH",
+  "reviewedAt": "2026-11-10",
+  "sections": {
+    "c32-s1": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "风险度量",
+        "一致性",
+        "次可加性",
+        "在险价值",
+        "凸风险度量"
+      ],
+      "coreConcepts": [
+        "货币风险度量",
+        "次可加性",
+        "单调性与平移不变性",
+        "在险价值VaR",
+        "一致性与凸度量"
+      ],
+      "applications": [
+        "法定资本要求核算",
+        "组合分散化效应评估",
+        "反常监管资本套利规避"
+      ],
+      "prerequisites": [
+        {
+          "id": "c11-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c13-s2",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c32-s2",
+        "c32-s6",
+        "c32-s7"
+      ],
+      "learningObjective": "掌握货币风险度量的公理化体系、在险价值VaR的下确界定义、次可加性缺失的构造性反例及一致性/凸风险度量条件。",
+      "keyFormulas": [
+        "c32-eq-32.1",
+        "c32-eq-32.2"
+      ],
+      "rationale": "本节建立定义32.1式(32.1)货币风险度量公理体系，给出定义32.2式(32.2)在险价值VaR分位数形式，在例32.1中利用独立Bernoulli损失严格构造VaR违背次可加性的反例，建立定义32.3一致性与凸风险度量标准。现代量化风控公理化理论源头基石，属P0核心起点与必考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c32-s2": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 55,
+      "examFrequency": "high",
+      "tags": [
+        "期望短缺",
+        "CVaR",
+        "变分优化",
+        "对偶表示",
+        "谱风险度量"
+      ],
+      "coreConcepts": [
+        "期望短缺ES",
+        "条件在险价值CVaR",
+        "Rockafellar-Uryasev变分",
+        "测度对偶表示",
+        "谱风险度量"
+      ],
+      "applications": [
+        "厚尾尾部期望损失度量",
+        "凸规划头寸规模优化",
+        "最坏情景资本充裕度评估"
+      ],
+      "prerequisites": [
+        {
+          "id": "c07-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c12-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c32-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c32-s1",
+        "c32-s5",
+        "c32-s7"
+      ],
+      "learningObjective": "掌握期望短缺的分位数积分与原子修正、Rockafellar-Uryasev无约束凸变分表述、次可加性严格证明及对偶谱积分表示。",
+      "keyFormulas": [
+        "c32-eq-32.3",
+        "c32-eq-32.5",
+        "c32-eq-32.6",
+        "c32-eq-32.8"
+      ],
+      "rationale": "本节建立定义32.4式(32.5)分位数积分与式(32.6)Rockafellar-Uryasev变分优化，严格证明定理32.5式(32.7)期望短缺一致性与次可加性，证明定理32.6式(32.8)密度有界测度对偶表示与最坏期望损失，建立定义32.7式(32.9)谱度量并在例32.2验证数值。尾部资本度量核心理论，属P0最高频考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c32-s3": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 55,
+      "examFrequency": "high",
+      "tags": [
+        "极值理论",
+        "GEV分布",
+        "GPD分布",
+        "POT模型",
+        "阈值稳定性"
+      ],
+      "coreConcepts": [
+        "Fisher-Tippett-Gnedenko定理",
+        "广义极值分布GEV",
+        "超阈值POT模型",
+        "广义Pareto分布GPD",
+        "阈值稳定性"
+      ],
+      "applications": [
+        "稀有事件发生概率推断",
+        "高阈值损失尾部建模",
+        "块极大值与超阈值交叉核验"
+      ],
+      "prerequisites": [
+        {
+          "id": "c11-s3",
+          "strength": "required"
+        },
+        {
+          "id": "c12-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c32-s2",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c32-s2",
+        "c32-s4",
+        "c32-s5"
+      ],
+      "learningObjective": "证明广义极值分布的三大类型与Poisson超阈值极限，掌握Pickands-Balkema-de Haan定理及GPD阈值稳定性。",
+      "keyFormulas": [
+        "c32-eq-32.10",
+        "c32-eq-32.11",
+        "c32-eq-32.13",
+        "c32-eq-32.14"
+      ],
+      "rationale": "本节建立定理32.8式(32.10)-(32.11)GEV极值类型定理与Fréchet/Gumbel/Weibull三大分类，严格推导式(32.12)稀有超阈值Poisson计数极限与式(32.13)GPD，严格证明定理32.9式(32.14)超阈值条件分布向GPD收敛与尺度线性变换，在例32.3验证条件外推。极值统计第一大理论基石，属P0核心高频考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c32-s4": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "极大似然",
+        "得分方程",
+        "平均超出图",
+        "Fisher信息",
+        "尾指数"
+      ],
+      "coreConcepts": [
+        "GPD似然与得分方程",
+        "平均超出函数",
+        "参数稳定图",
+        "Fisher信息矩阵",
+        "有限矩条件"
+      ],
+      "applications": [
+        "极值POT模型阈值精细粗选",
+        "重尾形状参数标准误评估",
+        "QQ/PP分布诊断与除簇检验"
+      ],
+      "prerequisites": [
+        {
+          "id": "c19-s3",
+          "strength": "required"
+        },
+        {
+          "id": "c19-s4",
+          "strength": "required"
+        },
+        {
+          "id": "c32-s3",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c32-s3",
+        "c32-s5"
+      ],
+      "learningObjective": "推导GPD极大似然偏导得分方程、平均超出函数线性性质，证明xi>-1/2下Fisher信息逆矩阵与各阶有限矩公式。",
+      "keyFormulas": [
+        "c32-eq-32.15",
+        "c32-eq-32.17",
+        "c32-eq-32.18",
+        "c32-eq-32.19"
+      ],
+      "rationale": "本节建立定义32.10式(32.15)-(32.16)似然函数，证明定理32.11式(32.17)GPD偏导得分方程，推导式(32.18)平均超出函数线性检验与阈值稳定性诊断，严格证明定理32.12式(32.19)在xi>-1/2下的Fisher信息逆矩阵与渐近正态方差，给出矩存在条件m xi<1。极值参数辨识与推断统计框架，属P0核心高频考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c32-s5": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 55,
+      "examFrequency": "high",
+      "tags": [
+        "尾部外推",
+        "超额期望",
+        "时间标度",
+        "重尾标度",
+        "历史模拟"
+      ],
+      "coreConcepts": [
+        "高分位VaR闭式外推",
+        "高分位ES闭式解",
+        "似然分解",
+        "多期尾和定理",
+        "超根号时间标度"
+      ],
+      "applications": [
+        "样本外极端分位数测算",
+        "多期重尾资本需求标度",
+        "半参数整体似然估计"
+      ],
+      "prerequisites": [
+        {
+          "id": "c32-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c32-s3",
+          "strength": "required"
+        },
+        {
+          "id": "c32-s4",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c32-s2",
+        "c32-s4",
+        "c32-s6",
+        "c32-s7"
+      ],
+      "learningObjective": "证明GPD尾部高分位VaR与ES解析外推公式，推导半参数似然分解，掌握独立重尾损失的多期h^xi时间标度律。",
+      "keyFormulas": [
+        "c32-eq-32.20",
+        "c32-eq-32.21",
+        "c32-eq-32.26",
+        "c32-eq-32.27"
+      ],
+      "rationale": "本节严格证明定理32.13式(32.20)-(32.21)GPD高分位VaR与ES解析外推公式，建立命题32.14式(32.22)半参数似然分解，在例32.4比较历史模拟缺陷，严格证明定理32.16式(32.25)-(32.27)独立重尾多期风险标度h^xi律与超根号发散，在例32.5对比正态倍数。极值量化风控实操核心计算链，属P0必考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c32-s6": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 55,
+      "examFrequency": "high",
+      "tags": [
+        "组合风险",
+        "椭圆分布",
+        "边际风险",
+        "Euler分解",
+        "上尾相依"
+      ],
+      "coreConcepts": [
+        "正态组合风险",
+        "厚尾椭圆标度",
+        "边际风险贡献MVaR",
+        "Euler齐次分解",
+        "上尾相依系数"
+      ],
+      "applications": [
+        "多资产组合极端尾部测算",
+        "投资组合风险预算归因",
+        "Copula极端协同下行对冲"
+      ],
+      "prerequisites": [
+        {
+          "id": "c05-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c13-s3",
+          "strength": "required"
+        },
+        {
+          "id": "c32-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c32-s5",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c32-s1",
+        "c32-s5",
+        "c32-s7"
+      ],
+      "learningObjective": "掌握正态与椭圆分布下组合VaR/ES闭式，证明成分风险的Euler恒等式分解与生存Copula上尾相依夹界。",
+      "keyFormulas": [
+        "c32-eq-32.29",
+        "c32-eq-32.30",
+        "c32-eq-32.31",
+        "c32-eq-32.32"
+      ],
+      "rationale": "本节推导定理32.17式(32.29)正态组合VaR/ES与定理32.18式(32.30)厚尾椭圆标度，利用齐次性严格证明定理32.19式(32.31)边际与成分风险Euler分解并在例32.7验算贡献，严格证明定理32.20式(32.32)生存Copula上尾相依系数与组合极端和夹界。组合尾部相依与风险归因数学枢纽，属P0最高频考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c32-s7": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 55,
+      "examFrequency": "high",
+      "tags": [
+        "监管资本",
+        "FRTB",
+        "Kupiec检验",
+        "独立性检验",
+        "风险平价",
+        "逆压力测试"
+      ],
+      "coreConcepts": [
+        "交易账簿基本面审查FRTB",
+        "Kupiec无条件检验",
+        "Christoffersen独立性检验",
+        "逆压力测试",
+        "风险平价凸规划",
+        "Wasserstein分布鲁棒"
+      ],
+      "applications": [
+        "内部模型法市场风险资本核算",
+        "VaR模型动态失效回测与监管乘数调整",
+        "极端逆境情景最小马氏对齐对冲"
+      ],
+      "prerequisites": [
+        {
+          "id": "c20-s3",
+          "strength": "required"
+        },
+        {
+          "id": "c32-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c32-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c32-s6",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c32-s1",
+        "c32-s2",
+        "c32-s6"
+      ],
+      "learningObjective": "掌握FRTB监管资本转型背景、Kupiec与Christoffersen似然比回测检验、逆压力测试变分求导与等风险贡献凸优化。",
+      "keyFormulas": [],
+      "rationale": "本节系统落地监管与风控体系：阐明FRTB采用ES替代VaR的公理化依据，建立Kupiec无条件与Christoffersen独立性卡方检验并在例32.8完成马氏转移诊断，推导相对熵压力测度与最小马氏逆压力闭式，严格证明风险预算等风险贡献的对数凸规划唯一存在性，构建Wasserstein分布鲁棒优化。量化风控实战终极闭环，属P0核心实战点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    }
+  }
+}

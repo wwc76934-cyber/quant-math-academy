@@ -1,0 +1,400 @@
+{
+  "schemaVersion": 1,
+  "chapterId": "c31",
+  "title": "因子模型、IC/RankIC 与研究有效性",
+  "partId": "part-8",
+  "summary": "本章系统推导线性因子模型、主成分统计因子、IC/RankIC截面评价、时间序列HAC推断与分组回测损耗，建立多重检验FWER/FDR控制、选择偏差校准与purge/embargo时序验证闭环。",
+  "whyStudy": "因子研究是量化投资与资产定价的核心工程基石，掌握从截面信号到时序检验、从毛收益到换手成本、从回测过拟合到多重比较控制的严谨数理框架，是构建样本外可重复策略的必备技能。",
+  "prerequisites": [
+    "c05-s1",
+    "c21-s1",
+    "c28-s1"
+  ],
+  "metadataStatus": "reviewed",
+  "reviewed": true,
+  "reviewedBy": "DSH",
+  "reviewedAt": "2026-11-10",
+  "sections": {
+    "c31-s1": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "因子模型",
+        "正交投影",
+        "因子暴露",
+        "因子中性化",
+        "Fama-MacBeth"
+      ],
+      "coreConcepts": [
+        "因子模型",
+        "正交投影",
+        "方差分解",
+        "因子中性化",
+        "Fama-MacBeth"
+      ],
+      "applications": [
+        "多因子风险暴露估计",
+        "风格中性化残差构建",
+        "资产收益协方差建模"
+      ],
+      "prerequisites": [
+        {
+          "id": "c05-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c21-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c21-s2",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c31-s2",
+        "c31-s3",
+        "c31-s7"
+      ],
+      "learningObjective": "掌握线性因子模型的正交投影分解、多资产协方差结构、截面因子中性化算子与时间序列/截面回归的区别。",
+      "keyFormulas": [
+        "c31-eq-31.1",
+        "c31-eq-31.3",
+        "c31-eq-31.4",
+        "c31-eq-31.7"
+      ],
+      "rationale": "本节建立式(31.1)-(31.3)线性因子模型识别条件与定义31.1投影分解，导出式(31.4)方差分解并在例31.1精算暴露与残差，给出式(31.5)-(31.7)多资产协方差与中性化投影算子，厘清时间序列与截面回归的区别。量化多因子体系的几何与代数地基，属P0核心起点与高频考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c31-s2": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 45,
+      "examFrequency": "high",
+      "tags": [
+        "主成分分析",
+        "统计因子",
+        "谱分解",
+        "解释方差比",
+        "SVD"
+      ],
+      "coreConcepts": [
+        "主成分分析",
+        "统计因子",
+        "方差最大化",
+        "解释方差比",
+        "奇异值分解"
+      ],
+      "applications": [
+        "截面多空特征方向提取",
+        "统计风险因子降维",
+        "多重共线性信号压缩"
+      ],
+      "prerequisites": [
+        {
+          "id": "c04-s4",
+          "strength": "required"
+        },
+        {
+          "id": "c08-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c31-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c31-s1",
+        "c31-s3"
+      ],
+      "learningObjective": "证明主成分的正交方差最大化定理，掌握前K主成分累计解释方差比例计算与量纲标准化影响。",
+      "keyFormulas": [
+        "c31-eq-31.8"
+      ],
+      "rationale": "本节严格证明定理31.2主成分在正交约束下的方差最大化性质，建立式(31.8)前K主成分累计解释方差比例EVR与SVD对应关系，剖析协方差与相关矩阵PCA的量纲差异，在例31.2中求解等权与多空特征方向。统计因子提取与降维的核心数学工具，属P0必考高频考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c31-s3": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "PearsonIC",
+        "RankIC",
+        "Spearman相关",
+        "截面回归",
+        "并列秩"
+      ],
+      "coreConcepts": [
+        "PearsonIC",
+        "RankIC",
+        "Spearman秩相关",
+        "截面斜率",
+        "并列秩修正"
+      ],
+      "applications": [
+        "单因子预测能力评估",
+        "异常值稳健排序检验",
+        "因子标准化回归斜率标定"
+      ],
+      "prerequisites": [
+        {
+          "id": "c13-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c21-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c31-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c31-s1",
+        "c31-s4",
+        "c31-s5"
+      ],
+      "learningObjective": "掌握Pearson IC与Spearman RankIC的数学定义、并列秩处理、单调稳健性及与标准化截面回归斜率的等价关系。",
+      "keyFormulas": [
+        "c31-eq-31.9",
+        "c31-eq-31.10",
+        "c31-eq-31.11"
+      ],
+      "rationale": "本节建立定义式(31.9)截面Pearson IC与式(31.10)Spearman RankIC无并列闭式，证明秩离差平方和与相关恒等式，推导式(31.11)标准化变量下回归斜率与IC等价性，并在例31.3比较线性与排序度量差异。量化单因子预测力检验最基础度量工具，属P0核心必考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c31-s4": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "ICIR",
+        "序列相关",
+        "Newey-West",
+        "HAC估计",
+        "有效样本量"
+      ],
+      "coreConcepts": [
+        "ICIR",
+        "自协方差展开",
+        "Newey-West估计",
+        "Bartlett权重",
+        "有效样本量"
+      ],
+      "applications": [
+        "年化信息比率估算",
+        "自相关序列假设检验",
+        "长期方差稳健标准误修正"
+      ],
+      "prerequisites": [
+        {
+          "id": "c20-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c28-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c31-s3",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c31-s3",
+        "c31-s5",
+        "c31-s6"
+      ],
+      "learningObjective": "掌握IC时间序列汇总指标ICIR、弱平稳自协方差展开、Newey-West HAC长期方差估计与AR(1)有效样本量推断。",
+      "keyFormulas": [
+        "c31-eq-31.12",
+        "c31-eq-31.14",
+        "c31-eq-31.15",
+        "c31-eq-31.16"
+      ],
+      "rationale": "本节建立式(31.12)ICIR定义与式(31.13)独立t统计量，推导式(31.14)弱平稳自协方差求和展开与式(31.15)Newey-West HAC长期方差估计，导出式(31.16)AR(1)有效样本量并在例31.4精算自相关下的t值压缩。因子时间序列推断与防止虚假显著的核心，属P0高频考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c31-s5": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 45,
+      "examFrequency": "high",
+      "tags": [
+        "分组回测",
+        "多空收益",
+        "换手率",
+        "交易成本",
+        "重叠收益"
+      ],
+      "coreConcepts": [
+        "次序统计量组合",
+        "多空收益",
+        "单边换手率",
+        "交易成本模型",
+        "重叠持有期"
+      ],
+      "applications": [
+        "分位数单调性回测",
+        "多空策略净值模拟",
+        "调仓摩擦损耗精算"
+      ],
+      "prerequisites": [
+        {
+          "id": "c19-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c31-s3",
+          "strength": "required"
+        },
+        {
+          "id": "c31-s4",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c31-s3",
+        "c31-s4",
+        "c31-s7"
+      ],
+      "learningObjective": "掌握基于次序统计量的分组多空构造、单边换手率定义、线性成本净收益模型及重叠持有期自相关处理。",
+      "keyFormulas": [
+        "c31-eq-31.17",
+        "c31-eq-31.18",
+        "c31-eq-31.19"
+      ],
+      "rationale": "本节将因子分组刻画为次序统计量上的组合构造，建立式(31.17)多空收益与式(31.18)单边换手率，推导式(31.19)扣除线性冲击成本的净收益模型并在例31.5计算基点损耗，剖析重叠持有期的机械自相关与HAC修正。因子向实盘组合收益转化的核心链路，属P0核心应用点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c31-s6": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 55,
+      "examFrequency": "high",
+      "tags": [
+        "多重检验",
+        "FWER",
+        "FDR",
+        "选择偏差",
+        "数据泄漏"
+      ],
+      "coreConcepts": [
+        "族错误率FWER",
+        "错误发现率FDR",
+        "Bonferroni校正",
+        "Benjamini-Hochberg",
+        "purge与embargo"
+      ],
+      "applications": [
+        "多因子搜索过拟合校正",
+        "最优夏普比率选择偏差修正",
+        "时序交叉验证信息泄漏防范"
+      ],
+      "prerequisites": [
+        {
+          "id": "c20-s4",
+          "strength": "required"
+        },
+        {
+          "id": "c23-s5",
+          "strength": "required"
+        },
+        {
+          "id": "c31-s4",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c31-s4",
+        "c31-s5",
+        "c31-s7"
+      ],
+      "learningObjective": "掌握多重假设检验下极小p值分布、Bonferroni/Holm/BH校正、最优绩效极值选择偏差及purge/embargo时序防泄漏机制。",
+      "keyFormulas": [
+        "c31-eq-31.20",
+        "c31-eq-31.21",
+        "c31-eq-31.22"
+      ],
+      "rationale": "本节严格推导式(31.20)独立检验下极值p值分布，建立Bonferroni与Holm的FWER控制及式(31.21)BH方法的FDR准则，在例31.6对比检验结论，推导式(31.22)最优夏普极值选择偏差，阐明数据泄漏机理与purge/embargo时序防护。回测过拟合防治的理论中枢，属P0最高频考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c31-s7": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 45,
+      "examFrequency": "high",
+      "tags": [
+        "因子体系",
+        "增量信息",
+        "嵌套验证",
+        "可检验结构",
+        "量化回测"
+      ],
+      "coreConcepts": [
+        "可检验数学结构",
+        "增量投影检验",
+        "统计显著性",
+        "经济可交易性",
+        "嵌套验证"
+      ],
+      "applications": [
+        "端到端因子量化研发",
+        "策略容量与交易摩擦评估",
+        "未触碰样本外终验"
+      ],
+      "prerequisites": [
+        {
+          "id": "c31-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c31-s3",
+          "strength": "required"
+        },
+        {
+          "id": "c31-s4",
+          "strength": "required"
+        },
+        {
+          "id": "c31-s5",
+          "strength": "required"
+        },
+        {
+          "id": "c31-s6",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c31-s1",
+        "c31-s5",
+        "c31-s6"
+      ],
+      "learningObjective": "掌握严谨因子研究的七步闭环数学结构，区分统计增量信息、经济可交易性与样本外泛化能力。",
+      "keyFormulas": [],
+      "rationale": "本节系统整合因子研究数学结构，建立涵盖严格信息集定义、增量正交投影、度量泛函分离、相容长期方差估计、多重比较校准、purge嵌套时序验证及交易摩擦检验的七步闭环体系，厘清统计显著与经济可实现的边界。因子量化研发端到端验证方法论，属P0核心综合实战点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    }
+  }
+}
