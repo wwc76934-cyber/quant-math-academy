@@ -239,9 +239,9 @@
     },
     "c34-s5": {
       "difficulty": "D2",
-      "priority": "P1",
+      "priority": "P2",
       "minutes": 45,
-      "examFrequency": "high",
+      "examFrequency": "medium",
       "tags": [
         "策略容量",
         "流动性约束",
@@ -282,7 +282,7 @@
         "c34-eq-34.25",
         "c34-eq-34.26"
       ],
-      "rationale": "本节建立冲击衰减下的资金容量临界方程，并推导含二次冲击、行业与风格约束的 KKT 最优持仓闭式；属基金规模规划与约束调仓应用，按手册校准为 P1。",
+      "rationale": "本节建立冲击衰减下的资金容量临界方程与含约束 KKT 最优持仓；属基金规模规划应用，按手册校准为 P2，考频降为 medium。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"

@@ -327,9 +327,9 @@
     },
     "c27-s7": {
       "difficulty": "D3",
-      "priority": "P1",
+      "priority": "P2",
       "minutes": 55,
-      "examFrequency": "high",
+      "examFrequency": "medium",
       "tags": [
         "Euler格式",
         "Milstein格式",
@@ -368,7 +368,7 @@
         "c27-eq-27.31",
         "c27-eq-27.32"
       ],
-      "rationale": "本节定义 Euler-Maruyama/Milstein 格式并证明 Euler 强收敛 0.5 阶；数值实现常用，理论细节可后置，按手册校准为 P1。",
+      "rationale": "本节定义 Euler-Maruyama/Milstein 格式并证明强收敛阶；数值 SDE 是专门工具，多数量化岗位不手写实现，按手册校准为 P2，考频降为 medium。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"

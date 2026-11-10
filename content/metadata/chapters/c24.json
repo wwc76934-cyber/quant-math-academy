@@ -230,7 +230,7 @@
     },
     "c24-s5": {
       "difficulty": "D2",
-      "priority": "P1",
+      "priority": "P2",
       "minutes": 40,
       "examFrequency": "medium",
       "tags": [
@@ -271,7 +271,7 @@
       ],
       "learningObjective": "理解基础随机模型在金融实证中的近似作用与局限性，能够运用合并与竞争模型分析订单流容量，并理解向Hawkes与跳跃扩散拓展的数理动机。",
       "keyFormulas": [],
-      "rationale": "本节系统梳理离散随机过程在金融微观结构中的建模映射：将高频限价订单簿买卖订单流建模为多类Poisson合并与竞争风险到达，剖析波动聚集与自激Hawkes拓展需求，评述市场流动性危机状态转移。连通基础概率模型与量化高频交易微观实战，属P1重要应用分析工具。",
+      "rationale": "本节讨论随机模型在金融实证中的近似、订单流容量与模型选择；属应用与模型选择讨论，按手册校准为 P2，考频降为 medium。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"

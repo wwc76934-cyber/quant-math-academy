@@ -121,9 +121,9 @@
     },
     "c32-s3": {
       "difficulty": "D3",
-      "priority": "P1",
+      "priority": "P2",
       "minutes": 55,
-      "examFrequency": "high",
+      "examFrequency": "medium",
       "tags": [
         "极值理论",
         "GEV分布",
@@ -169,7 +169,7 @@
         "c32-eq-32.13",
         "c32-eq-32.14"
       ],
-      "rationale": "本节证明 GEV 三类型与 Poisson 超阈值极限，给出 Pickands-Balkema-de Haan 与 GPD 阈值稳定性；EVT 方向性强，按手册校准为 P1。",
+      "rationale": "本节证明 GEV 三类型与 Poisson 超阈值极限，给出 GPD 阈值稳定性；EVT 是专门风险方向，按手册校准为 P2，考频降为 medium。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"

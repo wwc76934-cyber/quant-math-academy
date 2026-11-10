@@ -179,9 +179,9 @@
     },
     "c30-s4": {
       "difficulty": "D2",
-      "priority": "P1",
+      "priority": "P2",
       "minutes": 45,
-      "examFrequency": "high",
+      "examFrequency": "medium",
       "tags": [
         "时变beta",
         "局部水平",
@@ -223,16 +223,16 @@
         "c30-eq-30.13",
         "c30-eq-30.14"
       ],
-      "rationale": "本节把状态空间用于时变 Beta、局部趋势与动态因子载荷，并讨论信噪比对滤波记忆的控制；属应用构件，按手册校准为 P1。",
+      "rationale": "本节把状态空间用于时变 Beta、局部趋势与动态因子载荷；属应用构件，依赖 Kalman 基础，按手册校准为 P2，考频降为 medium。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"
     },
     "c30-s5": {
       "difficulty": "D2",
-      "priority": "P1",
+      "priority": "P2",
       "minutes": 50,
-      "examFrequency": "high",
+      "examFrequency": "medium",
       "tags": [
         "RTS平滑",
         "预测误差分解",
@@ -276,7 +276,7 @@
         "c30-eq-30.18",
         "c30-eq-30.20"
       ],
-      "rationale": "本节推导 RTS 固定区间平滑、预测误差分解似然与超参数 MLE；属估计流水线，具体计算可由软件实现，按手册校准为 P1。",
+      "rationale": "本节推导 RTS 固定区间平滑、预测误差分解似然与超参数 MLE；属状态空间估计流水线，具体计算可由软件实现，按手册校准为 P2，考频降为 medium。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"

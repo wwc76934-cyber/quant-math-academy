@@ -283,9 +283,9 @@
     },
     "c22-s6": {
       "difficulty": "D2",
-      "priority": "P1",
+      "priority": "P2",
       "minutes": 50,
-      "examFrequency": "high",
+      "examFrequency": "medium",
       "tags": [
         "MCMC",
         "详细平衡",
@@ -328,7 +328,7 @@
         "c22-eq-22.27",
         "c22-eq-22.28"
       ],
-      "rationale": "本节建立定义22.17转移核与式(22.25)详细平衡，证明定理22.18 MH算法式(22.26)目标分布不变性，证明命题22.19 Gibbs抽样式(22.27)接受率恒为1，推导式(22.28)方差膨胀与ESS。连通非共轭复杂模型后验计算，是量化计算核心工具，属P1高频点。",
+      "rationale": "本节证明 MH 算法与 Gibbs 抽样的详细平衡和不变分布；MCMC 是 Bayesian 计算工具，方向性强且可由软件实现，按手册校准为 P2，考频降为 medium。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"

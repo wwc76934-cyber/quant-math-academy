@@ -182,9 +182,9 @@
     },
     "c29-s4": {
       "difficulty": "D2",
-      "priority": "P1",
+      "priority": "P2",
       "minutes": 50,
-      "examFrequency": "high",
+      "examFrequency": "medium",
       "tags": [
         "GJR模型",
         "EGARCH",
@@ -224,7 +224,7 @@
         "c29-eq-29.18",
         "c29-eq-29.19"
       ],
-      "rationale": "本节覆盖 GJR/EGARCH/IGARCH/FIGARCH 等高级扩展，并证明非对称杠杆与长记忆机制；方向性强，掌握机制与适用条件即可，按手册校准为 P1。",
+      "rationale": "本节覆盖 GJR/EGARCH/IGARCH/FIGARCH 等非对称与长记忆扩展；属波动率高级方向，按手册校准为 P2，考频降为 medium。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"

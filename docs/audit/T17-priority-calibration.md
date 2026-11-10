@@ -53,7 +53,7 @@ C01–C18 的 P0 占比大致 40–100%，有 P1 分层；C20、C23、C25–C32�
 | 11.4 概率不等式 | P0 | P0 | 一致 |
 | 20.2 正态经典区间 | P0 | P0 | 一致 |
 
-T18 Batch 1/2 已校准 C20/C23/C25/C26，P0 降至 124 节（56.6%），仍偏高；详见 `T18-priority-calibration-progress.md`。
+T18 Batch 1/2 已校准 C20/C23/C25/C26，P0 降至 124 节（56.6%），P2/P3 合计 10.0%，仍偏高；详见 `T18-priority-calibration-progress.md`。
 
 ## 4. 建议校准规则（下一轮）
 

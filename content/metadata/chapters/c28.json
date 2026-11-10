@@ -334,9 +334,9 @@
     },
     "c28-s7": {
       "difficulty": "D2",
-      "priority": "P1",
+      "priority": "P2",
       "minutes": 45,
-      "examFrequency": "high",
+      "examFrequency": "medium",
       "tags": [
         "量化有效性",
         "重叠收益",
@@ -380,7 +380,7 @@
       ],
       "learningObjective": "深刻识别ARMA在量化投研中的典型误区，掌握重叠标签自相关修正、波动聚集残差检验与HAC稳健推断，防范过拟合。",
       "keyFormulas": [],
-      "rationale": "本节系统辨析 ARMA 在量化投研中的误用：重叠收益制造假性 MA 自相关、波动聚集下弱平稳非 IID、HAC 稳健标准误与过拟合；属实战指南，按手册校准为 P1。",
+      "rationale": "本节辨析 ARMA 在量化投研中的重叠标签、波动聚集与 HAC 稳健推断；属实战指南，按手册校准为 P2，考频降为 medium。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"

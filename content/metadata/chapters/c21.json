@@ -274,7 +274,7 @@
     },
     "c21-s6": {
       "difficulty": "D2",
-      "priority": "P1",
+      "priority": "P2",
       "minutes": 45,
       "examFrequency": "medium",
       "tags": [
@@ -319,7 +319,7 @@
         "c21-eq-21.25",
         "c21-eq-21.26"
       ],
-      "rationale": "本节推导定理21.14式(21.23)GLS解与协方差，给出式(21.24)Cholesky白化变换，严格证明定理21.15式(21.25)广义Gauss-Markov最优性，展开式(21.26)WLS加权与FGLS相合性。解决非球形误差下估计效率损失，属P1重要方法工具。",
+      "rationale": "本节推导 GLS 的 Cholesky 白化与广义 Gauss-Markov 定理；属回归进阶工具，可由软件实现，按手册校准为 P2，考频降为 medium。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"

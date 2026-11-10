@@ -232,9 +232,9 @@
     },
     "c31-s5": {
       "difficulty": "D2",
-      "priority": "P1",
+      "priority": "P2",
       "minutes": 45,
-      "examFrequency": "high",
+      "examFrequency": "medium",
       "tags": [
         "分组回测",
         "多空收益",
@@ -279,7 +279,7 @@
         "c31-eq-31.18",
         "c31-eq-31.19"
       ],
-      "rationale": "本节把因子分组为组合，给出多空收益、单边换手率、线性成本净收益与重叠期 HAC 修正；属回测到实盘的应用链路，按手册校准为 P1。",
+      "rationale": "本节把因子分组为组合，给出多空收益、换手率与线性成本净收益；属因子到实盘的应用链路，按手册校准为 P2，考频降为 medium。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"

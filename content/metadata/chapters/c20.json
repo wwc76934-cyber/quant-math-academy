@@ -328,9 +328,9 @@
     },
     "c20-s7": {
       "difficulty": "D3",
-      "priority": "P1",
+      "priority": "P2",
       "minutes": 55,
-      "examFrequency": "high",
+      "examFrequency": "medium",
       "tags": [
         "信息系数",
         "Newey-West",
@@ -378,7 +378,7 @@
         "c20-eq-20.27",
         "c20-eq-20.28"
       ],
-      "rationale": "本节应用前文理论解析式(20.27)因子IC检验与Newey-West修正，推导例20.8式(20.28)无效策略最优者p值分布，阐明数据窥探与Harvey t>3统计依据。将数理统计推断无缝对接量化投资实战痛点，极具实践价值，因子 IC/Newey-West/Harvey 检验是量化实践应用，依赖前文理论；按手册归为 P1。",
+      "rationale": "本节把 IC/ICIR、Newey-West 与 Harvey 检验落到因子研究；属应用层，依赖前文统计推断，按手册校准为 P2，考频降为 medium。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"
