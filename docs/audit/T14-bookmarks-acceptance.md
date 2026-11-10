@@ -28,7 +28,7 @@
 | build | 0 error；BookmarksPage gzip 1.43KB |
 | 目标测试 | BookmarksPage 4/4 |
 | ReaderPage | 11/11 |
-| 全量 Web | **117 / 117** |
+| 全量 Web | **123 / 123** |
 | 内容 | 58 / 58 |
 | 点击星标 | formulaMeta 写入；toast；copy activity 0 |
 | 刷新 | 星标保持 |
