@@ -2,7 +2,7 @@
 
 - 项目：Quant Math Academy（量化数学学院）
 - 内容底本：《量化数学进阶教材》（34 章 / 8 篇）
-- 当前阶段：**已发布，T23 质量复检通过**：https://wwc76934-cyber.github.io/quant-math-academy/；代码 MIT、正文保留所有权利；Phase 4 待决策
+- 当前阶段：**RC1 完成并发布**；最终验收 `docs/audit/FINAL-ACCEPTANCE.md`；可选深交互/真机验证为后续 backlog：https://wwc76934-cyber.github.io/quant-math-academy/；代码 MIT、正文保留所有权利；Phase 4 待决策
 - 最后更新：2026-11-08
 
 ## 文档
