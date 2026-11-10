@@ -81,6 +81,12 @@ export const AppHeader: React.FC = () => {
               练习
             </NavLink>
             <NavLink
+              to="/bookmarks"
+              className={({ isActive }) => (isActive ? 'is-active' : '')}
+            >
+              收藏
+            </NavLink>
+            <NavLink
               to={progressPath()}
               className={({ isActive }) => (isActive ? 'is-active' : '')}
             >

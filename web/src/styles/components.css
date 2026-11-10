@@ -1693,3 +1693,140 @@ details.proof[open] > summary.proof__label::before {
     font-size: 12px;
   }
 }
+
+/* Bookmarks Page */
+.bookmarks-page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 32px 24px 64px;
+}
+.bookmarks-page__header {
+  margin-bottom: 32px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 16px;
+}
+.bookmarks-page__header h1 {
+  font-size: 26px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  color: var(--ink);
+}
+.bookmarks-page__intro {
+  font-size: 14px;
+  color: var(--ink-secondary);
+  margin: 0;
+}
+.bookmarks-page__empty {
+  padding: 48px 24px;
+  text-align: center;
+  background: var(--bg-elevated, #ffffff);
+  border: 1px dashed var(--line);
+  border-radius: var(--radius-md, 8px);
+  margin: 24px 0;
+}
+.bookmarks-page__empty p {
+  font-size: 15px;
+  color: var(--ink-muted);
+  margin-bottom: 20px;
+}
+.bookmarks-page__empty-links {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+.bookmarks-page__groups {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+.bookmarks-group__title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line-strong, #e5e5e5);
+}
+.bookmarks-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.bookmark-item {
+  background: var(--bg-elevated, #ffffff);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md, 8px);
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: border-color 0.15s ease;
+}
+.bookmark-item:hover {
+  border-color: var(--ink-muted);
+}
+.bookmark-item__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+}
+.bookmark-item__identifier {
+  font-weight: 600;
+  color: var(--ink);
+  font-family: var(--font-mono, monospace);
+  background: var(--bg-subtle, #f5f5f5);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.bookmark-item__section {
+  color: var(--ink-secondary);
+}
+.bookmark-item__body {
+  margin: 4px 0;
+}
+.bookmark-item__latex {
+  margin: 0;
+  padding: 10px 14px;
+  background: var(--bg-subtle, #f8f9fa);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm, 4px);
+  overflow-x: auto;
+  font-family: var(--font-mono, monospace);
+  font-size: 13px;
+  color: var(--ink);
+}
+.bookmark-item__legacy-tip {
+  margin: 0;
+  font-size: 13px;
+  color: var(--warning, #b45309);
+  font-style: italic;
+}
+.bookmark-item__actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 13px;
+}
+.bookmark-item__jump-link {
+  color: var(--accent, #1a73e8);
+  text-decoration: none;
+}
+.bookmark-item__jump-link:hover {
+  text-decoration: underline;
+}
+.bookmark-item__remove-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--ink-muted);
+  cursor: pointer;
+  font-size: 13px;
+  text-decoration: underline;
+}
+.bookmark-item__remove-btn:hover {
+  color: var(--accent);
+}

@@ -24,6 +24,9 @@ const PracticeSessionPage = React.lazy(() =>
 const WrongBookPage = React.lazy(() => import('./routes/WrongBookPage').then((m) => ({ default: m.WrongBookPage })));
 const ProgressPage = React.lazy(() => import('./routes/ProgressPage').then((m) => ({ default: m.ProgressPage })));
 const NotesPage = React.lazy(() => import('./routes/NotesPage').then((m) => ({ default: m.NotesPage })));
+const BookmarksPage = React.lazy(() =>
+  import('./routes/BookmarksPage').then((m) => ({ default: m.BookmarksPage }))
+);
 
 const StorageAlerts: React.FC = () => {
   const { storageAvailable, storageCorrupted, clearCorruptedNotice } = useStore();
@@ -134,6 +137,7 @@ const MainLayout: React.FC = () => {
             <Route path="/practice/wrong" element={<WrongBookPage />} />
             <Route path="/practice/:chapterId" element={<PracticeSessionPage />} />
             <Route path="/notes" element={<NotesPage />} />
+            <Route path="/bookmarks" element={<BookmarksPage />} />
             <Route path="/progress" element={<ProgressPage />} />
             <Route path="/search" element={<SearchPage />} />
             <Route path="/graph" element={<GraphPage />} />
