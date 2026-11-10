@@ -1,0 +1,404 @@
+{
+  "schemaVersion": 1,
+  "chapterId": "c29",
+  "title": "波动率建模与 GARCH",
+  "partId": "part-7",
+  "summary": "本章系统建立金融资产收益波动率动态建模与条件异方差过程的完整数理统计体系：从成熟市场收益序列不相关、平方收益显著自相关、波动聚集与超额峰度等典型事实出发，严格界定定义29.1条件方差与引理29.2鞅差标准化残差分解，证明命题29.3方差混合产生超额峰度的代数机制；系统建立定义29.4 ARCH(q)模型，严格证明定理29.5 ARCH(1)平稳解与无条件方差及定理29.6四阶矩存在充要条件；全面推导定理29.8 GARCH(1,1)因果平稳解无条件方差、命题29.9平方收益ARMA表示与自相关结构、式(29.12)多步预测几何回归与News Impact Curve杠杆效应；深入探讨GJR、EGARCH、APARCH与FIGARCH长记忆非对称扩展；建立Student-t与GED单位方差厚尾分布及广义Pareto极值尾部分位数量化；构造离散时间随机波动率（SV）状态空间模型与高频已实现方差微观结构噪声偏差定理；最后全面落地量化投资实盘：推导条件VaR与ES积分、命题29.19波动率目标化杠杆再平衡、定理29.20 DCC-GARCH动态相关矩阵正定性以及波动率风险溢价方差互换回测。",
+  "whyStudy": "波动率建模是现代量化金融风险度量（VaR/ES）、衍生品定价、波动率交易与自适应仓位管理的绝对中枢：资产收益率呈现典型的波动聚集与尖峰厚尾，静态同方差假设会导致极端风险发生概率被系统性严重低估；GARCH族模型以极简参数捕捉时变条件方差与杠杆非对称效应；DCC-GARCH解决了高维投资组合动态相关性估计的维数灾难；已实现方差与随机波动率模型更是连接高频订单流与宏观风险溢价的桥梁。掌握波动率的动力学递推、极大似然估计与回测诊断，是量化策略从简单均值预测走向成熟工业级风控的决定性分水岭。",
+  "prerequisites": [
+    "c09-s1",
+    "c10-s2",
+    "c11-s2",
+    "c12-s2",
+    "c13-s2",
+    "c19-s1",
+    "c20-s1",
+    "c28-s1",
+    "c28-s3"
+  ],
+  "metadataStatus": "reviewed",
+  "reviewed": true,
+  "sections": {
+    "c29-s1": {
+      "difficulty": "D1",
+      "priority": "P0",
+      "minutes": 45,
+      "examFrequency": "high",
+      "tags": [
+        "波动聚集",
+        "典型事实",
+        "鞅差序列",
+        "条件异方差",
+        "超额峰度"
+      ],
+      "coreConcepts": [
+        "成熟市场资产收益率本身微弱自相关与绝对/平方收益强相关慢衰减事实",
+        "波动聚集现象、尖峰厚尾经验分布与负收益杠杆非对称效应特征",
+        "定义29.1式(29.1)信息流滤波、条件均值、条件残差与条件方差数学定义",
+        "引理29.2式(29.2)标准化残差的鞅差性质与无条件全方差分解",
+        "命题29.3式(29.3)方差混合产生超额峰度的严格证明与条件正态无条件厚尾机制"
+      ],
+      "applications": [
+        "金融日度收益率序列的鞅差弱可预测性与时变波动聚集特征检验",
+        "识别方差混合导致金融资产厚尾风险溢价的量化回测基准设定"
+      ],
+      "prerequisites": [
+        {
+          "id": "c10-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c13-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c28-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c29-s2",
+        "c29-s3",
+        "c29-s5"
+      ],
+      "learningObjective": "掌握金融收益率的六大典型事实，深刻理解条件方差与无条件方差的区别，严格证明方差混合产生超额峰度的代数机制。",
+      "keyFormulas": [
+        "c29-eq-29.1",
+        "c29-eq-29.2",
+        "c29-eq-29.3"
+      ],
+      "rationale": "本节系统梳理收益率微弱自相关、平方收益强相关、波动聚集与尖峰厚尾等典型事实，建立定义29.1式(29.1)信息流条件矩与引理29.2式(29.2)标准化残差鞅差分解，严格证明命题29.3式(29.3)方差混合产生超额峰度。奠定波动率时变建模经验与数理基石，属P0核心起点与高频考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c29-s2": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "ARCH模型",
+        "条件方差",
+        "随机系数递推",
+        "四阶矩条件",
+        "平稳解"
+      ],
+      "coreConcepts": [
+        "定义29.4式(29.4)ARCH(q)模型结构与参数非负非退化约束条件",
+        "式(29.5)随机系数递推方程在严格平稳因果解构造中的核心作用",
+        "定理29.5式(29.6)ARCH(1)平稳解充要条件alpha<1与无条件方差omega/(1-alpha)推导",
+        "定理29.6式(29.7)ARCH(1)四阶矩有限充要条件kappa_z alpha^2<1与超额峰度公式"
+      ],
+      "applications": [
+        "单资产高频日度波动率的初步自回归条件异方差拟合",
+        "金融时间序列四阶矩爆炸风险识别与ARCH参数平稳边界检验"
+      ],
+      "prerequisites": [
+        {
+          "id": "c11-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c28-s3",
+          "strength": "required"
+        },
+        {
+          "id": "c29-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c29-s1",
+        "c29-s3",
+        "c29-s4"
+      ],
+      "learningObjective": "掌握ARCH(q)模型定义与正性约束，熟练证明ARCH(1)平稳解存在唯一性与无条件方差，掌握四阶矩存在充要条件推导。",
+      "keyFormulas": [
+        "c29-eq-29.4",
+        "c29-eq-29.5",
+        "c29-eq-29.6",
+        "c29-eq-29.7"
+      ],
+      "rationale": "本节建立定义29.4式(29.4)ARCH(q)模型，基于式(29.5)随机系数迭代严格证明定理29.5式(29.6)ARCH(1)平稳解充要条件alpha<1与无条件方差omega/(1-alpha)，严格证明定理29.6式(29.7)四阶矩有限充要条件kappa_z alpha^2<1与超额峰度解析式。条件异方差建模源头母体，属P0必考核心点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c29-s3": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 55,
+      "examFrequency": "high",
+      "tags": [
+        "GARCH",
+        "持久性",
+        "平方收益相关",
+        "多步方差预测",
+        "NewsImpact"
+      ],
+      "coreConcepts": [
+        "定义29.7式(29.8)GARCH(1,1)模型参数非负约束与式(29.9)ARCH(无穷)几何衰减表示",
+        "定理29.8平稳条件phi=alpha+beta<1与式(29.10)无条件方差omega/(1-phi)证明",
+        "命题29.9式(29.11)平方收益ARMA(1,1)表示、协方差与自相关几何衰减结构",
+        "式(29.12)多步波动率预测递推向长期方差指数回复法则",
+        "式(29.13)News Impact Curve抛物线对称性与标准GARCH无法刻画杠杆效应的原因",
+        "式(29.15)-(29.16)GARCH条件高斯极大似然目标函数、无条件初值与约束参数优化"
+      ],
+      "applications": [
+        "多期风险预算中资产收益动态条件波动率多步向外预测与置信区间构建",
+        "期权做市商隐含波动率与历史GARCH条件预测波动率的期限结构套利"
+      ],
+      "prerequisites": [
+        {
+          "id": "c28-s4",
+          "strength": "required"
+        },
+        {
+          "id": "c29-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c29-s2",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c29-s2",
+        "c29-s4",
+        "c29-s7"
+      ],
+      "learningObjective": "掌握GARCH(1,1)模型平稳性证明与无条件方差推导，掌握平方收益自相关与多步预测公式，深刻理解条件极大似然构造。",
+      "keyFormulas": [
+        "c29-eq-29.8",
+        "c29-eq-29.10",
+        "c29-eq-29.11",
+        "c29-eq-29.12"
+      ],
+      "rationale": "本节建立定义29.7式(29.8)GARCH(1,1)，证明定理29.8平稳条件phi=alpha+beta<1与式(29.10)无条件方差，导出命题29.9式(29.11)平方收益ARMA表示与自相关几何衰减，证明式(29.12)多步预测向长期方差回归，剖析News Impact Curve。波动率建模绝对核心构件，属P0最高频考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c29-s4": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "GJR模型",
+        "EGARCH",
+        "APARCH",
+        "IGARCH",
+        "长记忆"
+      ],
+      "coreConcepts": [
+        "命题29.11 GJR(1,1)非对称模型平稳充要条件alpha+gamma/2+beta<1与长期方差",
+        "式(29.14)指数GARCH(EGARCH)对数方差无参数非负约束与非对称符号项",
+        "式(29.17)TGARCH与不对称幂次APARCH模型参数识别与绝对收益记忆优势",
+        "定理29.12式(29.18)IGARCH(1,1)单位根模型不存在有限正方差平稳解证明",
+        "式(29.19)分数积分FIGARCH模型分数差分展开与双曲幂律慢衰减长记忆机制"
+      ],
+      "applications": [
+        "股票市场负冲击导致波动率更剧烈上升的杠杆不对称效应精准刻画",
+        "高频日内波动率长记忆性与跨期波动率曲面的幂律衰减拟合"
+      ],
+      "prerequisites": [
+        {
+          "id": "c29-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c29-s3",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c29-s3",
+        "c29-s5",
+        "c29-s7"
+      ],
+      "learningObjective": "掌握GJR与EGARCH非对称杠杆建模与平稳条件，理解APARCH幂次变换，深刻理解IGARCH与FIGARCH长记忆数理机制。",
+      "keyFormulas": [
+        "c29-eq-29.17",
+        "c29-eq-29.18",
+        "c29-eq-29.19"
+      ],
+      "rationale": "本节系统呈现非对称与长记忆扩展：严格证明命题29.11 GJR(1,1)有限方差平稳条件alpha+gamma/2+beta<1与有效持续性，推导式(29.17)TGARCH/APARCH幂次变换，严格证明定理29.12式(29.18)IGARCH不存在有限方差平稳解，给出式(29.19)FIGARCH双曲衰减。波动率高级扩展体系，属P0核心高频考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c29-s5": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "厚尾分布",
+        "Student-t",
+        "GED分布",
+        "广义Pareto",
+        "VaR与ES"
+      ],
+      "coreConcepts": [
+        "定义29.13式(29.20)标准化Student-t与广义误差分布GED单位方差密度形式",
+        "命题29.14 Student-t分布矩有限性q<nu与式(29.20)幂律渐近尾部证明",
+        "式(29.21)极值理论广义Pareto分布GPD超额损失似然与高分位数表达式",
+        "式(29.22)Ljung-Box标准化残差自相关Q检验与概率积分变换均匀性检验",
+        "式(29.23)条件VaR与预期缺口ES积分公式及非正态创新分位数缩放"
+      ],
+      "applications": [
+        "金融危机期间资产收益极端尾部VaR与预期缺口ES的高精度分位数估计",
+        "GARCH模型标准化残差的QQ图校准与极值厚尾超越率回测验证"
+      ],
+      "prerequisites": [
+        {
+          "id": "c11-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c20-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c29-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c29-s3",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c29-s1",
+        "c29-s4",
+        "c29-s7"
+      ],
+      "learningObjective": "掌握标准化Student-t与GED厚尾密度，掌握GPD极值尾部拟合，熟练运用标准化残差诊断与条件VaR/ES计算。",
+      "keyFormulas": [
+        "c29-eq-29.20",
+        "c29-eq-29.21",
+        "c29-eq-29.22",
+        "c29-eq-29.23"
+      ],
+      "rationale": "本节建立定义29.13式(29.20)标准化Student-t与GED单位方差厚尾密度，证明命题29.14幂律尾部与矩条件，推导式(29.21)广义Pareto极值超额尾部拟合分位数，建立式(29.22)残差自相关Q检验与式(29.23)条件VaR/ES积分公式。非正态尾部风险度量关键工具，属P0核心考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c29-s6": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 55,
+      "examFrequency": "high",
+      "tags": [
+        "随机波动率",
+        "粒子滤波",
+        "SMC",
+        "已实现方差",
+        "微观噪声"
+      ],
+      "coreConcepts": [
+        "定义29.15式(29.24)离散时间对数正态随机波动率（SV）状态空间模型",
+        "命题29.16式(29.25)公开信息集与完整状态信息集下的条件矩与Jensen不等式偏差",
+        "式(29.26)序贯非线性滤波Chapman-Kolmogorov积分与粒子滤波重加权",
+        "对数平方准极大似然变换与Kalman滤波近似求解",
+        "定理29.17式(29.27)-(29.28)连续半鞅无噪声已实现方差一致性与高频微观结构噪声2N sigma_eta^2偏差定理"
+      ],
+      "applications": [
+        "未观测潜在时变波动率状态的粒子滤波实时滤波与状态后验更新",
+        "日内高频Tick行情已实现波动率（RV）计算与微观结构噪声偏误修正"
+      ],
+      "prerequisites": [
+        {
+          "id": "c26-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c27-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c29-s3",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c29-s3",
+        "c29-s7"
+      ],
+      "learningObjective": "掌握随机波动率模型状态空间形式，深刻理解SV与GARCH信息集差异，掌握高频已实现方差一致性证明与微观噪声修正。",
+      "keyFormulas": [
+        "c29-eq-29.24",
+        "c29-eq-29.25",
+        "c29-eq-29.27",
+        "c29-eq-29.28"
+      ],
+      "rationale": "本节建立定义29.15式(29.24)对数正态SV状态空间模型，证明命题29.16式(29.25)公开与完整信息集条件方差差异，给出式(29.26)粒子滤波递推与准极大似然，严格证明定理29.17式(29.27)-(29.28)高频已实现方差一致性与微观噪声2N sigma_eta^2偏差。潜状态波动率与高频计量核心，属P0核心高频考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c29-s7": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "波动率目标化",
+        "DCC-GARCH",
+        "方差互换",
+        "回测检验",
+        "QLIKE损失"
+      ],
+      "coreConcepts": [
+        "定义29.18式(29.29)条件VaR与条件ES的积分分位数定义",
+        "命题29.19式(29.30)波动率目标化杠杆规则、调仓单边成交额与交易成本后净收益",
+        "式(29.31)动态条件相关DCC-GARCH分解与定理29.20递推正定性保证证明",
+        "式(29.32)物理测度与风险中性测度下波动率风险溢价与方差互换收益",
+        "基于QLIKE损失函数的样本外波动率预测对比与Kupiec无条件覆盖卡方检验"
+      ],
+      "applications": [
+        "量化多资产投资组合波动率目标化自适应杠杆风控与动态调仓",
+        "基于DCC-GARCH的多资产动态协方差矩阵预测与多空对冲比率求解"
+      ],
+      "prerequisites": [
+        {
+          "id": "c21-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c29-s3",
+          "strength": "required"
+        },
+        {
+          "id": "c29-s5",
+          "strength": "required"
+        },
+        {
+          "id": "c29-s6",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c29-s3",
+        "c29-s5",
+        "c29-s6"
+      ],
+      "learningObjective": "全面掌握波动率模型在量化投研中的四大应用：条件VaR/ES、目标化杠杆策略、高维DCC-GARCH正定递推与方差互换风险溢价回测。",
+      "keyFormulas": [
+        "c29-eq-29.29",
+        "c29-eq-29.30",
+        "c29-eq-29.31",
+        "c29-eq-29.32"
+      ],
+      "rationale": "本节系统落地波动率实战：推导定义29.18式(29.29)条件VaR/ES，证明命题29.19式(29.30)波动率目标化杠杆与净收益，严格证明定理29.20式(29.31)DCC-GARCH动态相关矩阵对称正定性，推导式(29.32)方差互换风险溢价与QLIKE损失回测。量化风控与动态资产配置核心落地，属P0核心实战点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    }
+  },
+  "reviewedBy": "DSH",
+  "reviewedAt": "2026-11-10"
+}
