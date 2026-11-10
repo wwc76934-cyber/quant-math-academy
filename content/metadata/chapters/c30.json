@@ -179,7 +179,7 @@
     },
     "c30-s4": {
       "difficulty": "D2",
-      "priority": "P0",
+      "priority": "P1",
       "minutes": 45,
       "examFrequency": "high",
       "tags": [
@@ -223,14 +223,14 @@
         "c30-eq-30.13",
         "c30-eq-30.14"
       ],
-      "rationale": "本节系统建立状态空间量化实战模型：推导式(30.13)时变Beta与动态因子载荷状态方程，建立式(30.14)局部线性趋势与局部水平模型，剖析信噪比lambda=q/h对滤波记忆长度的支配作用，在例30.3中精算增益分配与方差压缩。量化动态因子与趋势提取经典应用构件，属P0核心应用点。",
+      "rationale": "本节把状态空间用于时变 Beta、局部趋势与动态因子载荷，并讨论信噪比对滤波记忆的控制；属应用构件，按手册校准为 P1。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"
     },
     "c30-s5": {
       "difficulty": "D2",
-      "priority": "P0",
+      "priority": "P1",
       "minutes": 50,
       "examFrequency": "high",
       "tags": [
@@ -276,16 +276,16 @@
         "c30-eq-30.18",
         "c30-eq-30.20"
       ],
-      "rationale": "本节利用全协方差与Markov性严格证明定理30.11式(30.15)-(30.16)RTS固定区间反向平滑算法，严格证明定理30.12式(30.18)预测误差分解对数似然闭式，建立定义30.13超参数MLE，证明命题30.14式(30.20)扩散初始化极限。状态后验平滑与参数辨识统计流水线，属P0核心高频考点。",
+      "rationale": "本节推导 RTS 固定区间平滑、预测误差分解似然与超参数 MLE；属估计流水线，具体计算可由软件实现，按手册校准为 P1。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"
     },
     "c30-s6": {
       "difficulty": "D3",
-      "priority": "P0",
+      "priority": "P2",
       "minutes": 55,
-      "examFrequency": "high",
+      "examFrequency": "medium",
       "tags": [
         "EKF",
         "UKF",
@@ -330,14 +330,14 @@
         "c30-eq-30.24",
         "c30-eq-30.26"
       ],
-      "rationale": "本节建立式(30.21)非线性滤波Chapman-Kolmogorov与Bayes方程，建立定义30.15式(30.22)EKF局部一阶Jacobian线性化，建立定义30.16式(30.23)-(30.24)UKF无迹变换对称采样与协方差，严格证明定理30.17式(30.26)粒子滤波SMC一致性。非线性非高斯状态滤波核心框架，属P0核心考点。",
+      "rationale": "本节覆盖 EKF/UKF/粒子滤波及 SMC 一致性，属非线性非高斯研究型工具；多数量化岗位不直接实现，按手册校准为 P2，考频降为 medium。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"
     },
     "c30-s7": {
       "difficulty": "D2",
-      "priority": "P0",
+      "priority": "P1",
       "minutes": 50,
       "examFrequency": "high",
       "tags": [
@@ -388,7 +388,7 @@
         "c30-eq-30.32",
         "c30-eq-30.37"
       ],
-      "rationale": "本节建立式(30.30)时变回归状态系统，证明命题30.19不规则发布Nowcasting动态更新，推导式(30.31)配对交易最小方差动态对冲比率，严格证明定理30.20式(30.32)归一化创新平方卡方独立性与发散排查，建立式(30.37)ESS有效粒子诊断。量化系统滤波实施与审计闭环，属P0核心实战点。",
+      "rationale": "本节讨论不规则数据 Nowcasting、动态最小方差对冲比率与归一化创新卡方滤波诊断；属实施与审计应用，按手册校准为 P1。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"

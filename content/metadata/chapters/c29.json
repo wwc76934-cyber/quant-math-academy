@@ -182,7 +182,7 @@
     },
     "c29-s4": {
       "difficulty": "D2",
-      "priority": "P0",
+      "priority": "P1",
       "minutes": 50,
       "examFrequency": "high",
       "tags": [
@@ -224,14 +224,14 @@
         "c29-eq-29.18",
         "c29-eq-29.19"
       ],
-      "rationale": "本节系统呈现非对称与长记忆扩展：严格证明命题29.11 GJR(1,1)有限方差平稳条件alpha+gamma/2+beta<1与有效持续性，推导式(29.17)TGARCH/APARCH幂次变换，严格证明定理29.12式(29.18)IGARCH不存在有限方差平稳解，给出式(29.19)FIGARCH双曲衰减。波动率高级扩展体系，属P0核心高频考点。",
+      "rationale": "本节覆盖 GJR/EGARCH/IGARCH/FIGARCH 等高级扩展，并证明非对称杠杆与长记忆机制；方向性强，掌握机制与适用条件即可，按手册校准为 P1。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"
     },
     "c29-s5": {
       "difficulty": "D2",
-      "priority": "P0",
+      "priority": "P1",
       "minutes": 50,
       "examFrequency": "high",
       "tags": [
@@ -282,14 +282,14 @@
         "c29-eq-29.22",
         "c29-eq-29.23"
       ],
-      "rationale": "本节建立定义29.13式(29.20)标准化Student-t与GED单位方差厚尾密度，证明命题29.14幂律尾部与矩条件，推导式(29.21)广义Pareto极值超额尾部拟合分位数，建立式(29.22)残差自相关Q检验与式(29.23)条件VaR/ES积分公式。非正态尾部风险度量关键工具，属P0核心考点。",
+      "rationale": "本节给出 Student-t/GED、GPD 尾部拟合、残差诊断与条件 VaR/ES；属风险度量工具，方向性强且可软件实现，按手册校准为 P1。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"
     },
     "c29-s6": {
       "difficulty": "D3",
-      "priority": "P0",
+      "priority": "P1",
       "minutes": 55,
       "examFrequency": "high",
       "tags": [
@@ -335,14 +335,14 @@
         "c29-eq-29.27",
         "c29-eq-29.28"
       ],
-      "rationale": "本节建立定义29.15式(29.24)对数正态SV状态空间模型，证明命题29.16式(29.25)公开与完整信息集条件方差差异，给出式(29.26)粒子滤波递推与准极大似然，严格证明定理29.17式(29.27)-(29.28)高频已实现方差一致性与微观噪声2N sigma_eta^2偏差。潜状态波动率与高频计量核心，属P0核心高频考点。",
+      "rationale": "本节建立随机波动率状态空间、粒子滤波与已实现方差一致性，并讨论微观噪声修正；属高级波动率建模，需状态空间/高频背景，按手册校准为 P1。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"
     },
     "c29-s7": {
       "difficulty": "D2",
-      "priority": "P0",
+      "priority": "P1",
       "minutes": 50,
       "examFrequency": "high",
       "tags": [
@@ -393,7 +393,7 @@
         "c29-eq-29.31",
         "c29-eq-29.32"
       ],
-      "rationale": "本节系统落地波动率实战：推导定义29.18式(29.29)条件VaR/ES，证明命题29.19式(29.30)波动率目标化杠杆与净收益，严格证明定理29.20式(29.31)DCC-GARCH动态相关矩阵对称正定性，推导式(29.32)方差互换风险溢价与QLIKE损失回测。量化风控与动态资产配置核心落地，属P0核心实战点。",
+      "rationale": "本节落地条件 VaR/ES、波动率目标、DCC-GARCH 与方差互换回测；属应用层，依赖前文模型，按手册校准为 P1。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"
