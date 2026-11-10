@@ -16,7 +16,6 @@
   },
   "dependencies": {
     "katex": "0.16.22",
-    "marked": "15.0.12",
-    "pagedjs": "0.4.3"
+    "marked": "15.0.12"
   }
 }
