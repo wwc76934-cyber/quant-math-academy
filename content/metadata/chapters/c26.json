@@ -1,0 +1,383 @@
+{
+  "schemaVersion": 1,
+  "chapterId": "c26",
+  "title": "Brown 运动、二次变差与 Itô 积分",
+  "partId": "part-6",
+  "summary": "本章作为全书连续时间随机分析与量化微积分的奠基核心，系统建立标准Brown运动、无界变差分析、随机微积分与Itô公式的完备理论体系：从Kolmogorov连续性定理出发公理化定义标准Brown运动，严格证明转移核高斯分布、协方差二阶结构、标度不变性、Brown桥与几乎必然处处不可微性；深入剖析路径变差，证明连续有界变差二次变差恒为零，严格推导Brown运动二次变差依L2与二进几乎必然收敛至时间T以及一阶总变差几乎必然无穷；剖析Riemann-Stieltjes积分在无界变差下的根本失效，揭示左端点Itô约定保证适应性、零均值鞅性与前视偏差消除的构造动机，对比中点Stratonovich积分；在L2等距与简单过程逼近下严格构造连续时间Itô积分与连续局部鞅极大值估计；运用二阶Taylor展开严格证明一元、多元及含时Itô公式，极化导出连续半鞅乘积法则与协变差修正；导出几何Brown运动正值解与对数正态矩、指数鞅Novikov充要条件及Tanaka公式局部时；最后系统落地量化金融，剖析连续对数资产价格漂移修正、高频已实现方差依概率收敛于积分方差、多资产收益归因与离散Delta对冲Gamma累积误差递推。",
+  "whyStudy": "Brown运动与Itô微积分是现代量化金融衍生品定价（Black-Scholes-Merton模型）、连续时间投资组合选择与动态对冲的通用数学语言：金融资产连续价格路径本质上是无界变差分形几何，传统牛顿-莱布尼茨微积分链式法则在此彻底失效；Itô公式通过引入非零二次变差二阶修正项[B]_t=t，构成了所有衍生品偏微分方程与无套利定价的计算母体；已实现波动率与微观结构噪声分析更直接依赖于二次变差理论。掌握随机积分与Itô公式，是从离散统计走向现代连续时间金融工程的必经之路。",
+  "prerequisites": [
+    "c02-s5",
+    "c05-s1",
+    "c11-s2",
+    "c12-s4",
+    "c21-s7",
+    "c24-s1",
+    "c25-s1",
+    "c25-s2",
+    "c25-s7"
+  ],
+  "metadataStatus": "reviewed",
+  "reviewed": true,
+  "sections": {
+    "c26-s1": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "Brown运动",
+        "标度不变性",
+        "Brown桥",
+        "处处不可微",
+        "高斯过程"
+      ],
+      "coreConcepts": [
+        "定义26.1标准Brown运动四条公理体系：初值、独立增量、高斯平稳增量与样本路径连续",
+        "命题26.3式(26.1)-(26.3)转移密度热传导核与协方差结构Cov(B_s,B_t)=min(s,t)",
+        "命题26.4式(26.4)自相似标度不变性、时间反演性与对称反射性",
+        "定义26.5式(26.5)Brown桥定义与其高斯协方差结构",
+        "定理26.6式(26.6)基于二进网格极差的Brown运动处处不可微几乎必然性证明"
+      ],
+      "applications": [
+        "连续时间股票价格与利率动态扩散过程的基础噪声源构建",
+        "日内固定时间跨度回撤与终点锚定资产路径的Brown桥模拟"
+      ],
+      "prerequisites": [
+        {
+          "id": "c11-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c12-s4",
+          "strength": "required"
+        },
+        {
+          "id": "c24-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c26-s2",
+        "c26-s3",
+        "c26-s4"
+      ],
+      "learningObjective": "掌握标准Brown运动的公理化定义与三大高斯自相似性质，深刻理解样本路径连续但处处不可微的分析本质。",
+      "keyFormulas": [
+        "c26-eq-26.1",
+        "c26-eq-26.2",
+        "c26-eq-26.4",
+        "c26-eq-26.5"
+      ],
+      "rationale": "本节建立定义26.1标准Brown运动四公理与Kolmogorov连续性，证明命题26.3式(26.1)-(26.2)转移密度与协方差结构，证明命题26.4式(26.4)标度不变性，推导定义26.5式(26.5)Brown桥，证明定理26.6几乎必然处处不可微。连续时间随机分析的基石，属P0核心起点与高频考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c26-s2": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "总变差",
+        "二次变差",
+        "有界变差",
+        "无界变差",
+        "二进分割"
+      ],
+      "coreConcepts": [
+        "定义26.7式(26.7)-(26.8)路径一阶总变差V_T与二次变差[X]_T定义",
+        "引理26.8连续有界变差函数的二次变差恒为零的数学证明",
+        "定理26.9式(26.10)-(26.12)Brown运动二次变差在L2与二进几乎必然下收敛至时间跨度T",
+        "式(26.13)基于二次变差有限非零导出Brown运动路径一阶总变差几乎必然无穷"
+      ],
+      "applications": [
+        "高频量化交易日内已实现波动率（RV）与积分波动率的非参数估计",
+        "识别微观市场噪声对理论二次变差二次积累的阶数偏差"
+      ],
+      "prerequisites": [
+        {
+          "id": "c02-s5",
+          "strength": "required"
+        },
+        {
+          "id": "c26-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c26-s1",
+        "c26-s3",
+        "c26-s4"
+      ],
+      "learningObjective": "掌握总变差与二次变差的定义与级数收敛性，严格证明Brown运动二次变差依L2和a.s.收敛至T以及总变差无穷的根本性质。",
+      "keyFormulas": [
+        "c26-eq-26.7",
+        "c26-eq-26.8",
+        "c26-eq-26.11",
+        "c26-eq-26.12"
+      ],
+      "rationale": "本节建立定义26.7式(26.7)-(26.8)总变差与二次变差，证明引理26.8式(26.9)连续有界变差二次变差恒为零，严格证明定理26.9式(26.10)-(26.11)Brown运动二次变差L2与二进几乎必然收敛于式(26.12)[B]_T=T及式(26.13)一阶变差几乎必然无穷。揭示随机微积分核心代数机制，属P0高频必考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c26-s3": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 45,
+      "examFrequency": "high",
+      "tags": [
+        "Riemann积分",
+        "随机积分",
+        "前视偏差",
+        "非预见性",
+        "Stratonovich"
+      ],
+      "coreConcepts": [
+        "经典Riemann-Stieltjes积分在无界变差被积路径下的彻底失效机制",
+        "式(26.14)左右端点Riemann和的极限差：左端点收敛至(B_T^2-T)/2，右端点收敛至(B_T^2+T)/2",
+        "左端点Itô约定的金融经济学意义：非预见性信息流、零均值鞅性与适应性保证",
+        "中点Stratonovich积分定义及其与Itô积分的漂移修正转换公式"
+      ],
+      "applications": [
+        "量化策略交易执行在离散回测中的前视偏差（Look-ahead bias）数理溯源",
+        "连续时间几何微分流形与物理动力系统中的Stratonovich对称法则"
+      ],
+      "prerequisites": [
+        {
+          "id": "c25-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c26-s2",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c26-s2",
+        "c26-s4",
+        "c26-s5"
+      ],
+      "learningObjective": "深刻剖析无界变差下Riemann积分失效根源，掌握端点选取对随机和极限的确定性漂移偏移，理解Itô积远离前视偏差的构造动机。",
+      "keyFormulas": [
+        "c26-eq-26.14"
+      ],
+      "rationale": "本节剖析Riemann-Stieltjes积分在无界变差路径下的失效，严格证明式(26.14)左右端点Riemann和收敛至(B_T^2-T)/2与(B_T^2+T)/2并差出二次变差T，阐述左端点Ito约定保证适应可料、鞅性与L2等距的核心动机，推导中点Stratonovich积分与转换公式。奠定随机积分概念动机，属P0核心考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c26-s4": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 55,
+      "examFrequency": "high",
+      "tags": [
+        "简单过程",
+        "Itô 积分",
+        "Itô等距",
+        "连续修正",
+        "Doob极大值"
+      ],
+      "coreConcepts": [
+        "定义26.10-26.11式(26.15)-(26.16)可料简单过程的Itô随机积分显式定义",
+        "定理26.12式(26.17)Itô等距性恒等式E[(int X dB)^2] = int E[X^2] dt与零均值鞅性",
+        "引理26.14简单过程在平方可积适应过程空间L2_T中的稠密逼近",
+        "定理26.15式(26.20)Hilbert空间连续扩张与定理26.16式(26.21)-(26.22)唯一连续局部鞅修正"
+      ],
+      "applications": [
+        "连续时间自融资投资组合损益（PnL）的随机积分严格定义",
+        "高频量化执行算法中交易累计收益平方期望的误差界控制"
+      ],
+      "prerequisites": [
+        {
+          "id": "c05-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c25-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c26-s3",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c26-s3",
+        "c26-s5",
+        "c26-s6"
+      ],
+      "learningObjective": "掌握简单过程Itô积分构造，熟练证明Itô等距性与鞅性，掌握利用Hilbert空间稠密扩张构造一般连续适应积分的分析方法。",
+      "keyFormulas": [
+        "c26-eq-26.16",
+        "c26-eq-26.17",
+        "c26-eq-26.20",
+        "c26-eq-26.21"
+      ],
+      "rationale": "本节建立定义26.10-26.11式(26.16)简单过程Itô积分，证明定理26.12式(26.17)Itô等距与零均值鞅性，基于引理26.14稠密逼近完成定理26.15式(26.20)Hilbert空间连续扩张，证明定理26.16式(26.21)连续鞅修正与极大值界。随机分析核心构造，属P0高频核心考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c26-s5": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 55,
+      "examFrequency": "high",
+      "tags": [
+        "Itô公式",
+        "Taylor展开",
+        "链式法则",
+        "乘积法则",
+        "协变差"
+      ],
+      "coreConcepts": [
+        "定理26.17式(26.23)-(26.24)一元Itô公式证明：二阶Taylor展开与二次变差[X]_t补偿",
+        "定理26.18式(26.25)含时函数f(t,X_t)与式(26.26)多维Itô公式展开",
+        "式(26.27)连续半鞅的分部积分乘积法则d(XY) = X dY + Y dX + d[X,Y]",
+        "连续半鞅互变差[X,Y]_t的极化恒等式与Stratonovich形式对照"
+      ],
+      "applications": [
+        "Black-Scholes期权定价偏微分方程（PDE）的经典推导",
+        "衍生品Greeks敏感度（Delta, Gamma, Theta）的连续微积分动态展开"
+      ],
+      "prerequisites": [
+        {
+          "id": "c02-s5",
+          "strength": "required"
+        },
+        {
+          "id": "c26-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c26-s4",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c26-s4",
+        "c26-s6",
+        "c26-s7"
+      ],
+      "learningObjective": "熟练证明并应用一元、多维与含时Itô公式，深刻掌握非零二次变差引入的二阶修正项，熟练运用半鞅乘积法则与协变差计算。",
+      "keyFormulas": [
+        "c26-eq-26.23",
+        "c26-eq-26.25",
+        "c26-eq-26.26",
+        "c26-eq-26.27"
+      ],
+      "rationale": "本节在二阶Taylor展开下严格证明定理26.17式(26.23)-(26.24)一元Itô公式并导出[X]_t二次变差项，推广证明定理26.18式(26.25)含时公式与式(26.26)多维公式，极化导出式(26.27)连续半鞅乘积法则与协变差修正，对比Stratonovich形式。随机分析最重要的计算法则，属P0最高核心必考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c26-s6": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "几何Brown",
+        "对数正态",
+        "指数鞅",
+        "Novikov条件",
+        "Tanaka公式"
+      ],
+      "coreConcepts": [
+        "式(26.28)几何Brown运动（GBM）随机微分方程的正值显式解与式(26.29)对数正态各阶矩",
+        "Doléans-Dade随机指数与连续指数鞅结构",
+        "Novikov充分条件E[exp(1/2 int theta^2 ds)] < inf保证指数鞅为真实鞅的严格证明",
+        "Tanaka公式与绝对值函数次微分展开、局部时占用时间恒等式",
+        "Levy连续局部鞅特征刻画定理：二次变差为t的连续局部鞅必为Brown运动"
+      ],
+      "applications": [
+        "对数正态资产价格模拟与连续时间衍生品期望收益无偏蒙特卡洛抽样",
+        "测度变换Girsanov定理中Radon-Nikodym导数真实鞅性的Novikov验证"
+      ],
+      "prerequisites": [
+        {
+          "id": "c25-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c26-s5",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c26-s5",
+        "c26-s7"
+      ],
+      "learningObjective": "掌握几何Brown运动显式解推导与对数正态矩计算，掌握指数鞅与Novikov判定准则，理解Tanaka公式与局部时基本概念。",
+      "keyFormulas": [
+        "c26-eq-26.28",
+        "c26-eq-26.29"
+      ],
+      "rationale": "本节应用Itô公式严格推导式(26.28)几何Brown运动正值解与式(26.29)对数正态各阶矩，推导随机指数鞅性并证明Novikov充要条件，证明Tanaka公式绝对值次微分展开与局部时占用时间恒等式，证明多维Levy连续局部鞅特征刻画定理。汇集连续时间随机分析核心结论，属P0高频核心点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c26-s7": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "已实现方差",
+        "积分方差",
+        "收益归因",
+        "离散对冲",
+        "对冲误差"
+      ],
+      "coreConcepts": [
+        "式(26.30)对数价格连续扩散模型与漂移系数的-1/2 sigma^2 Itô修正",
+        "定理26.19式(26.31)高频等间隔已实现方差在网格细化下依概率收敛于积分方差",
+        "式(26.32)连续时间多资产投资组合几何增长率分解与波动率拖累归因",
+        "命题26.20式(26.33)-(26.34)期权离散Delta对冲的Gamma累积对冲误差递推公式"
+      ],
+      "applications": [
+        "高频量化交易日内积分波动率非参数度量与已实现方差互换定价",
+        "期权做市商离散再平衡对冲频度权衡与二次Gamma交易损益方差预算"
+      ],
+      "prerequisites": [
+        {
+          "id": "c21-s7",
+          "strength": "required"
+        },
+        {
+          "id": "c25-s7",
+          "strength": "required"
+        },
+        {
+          "id": "c26-s5",
+          "strength": "required"
+        },
+        {
+          "id": "c26-s6",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c26-s5",
+        "c26-s6"
+      ],
+      "learningObjective": "熟练掌握连续时间随机微积分在金融实战中的应用，掌握已实现波动率收敛性、多资产几何增长率分解与离散对冲误差推导。",
+      "keyFormulas": [
+        "c26-eq-26.30",
+        "c26-eq-26.31",
+        "c26-eq-26.32",
+        "c26-eq-26.34"
+      ],
+      "rationale": "本节系统呈现连续时间随机分析在量化实战中的落地：推导式(26.30)对数价格模型与漂移Itô修正，证明定理26.19式(26.31)高频已实现方差依概率收敛于积分方差，给出式(26.32)多资产增长率归因，证明命题26.20式(26.33)-(26.34)离散对冲Gamma误差递推。量化定价与对冲的实战基石，属P0核心压轴点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    }
+  },
+  "reviewedBy": "DSH",
+  "reviewedAt": "2026-11-10"
+}
