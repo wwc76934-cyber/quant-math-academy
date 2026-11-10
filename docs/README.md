@@ -76,7 +76,7 @@
 
 ## 下一步
 
-1. **等待用户确认 Phase 6**：代码许可、内容许可、仓库公开/私有、部署平台。
+1. **等待用户确认 Phase 6**：在 `OPEN_SOURCE_OPTIONS.md` 的 A/B/C/D 中选范围；确认内容版权与部署平台。
 2. 确认后：生成 THIRD_PARTY_NOTICES、LICENSE、README/CONTRIBUTING/SECURITY。
 3. T14 公式收藏：稳定版 backlog。
 4. 4 个超长节按 T19 口径做低端真机验证；无卡顿则不拆。
