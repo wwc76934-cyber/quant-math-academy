@@ -1,6 +1,6 @@
 # GitHub Pages 发布步骤（待执行）
 
-- 状态：配置已准备；**本机无 GitHub CLI/remote/凭证，尚未推送或部署**
+- 状态：已推送到 `https://github.com/wwc76934-cyber/quant-math-academy`；Actions build/upload 成功；deploy 因 **Pages 未启用** 返回 404
 - 已确认：代码 MIT、正文保留所有权利、公开仓库 + Pages
 
 ## 1. 已准备的文件
@@ -21,7 +21,29 @@ BASE_URL=/quant-math-academy/ npm --prefix web run build
 
 产物 gzip：主 JS 75.32KB；CSS 6.86KB。
 
-## 3. 需要你提供
+## 3. 首次部署的 Pages 启用（必须）
+
+首次运行 `deploy-pages` 报：
+
+```
+Failed to create deployment (status: 404) ... Ensure GitHub Pages has been enabled
+```
+
+请打开：
+
+```
+https://github.com/wwc76934-cyber/quant-math-academy/settings/pages
+```
+
+**Build and deployment → Source → GitHub Actions**，保存后：
+
+1. 打开 Actions → “Deploy web to GitHub Pages” → 最近一次 run；
+2. 点 **Re-run failed jobs**（或等下一次 push）；
+3. 部署成功后站点为 `https://wwc76934-cyber.github.io/quant-math-academy/`。
+
+构建已成功，不需要改代码；只缺 Pages 启用。
+
+## 4. 需要你提供
 
 1. **公开仓库 URL**（先创建空仓库，不要初始化 README）。
 2. 本机 GitHub 凭证之一：
@@ -29,7 +51,7 @@ BASE_URL=/quant-math-academy/ npm --prefix web run build
    - 或配置 Git Credential Manager，使 `git push` 能完成认证；
    - **不要在聊天中粘贴 PAT**。
 
-拿到 URL 后我会：
+仓库已推送；若后续需要重新推送：
 
 ```bash
 git remote add origin <repo-url>

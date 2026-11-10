@@ -1,7 +1,7 @@
 # Phase 6 开源准备审计（未发布）
 
 - 日期：2026-11-10
-- 状态：**用户已确认代码 MIT / 正文保留所有权利 / 公开仓库 + Pages；因本机无凭证，尚未推送/部署**
+- 状态：**已推送公开仓库** `https://github.com/wwc76934-cyber/quant-math-academy`；Actions build/upload 成功；Pages 尚未启用，deploy 404
 - 前置：全书 34 章/219 节覆盖完成，D/P 主校准 P0 56.6%、P2+P3 10.0%；110 Web + 58 内容测试通过。
 
 ## 1. 技术就绪度
