@@ -37,6 +37,15 @@ jobs:
       - name: Build content
         run: npm run content:build
 
+      - name: Build search index
+        run: node tools/content/build-search-index.mjs
+
+      - name: Build graph
+        run: npm run content:graph
+
+      - name: Build learning paths
+        run: npm run content:paths
+
       - name: Install web deps
         run: npm --prefix web ci
 
