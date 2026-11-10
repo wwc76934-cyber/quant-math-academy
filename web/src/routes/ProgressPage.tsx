@@ -289,7 +289,7 @@ export const ProgressPage: React.FC = () => {
 
   if (loading) {
     return (
-      <main className="content progress-page" style={{ padding: '40px 24px', maxWidth: '1040px', margin: '0 auto' }}>
+      <main className="content progress-page" id="main-content" style={{ padding: '40px 24px', maxWidth: '1040px', margin: '0 auto' }}>
         <p className="muted" role="status">正在加载学习进度与统计...</p>
       </main>
     );
@@ -297,7 +297,7 @@ export const ProgressPage: React.FC = () => {
 
   if (error || !book) {
     return (
-      <main className="content progress-page" style={{ padding: '40px 24px', maxWidth: '1040px', margin: '0 auto' }}>
+      <main className="content progress-page" id="main-content" style={{ padding: '40px 24px', maxWidth: '1040px', margin: '0 auto' }}>
         <div role="alert" style={{ padding: '16px', background: 'var(--bg-subtle)', border: '1px solid var(--accent)', borderRadius: '4px' }}>
           <h3>数据载入失败</h3>
           <p>{error || '无法获取章节数据'}</p>

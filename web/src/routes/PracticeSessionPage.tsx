@@ -131,7 +131,7 @@ export const PracticeSessionPage: React.FC = () => {
 
   if (loading) {
     return (
-      <main className="content practice-session shell" style={{ padding: '40px 24px', maxWidth: '840px', margin: '0 auto' }}>
+      <main className="content practice-session shell" id="main-content" style={{ padding: '40px 24px', maxWidth: '840px', margin: '0 auto' }}>
         <p className="muted" role="status">正在加载练习题目...</p>
       </main>
     );
@@ -139,7 +139,7 @@ export const PracticeSessionPage: React.FC = () => {
 
   if (error || !currentEx) {
     return (
-      <main className="content practice-session shell" style={{ padding: '40px 24px', maxWidth: '840px', margin: '0 auto' }}>
+      <main className="content practice-session shell" id="main-content" style={{ padding: '40px 24px', maxWidth: '840px', margin: '0 auto' }}>
         <div role="alert" style={{ padding: '20px', background: 'var(--bg-subtle)', border: '1px solid var(--accent)', borderRadius: '6px' }}>
           <h3>练习加载异常</h3>
           <p>{error || '未能加载本章习题'}</p>

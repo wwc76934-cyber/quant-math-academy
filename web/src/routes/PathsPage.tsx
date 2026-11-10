@@ -99,7 +99,7 @@ export const PathsPage: React.FC = () => {
 
   if (loading) {
     return (
-      <main className="content paths-page" style={{ padding: '40px 24px', maxWidth: '1040px', margin: '0 auto' }}>
+      <main className="content paths-page" id="main-content" style={{ padding: '40px 24px', maxWidth: '1040px', margin: '0 auto' }}>
         <p className="muted" role="status">正在加载学习路径规划...</p>
       </main>
     );
@@ -107,7 +107,7 @@ export const PathsPage: React.FC = () => {
 
   if (error || !pathsData) {
     return (
-      <main className="content paths-page" style={{ padding: '40px 24px', maxWidth: '1040px', margin: '0 auto' }}>
+      <main className="content paths-page" id="main-content" style={{ padding: '40px 24px', maxWidth: '1040px', margin: '0 auto' }}>
         <div role="alert" style={{ padding: '16px', background: 'var(--accent-light, #fdf2f2)', border: '1px solid var(--accent, #e53e3e)', borderRadius: '4px' }}>
           <h3>加载失败</h3>
           <p>{error || '无法获取学习路径数据'}</p>

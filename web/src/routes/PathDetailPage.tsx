@@ -167,7 +167,7 @@ export const PathDetailPage: React.FC = () => {
 
   if (loading) {
     return (
-      <main className="content paths-detail-page" style={{ padding: '40px 24px', maxWidth: '960px', margin: '0 auto' }}>
+      <main className="content paths-detail-page" id="main-content" style={{ padding: '40px 24px', maxWidth: '960px', margin: '0 auto' }}>
         <p className="muted" role="status">正在加载学习路径详情...</p>
       </main>
     );
@@ -175,7 +175,7 @@ export const PathDetailPage: React.FC = () => {
 
   if (error || !pathsData) {
     return (
-      <main className="content paths-detail-page" style={{ padding: '40px 24px', maxWidth: '960px', margin: '0 auto' }}>
+      <main className="content paths-detail-page" id="main-content" style={{ padding: '40px 24px', maxWidth: '960px', margin: '0 auto' }}>
         <div role="alert" style={{ padding: '16px', background: 'var(--accent-light, #fdf2f2)', border: '1px solid var(--accent, #e53e3e)', borderRadius: '4px' }}>
           <h3>加载失败</h3>
           <p>{error || '无法获取学习路径数据'}</p>
@@ -189,7 +189,7 @@ export const PathDetailPage: React.FC = () => {
 
   if (!pathItem) {
     return (
-      <main className="content paths-detail-page" style={{ padding: '40px 24px', maxWidth: '960px', margin: '0 auto' }}>
+      <main className="content paths-detail-page" id="main-content" style={{ padding: '40px 24px', maxWidth: '960px', margin: '0 auto' }}>
         <div style={{ padding: '24px', background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: '4px' }}>
           <h2>未找到指定学习路径</h2>
           <p className="muted">未能识别路径标识 "{mode}"，请在全览页选择有效路径。</p>
