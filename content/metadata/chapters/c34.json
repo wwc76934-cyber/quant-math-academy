@@ -1,0 +1,431 @@
+{
+  "schemaVersion": 1,
+  "chapterId": "c34",
+  "title": "量化策略的数学评估与回测",
+  "partId": "part-8",
+  "summary": "本章系统整合全书数学工具，从收益与风险调整指标、Lo非正态修正夏普比率、Brinson多因子业绩归因出发，深入剖析回测过拟合PBO、Almgren-Chriss市场冲击最优执行、资金容量与二次约束组合优化，建立多重检验DSR校正、前视漂移防范与平稳块自举策略评估终审闭环。",
+  "whyStudy": "策略评估是量化投研从数理推演走向真实资金运作的最终裁判席。掌握严格的回测信息边界、冲击成本损耗、统计过拟合检测与全书数学大一统认知，是成为成熟量化架构师与策略负责人的终极试金石。",
+  "prerequisites": [
+    "c11-s3",
+    "c21-s1",
+    "c31-s1",
+    "c32-s1",
+    "c33-s1"
+  ],
+  "metadataStatus": "reviewed",
+  "reviewed": true,
+  "reviewedBy": "DSH",
+  "reviewedAt": "2026-11-10",
+  "sections": {
+    "c34-s1": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "绩效指标",
+        "夏普比率",
+        "Lo调整",
+        "最大回撤",
+        "Sortino比率"
+      ],
+      "coreConcepts": [
+        "算术与对数收益",
+        "夏普比率",
+        "Sortino与Calmar比率",
+        "Lo自相关与偏度修正",
+        "最大回撤MDD"
+      ],
+      "applications": [
+        "策略风险收益综合评分",
+        "肥尾自相关序列夏普纠偏",
+        "账户资金回撤与恢复期测算"
+      ],
+      "prerequisites": [
+        {
+          "id": "c11-s3",
+          "strength": "required"
+        },
+        {
+          "id": "c13-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c28-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c34-s2",
+        "c34-s3",
+        "c34-s4"
+      ],
+      "learningObjective": "掌握算术对数收益年化转换、夏普/Sortino/Calmar定义，证明Lo(2002)非正态偏峰与序列相关渐近标准误修正定理。",
+      "keyFormulas": [
+        "c34-eq-34.1",
+        "c34-eq-34.2",
+        "c34-eq-34.3",
+        "c34-eq-34.4"
+      ],
+      "rationale": "本节建立定义34.1式(34.1)收益年化与定义34.2式(34.2)风险调整指标族，严格证明定理34.3式(34.3)夏普比率非正态偏度峰度与自相关Lo渐近标准误，建立定义34.4式(34.4)最大回撤动力学并在例34.1验证偏度修正。量化策略风险收益特征评价的核心测度地基，属P0必考高频考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c34-s2": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "业绩归因",
+        "Brinson模型",
+        "配置效应",
+        "选股效应",
+        "多因子归因"
+      ],
+      "coreConcepts": [
+        "Brinson归因恒等式",
+        "行业配置与个券选择",
+        "交互效应",
+        "多因子回归归因",
+        "归因误差传播"
+      ],
+      "applications": [
+        "投资经理主动超额收益解构",
+        "基准跟踪误差归因分析",
+        "因子暴露与特异Alpha分离"
+      ],
+      "prerequisites": [
+        {
+          "id": "c21-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c31-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c34-s1",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c34-s1",
+        "c34-s3",
+        "c34-s5"
+      ],
+      "learningObjective": "证明含交互项的Brinson归因恒等式与多因子截面回归业绩归因，掌握残差方差的误差传播与统计检验边界。",
+      "keyFormulas": [
+        "c34-eq-34.6",
+        "c34-eq-34.7",
+        "c34-eq-34.8",
+        "c34-eq-34.10"
+      ],
+      "rationale": "本节严格证明定理34.5式(34.6)-(34.7)含交互项Brinson归因恒等式，推导资产配置、个券选择与交互效应的正交分解，建立定理34.6式(34.8)多因子截面回归收益归因与式(34.10)残差方差误差传播，在例34.2完成超额分解。投资组合收益来源透视与Alpha真伪鉴定的理论枢纽，属P0核心考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c34-s3": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 55,
+      "examFrequency": "high",
+      "tags": [
+        "回测过拟合",
+        "选择偏差",
+        "CSCV",
+        "PBO",
+        "过滤泄露"
+      ],
+      "coreConcepts": [
+        "信息容许过滤",
+        "最优次序统计量偏差",
+        "期望夏普虚高",
+        "组合对称交叉验证CSCV",
+        "过拟合概率PBO"
+      ],
+      "applications": [
+        "多策略网格搜索虚假显著剔除",
+        "时序交叉验证避免前视泄漏",
+        "策略投产前过拟合概率量化评估"
+      ],
+      "prerequisites": [
+        {
+          "id": "c19-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c23-s5",
+          "strength": "required"
+        },
+        {
+          "id": "c31-s6",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c34-s1",
+        "c34-s4",
+        "c34-s6"
+      ],
+      "learningObjective": "掌握过滤信息流回测公理，证明独立策略择优期望虚高公式，建立CSCV组合对称验证与过拟合概率PBO积分计算。",
+      "keyFormulas": [
+        "c34-eq-34.11",
+        "c34-eq-34.12",
+        "c34-eq-34.13",
+        "c34-eq-34.14"
+      ],
+      "rationale": "本节建立定义34.7式(34.11)信息流容许过滤，严格证明定理34.8式(34.12)多策略搜索择优的夏普极值期望虚高公式，建立定义34.9式(34.13)-(34.14)组合对称交叉验证CSCV与回测过拟合概率PBO积分，在例34.3精算搜索偏差。防治量化回测幸存与过拟合陷阱的数理中枢，属P0最高频考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c34-s4": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 55,
+      "examFrequency": "high",
+      "tags": [
+        "实施缺口",
+        "市场冲击",
+        "AC最优执行",
+        "最优执行",
+        "换手拖累"
+      ],
+      "coreConcepts": [
+        "实施缺口ImplementationShortfall",
+        "临时与永久冲击",
+        "Almgren-Chriss模型",
+        "执行轨迹双曲三角解",
+        "换手率成本拖累"
+      ],
+      "applications": [
+        "大单最优拆单执行调度",
+        "回测真实交易摩擦扣除",
+        "高换手Alpha衰减与净收益精算"
+      ],
+      "prerequisites": [
+        {
+          "id": "c07-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c26-s2",
+          "strength": "required"
+        },
+        {
+          "id": "c31-s5",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c34-s1",
+        "c34-s5",
+        "c34-s6"
+      ],
+      "learningObjective": "证明离散线性冲击下的执行成本均值方差，求解Almgren-Chriss最优执行轨迹闭式解，推导换手率与净收益关系。",
+      "keyFormulas": [
+        "c34-eq-34.15",
+        "c34-eq-34.16",
+        "c34-eq-34.17",
+        "c34-eq-34.21"
+      ],
+      "rationale": "本节建立定义34.10式(34.15)实施缺口分解，推导命题34.11式(34.16)临时与永久冲击成本矩，严格证明定理34.12式(34.17)-(34.20)Almgren-Chriss离散最优执行双曲闭式，推导命题34.13式(34.21)换手损耗与净收益，在例34.4优化冲击。量化策略从纸面回测到实盘微观落地的核心构件，属P0必考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c34-s5": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 45,
+      "examFrequency": "high",
+      "tags": [
+        "策略容量",
+        "流动性约束",
+        "二次成本优化",
+        "杠杆约束",
+        "边际衰减"
+      ],
+      "coreConcepts": [
+        "策略资金容量",
+        "边际收益衰减模型",
+        "二次冲击均值方差优化",
+        "KKT最优性条件",
+        "流动性参与率约束"
+      ],
+      "applications": [
+        "资管产品策略资金容量评估",
+        "摩擦约束下的最优投资组合重平衡",
+        "券商融资融券杠杆与保证金风控"
+      ],
+      "prerequisites": [
+        {
+          "id": "c07-s3",
+          "strength": "required"
+        },
+        {
+          "id": "c34-s4",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c34-s2",
+        "c34-s4",
+        "c34-s6"
+      ],
+      "learningObjective": "掌握边际衰减下的资金容量临界方程，求解含二次冲击与行业风格约束的KKT最优持仓，分析杠杆与流动性约束。",
+      "keyFormulas": [
+        "c34-eq-34.24",
+        "c34-eq-34.25",
+        "c34-eq-34.26"
+      ],
+      "rationale": "本节建立定义34.15式(34.24)冲击衰减下的策略容量临界方程，严格推导命题34.16式(34.25)兼顾二次冲击与行业风格约束的KKT最优持仓闭式，给出式(34.26)流动性参与率与调仓周期折衷方程，在例34.5精算规模边界。高频与中频量化基金资产管理规模规划的核心数理模型，属P0核心应用点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c34-s6": {
+      "difficulty": "D3",
+      "priority": "P0",
+      "minutes": 55,
+      "examFrequency": "high",
+      "tags": [
+        "伪发现率",
+        "DSR紧缩夏普",
+        "平稳块自举",
+        "置换检验",
+        "前视膨胀"
+      ],
+      "coreConcepts": [
+        "策略伪发现率FDP/FDR",
+        "紧缩夏普比率DSR",
+        "最大夏普Gumbel极值",
+        "前视漂移膨胀",
+        "平稳块自举检验"
+      ],
+      "applications": [
+        "多重测试下的通胀夏普阈值调整",
+        "前视偏差污染的量化检验",
+        "非正态强相关收益平稳块重采样置换检验"
+      ],
+      "prerequisites": [
+        {
+          "id": "c20-s4",
+          "strength": "required"
+        },
+        {
+          "id": "c23-s6",
+          "strength": "required"
+        },
+        {
+          "id": "c31-s6",
+          "strength": "required"
+        },
+        {
+          "id": "c34-s3",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c34-s1",
+        "c34-s3",
+        "c34-s7"
+      ],
+      "learningObjective": "掌握策略伪发现率、证明最大夏普比率渐近Gumbel极值与通胀夏普比率DSR，证明前视漂移膨胀与平稳块自举检验。",
+      "keyFormulas": [
+        "c34-eq-34.27",
+        "c34-eq-34.28",
+        "c34-eq-34.29",
+        "c34-eq-34.30"
+      ],
+      "rationale": "本节建立定义34.17式(34.27)伪发现率，严格证明定理34.18式(34.28)-(34.29)最大夏普渐近Gumbel极值与通胀紧缩夏普比率DSR，证明命题34.19式(34.30)前视信息泄漏漂移膨胀，证明命题34.20式(34.31)-(34.32)平稳块自举与置换检验。策略投产终审与防伪的严谨审计流水线，属P0最高频考点。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    },
+    "c34-s7": {
+      "difficulty": "D2",
+      "priority": "P0",
+      "minutes": 50,
+      "examFrequency": "high",
+      "tags": [
+        "全书整合",
+        "随机分析链",
+        "多工具协同",
+        "投研方法论",
+        "量化大一统"
+      ],
+      "coreConcepts": [
+        "微积分到随机分析链条",
+        "数学工具协同共振",
+        "多因子与微观结构融合",
+        "波动率与极值风控闭环",
+        "量化研究进阶方法论"
+      ],
+      "applications": [
+        "全流程端到端量化投研架构",
+        "复杂多策略资产配置与对冲组合管理",
+        "量化数理全景框架建立"
+      ],
+      "prerequisites": [
+        {
+          "id": "c01-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c04-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c11-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c21-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c26-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c28-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c31-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c32-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c33-s1",
+          "strength": "required"
+        },
+        {
+          "id": "c34-s6",
+          "strength": "required"
+        }
+      ],
+      "related": [
+        "c01-s1",
+        "c26-s1",
+        "c31-s7",
+        "c32-s7",
+        "c33-s7",
+        "c34-s6"
+      ],
+      "learningObjective": "俯瞰全书34章数学工具演进链条，掌握基础分析、线性代数、概率统计、随机分析、时序预测与量化建模实战的协同机制。",
+      "keyFormulas": [],
+      "rationale": "本节系统梳理全书从微积分分析、线性代数、概率统计、随机微积分到高维时间序列与极值理论的逻辑演进链条，深度解构多因子选股、波动率曲面对冲、统计套利与风险平价中多模块数学工具的协同共振，构建严密的量化数学全景认知大厦。全书收官综述与方法论集大成之作，属P0核心必读总结。",
+      "reviewed": true,
+      "reviewedBy": "DSH",
+      "reviewedAt": "2026-11-10"
+    }
+  }
+}

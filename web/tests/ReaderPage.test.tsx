@@ -216,7 +216,7 @@ describe('ReaderPage', () => {
     expect(screen.queryByText('内容接入中')).not.toBeInTheDocument();
   });
 
-  it('renders unannotated chapter (C34) and marks missing metadata honestly', async () => {
+  it('renders C34 with full metadata and no unannotated badge', async () => {
     render(
       <StoreProvider>
         <ToastProvider>
@@ -242,7 +242,7 @@ describe('ReaderPage', () => {
       })
     ).toBeInTheDocument();
     expect(screen.queryByText('内容接入中')).not.toBeInTheDocument();
-    expect(screen.getAllByText('标注完善中').length).toBeGreaterThan(0);
+    expect(screen.queryAllByText('标注完善中').length).toBe(0);
   });
 
   it('shows the error state when a chapter manifest is missing', async () => {

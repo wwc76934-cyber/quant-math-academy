@@ -117,19 +117,18 @@ describe('PathDetailPage', () => {
     });
   });
 
-  it('displays "标注完善中" for sections from unannotated chapters', async () => {
+  it('shows no "标注完善中" badges after all 34 chapters are annotated', async () => {
     renderWithRouter('/paths/progression');
 
     expect(await screen.findByText('系统数学进阶')).toBeInTheDocument();
     expect(screen.getByText('20 周')).toBeInTheDocument();
     expect(screen.getAllByText(/219 节/).length).toBeGreaterThan(0);
 
-    // Expand all weeks so unannotated chapters in later weeks are rendered
+    // Expand all weeks so all sections are rendered
     fireEvent.click(screen.getByRole('button', { name: '展开全部周' }));
 
-    // Look for honest unannotated badge
-    const unannotatedBadges = screen.getAllByText('标注完善中');
-    expect(unannotatedBadges.length).toBeGreaterThan(0);
+    // All chapters are annotated now: no honest-unannotated badge should remain
+    expect(screen.queryAllByText('标注完善中').length).toBe(0);
   });
 
   it('renders not found error state for non-existent path mode', async () => {

@@ -37,24 +37,24 @@ describe('T09 知识关系图构建器与校验测试套件', () => {
 
     const manifest = JSON.parse(fs.readFileSync(MANIFEST_PATH, 'utf8'));
     assert.equal(manifest.totalNodes, 219);
-    assert.equal(manifest.annotatedNodes, 212);
-    assert.equal(manifest.unannotatedNodes, 7);
-    assert.equal(manifest.prerequisiteEdges, 530);
+    assert.equal(manifest.annotatedNodes, 219);
+    assert.equal(manifest.unannotatedNodes, 0);
+    assert.equal(manifest.prerequisiteEdges, 558);
     assert.equal(manifest.maxPrerequisiteDepth, 3);
     assert.deepEqual(manifest.warnings, []);
   });
 
-  test('2. 节点总数严格为 219，212 个标注节点，覆盖全部 34 章', () => {
+  test('2. 节点总数严格为 219，219 个标注节点，覆盖全部 34 章', () => {
     const { graphJson } = buildGraphData(bookData, metadataList);
 
     assert.equal(graphJson.nodes.length, 219, '全书必须恰好有 219 个知识点节点');
-    assert.equal(graphJson.stats.annotatedNodes, 212, '当前有 212 个已评审标注节点');
-    assert.equal(graphJson.stats.unannotatedNodes, 7, '其余 7 个节点为未标注');
+    assert.equal(graphJson.stats.annotatedNodes, 219, '当前有 219 个已评审标注节点');
+    assert.equal(graphJson.stats.unannotatedNodes, 0, '未标注节点为 0');
 
     // 校验每个节点字段
     const chapterIdSet = new Set();
     const annotatedChapterIds = [
-      'c01', 'c02', 'c03', 'c04', 'c05', 'c06', 'c07', 'c08', 'c09', 'c10', 'c11', 'c12', 'c13', 'c14', 'c15', 'c16', 'c17', 'c18', 'c19', 'c20', 'c21', 'c22', 'c23', 'c24', 'c25', 'c26', 'c27', 'c28', 'c29', 'c30', 'c31', 'c32', 'c33'
+      'c01', 'c02', 'c03', 'c04', 'c05', 'c06', 'c07', 'c08', 'c09', 'c10', 'c11', 'c12', 'c13', 'c14', 'c15', 'c16', 'c17', 'c18', 'c19', 'c20', 'c21', 'c22', 'c23', 'c24', 'c25', 'c26', 'c27', 'c28', 'c29', 'c30', 'c31', 'c32', 'c33', 'c34'
     ];
     for (const node of graphJson.nodes) {
       assert.ok(node.id, '节点 id 必须存在');
@@ -80,7 +80,7 @@ describe('T09 知识关系图构建器与校验测试套件', () => {
   test('3. 先修子图是严格 DAG（0 环）', () => {
     const { graphJson } = buildGraphData(bookData, metadataList);
     assert.equal(graphJson.stats.hasCycles, false);
-    assert.equal(graphJson.stats.prerequisiteEdges, 530);
+    assert.equal(graphJson.stats.prerequisiteEdges, 558);
   });
 
   test('4. 环路检测：人为注入循环先修必须报错并输出环路路径', () => {
@@ -173,14 +173,24 @@ describe('T09 知识关系图构建器与校验测试套件', () => {
   });
 
   test('9. 未标注章节不生成虚假关联边', () => {
-    const { graphJson } = buildGraphData(bookData, metadataList);
+    // 构造临时数据：若某章（如 c34）未评审标注，不生成其主动发出的先修边
+    const mutatedMeta = metadataList.map((m) => {
+      if (m.chapterId === 'c34') {
+        const copy = JSON.parse(JSON.stringify(m));
+        copy.reviewed = false;
+        for (const s of Object.values(copy.sections)) s.reviewed = false;
+        return copy;
+      }
+      return m;
+    });
+    const { graphJson } = buildGraphData(bookData, mutatedMeta);
 
-    // c34 是未标注章
+    // c34 变为未标注节点
     const c34s1 = graphJson.nodeMap['c34-s1'];
     assert.equal(c34s1.annotated, false);
 
-    // c16-s1 不应有由其主动发出的先修边
-    const c16Edges = graphJson.prerequisiteEdges.filter((e) => e.to === 'c34-s1');
-    assert.equal(c16Edges.length, 0, '未标注节不生成入向先修边');
+    // 不应有由其主动发出的入向先修边
+    const c34Edges = graphJson.prerequisiteEdges.filter((e) => e.to === 'c34-s1');
+    assert.equal(c34Edges.length, 0, '未标注节不生成入向先修边');
   });
 });
