@@ -75,7 +75,7 @@
     },
     "c27-s2": {
       "difficulty": "D3",
-      "priority": "P0",
+      "priority": "P1",
       "minutes": 55,
       "examFrequency": "high",
       "tags": [
@@ -121,7 +121,7 @@
         "c27-eq-27.9",
         "c27-eq-27.10"
       ],
-      "rationale": "本节建立定义27.4式(27.8)Lipschitz与线性增长条件，严格证明引理27.5式(27.9)Gronwall不等式，在Doob极大不等式与Itô等距下完整证明定理27.6式(27.10)Picard迭代强解存在唯一性与连续依赖性，辨析定义27.7强解弱解与Yamada-Watanabe定理。SDE数理存在性基石，属P0核心考点。",
+      "rationale": "本节用 Gronwall 不等式与 Picard 迭代证明 SDE 强解存在唯一，并辨析强解/弱解；这是理论基石，但多数量化岗位不手推完整证明，按手册校准为 P1。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"
@@ -230,7 +230,7 @@
     },
     "c27-s5": {
       "difficulty": "D2",
-      "priority": "P0",
+      "priority": "P1",
       "minutes": 50,
       "examFrequency": "high",
       "tags": [
@@ -270,14 +270,14 @@
         "c27-eq-27.24",
         "c27-eq-27.25"
       ],
-      "rationale": "本节建立定义27.13式(27.23)相关Brown运动与二次协变差d[W^i,W^j]_t=rho_ij dt，严格证明定理27.14式(27.24)多维Itô公式与Hessian二次变差矩阵补偿，证明命题27.15式(27.25)多维内积乘积法则，在例27.7中推导资产乘积漂移相关修正。多资产连续建模的理论基石，属P0核心高频考点。",
+      "rationale": "本节建立相关 Brown 运动二次协变差与多维 Itô 公式，用于多资产建模；属重要扩展，单资产可先掌握一维情形，按手册校准为 P1。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"
     },
     "c27-s6": {
       "difficulty": "D2",
-      "priority": "P0",
+      "priority": "P1",
       "minutes": 45,
       "examFrequency": "high",
       "tags": [
@@ -320,14 +320,14 @@
         "c27-eq-27.28",
         "c27-eq-27.29"
       ],
-      "rationale": "本节系统建立金融资产连续时间扩散体系：建立式(27.26)股票与无风险银行账户基准，建立式(27.27)Vasicek利率模型与式(27.28)CIR非负平方根扩散，建立式(27.29)Heston随机波动率系统与相关杠杆效应，阐明真实测度与风险中性测度漂移改写。量化资产定价工业界核心构件，属P0核心应用点。",
+      "rationale": "本节给出 Vasicek/CIR/Heston 与真实/风险中性测度设定；是定价应用核心但方向性较强，按手册校准为 P1。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"
     },
     "c27-s7": {
       "difficulty": "D3",
-      "priority": "P0",
+      "priority": "P1",
       "minutes": 55,
       "examFrequency": "high",
       "tags": [
@@ -368,7 +368,7 @@
         "c27-eq-27.31",
         "c27-eq-27.32"
       ],
-      "rationale": "本节建立定义27.16式(27.30)Euler-Maruyama格式与定义27.17式(27.31)Milstein二阶Itô-Taylor展开格式，给出定义27.18式(27.32)强弱收敛定义，严格证明定理27.19连续插值下Euler格式强收敛阶为0.5与矩控制界。复杂SDE无显式解时数值模拟的理论保障，属P0核心高频考点。",
+      "rationale": "本节定义 Euler-Maruyama/Milstein 格式并证明 Euler 强收敛 0.5 阶；数值实现常用，理论细节可后置，按手册校准为 P1。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"

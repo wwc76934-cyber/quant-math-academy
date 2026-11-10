@@ -178,7 +178,7 @@
     },
     "c28-s4": {
       "difficulty": "D2",
-      "priority": "P0",
+      "priority": "P1",
       "minutes": 50,
       "examFrequency": "high",
       "tags": [
@@ -220,14 +220,14 @@
         "c28-eq-28.20",
         "c28-eq-28.21"
       ],
-      "rationale": "本节建立定义28.12式(28.18)MA(q)模型与式(28.19)-(28.20)有限记忆自协方差截尾性，严格证明定义28.13单位圆外根可逆性条件与创新恢复，建立定义28.14式(28.21)ARMA(p,q)模型及其式(28.22)双向多项式因果可逆展开与公共根消除。时间序列ARMA混合建模核心，属P0核心考点。",
+      "rationale": "本节建立 MA(q) 与 ARMA(p,q)、可逆性与因果展开；ARMA 是重要建模工具，但依赖 AR 基础，按手册校准为 P1。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"
     },
     "c28-s5": {
       "difficulty": "D2",
-      "priority": "P0",
+      "priority": "P1",
       "minutes": 50,
       "examFrequency": "high",
       "tags": [
@@ -276,14 +276,14 @@
         "c28-eq-28.24",
         "c28-eq-28.25"
       ],
-      "rationale": "本节系统推导式(28.23)条件最小二乘估计与Gaussian极大似然拟合，对比式(28.24)AIC预测效率与BIC一致选择准则惩罚差异，建立式(28.25)Ljung-Box白噪声残差自相关累积卡方检验Q统计量并辨析独立性条件。时序参数推断与模型诊断的完整统计流水线，属P0核心高频考点。",
+      "rationale": "本节给出条件最小二乘/Gaussian MLE、AIC/BIC 定阶与 Ljung-Box 诊断；属参数推断流水线，工具可由软件实现，按手册校准为 P1。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"
     },
     "c28-s6": {
       "difficulty": "D2",
-      "priority": "P0",
+      "priority": "P1",
       "minutes": 50,
       "examFrequency": "high",
       "tags": [
@@ -327,14 +327,14 @@
         "c28-eq-28.26",
         "c28-eq-28.27"
       ],
-      "rationale": "本节利用条件期望塔式性质严格证明条件均值为最小均方误差预测，推导AR(1)式(28.26)h步预测均值衰减与向无条件方差收敛的预测方差，给出一般ARMA基于MA(无穷)系数的式(28.27)多步预测误差方差累加公式与高斯置信区间构造。动态时间序列预测与不确定性评估中枢，属P0核心必考点。",
+      "rationale": "本节证明条件均值最小 MSE 预测，推导 AR/ARMA 多步预测与误差方差；预测是核心应用但依赖模型设定，按手册校准为 P1。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"
     },
     "c28-s7": {
       "difficulty": "D2",
-      "priority": "P0",
+      "priority": "P1",
       "minutes": 45,
       "examFrequency": "high",
       "tags": [
@@ -380,7 +380,7 @@
       ],
       "learningObjective": "深刻识别ARMA在量化投研中的典型误区，掌握重叠标签自相关修正、波动聚集残差检验与HAC稳健推断，防范过拟合。",
       "keyFormulas": [],
-      "rationale": "本节深度剖析ARMA在量化投研中的实操边界：严格辨析统计显著与扣除交易成本后可交易性的差异，剖析弱平稳非IID下的波动聚集风险，揭示重叠收益计算机械制造假性MA自相关陷阱，强调平稳价差与协整检验区别及HAC稳健标准误必要性。量化回测与时序策略防过拟合核心指南，属P0核心实战点。",
+      "rationale": "本节系统辨析 ARMA 在量化投研中的误用：重叠收益制造假性 MA 自相关、波动聚集下弱平稳非 IID、HAC 稳健标准误与过拟合；属实战指南，按手册校准为 P1。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"
