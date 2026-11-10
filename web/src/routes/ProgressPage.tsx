@@ -4,9 +4,91 @@ import { useToast } from '../components/reader/Toast';
 import { loadBook } from '../features/content/loadBook';
 import { Book } from '../features/content/types';
 import { useStore } from '../features/store/store';
-import { ImportStoreSummary } from '../features/store/types';
+import { ImportStoreSummary, StoreV1 } from '../features/store/types';
 import { formatDisplayTitle, formatPercentage } from '../lib/format';
 import { learnPath, notesPath, practicePath } from '../lib/paths';
+
+export interface TodaySuggestion {
+  title: string;
+  reason: string;
+  link: string;
+}
+
+export function getTodaySuggestion(store: StoreV1, book: Book | null): TodaySuggestion {
+  const nowIso = new Date().toISOString();
+
+  // 1. store.review 中 dueAt <= now 且未掌握的数量 > 0：
+  //    - 标题“先复习 N 道到期错题”
+  //    - 理由“间隔复习到期”
+  //    - 链接 /practice/wrong
+  const wrongReviews = Object.values(store.review || {});
+  const dueReviews = wrongReviews.filter(
+    (r) => r.dueAt <= nowIso && (r.correctStreak === undefined || r.correctStreak < 3)
+  );
+  if (dueReviews.length > 0) {
+    return {
+      title: `先复习 ${dueReviews.length} 道到期错题`,
+      reason: '间隔复习到期',
+      link: '/practice/wrong',
+    };
+  }
+
+  // 2. 否则错题数（store.exercises 中 status=wrong）>0：
+  //    - “重练 N 道错题” / 理由“错题优先”
+  //    - 链接 /practice/wrong
+  const wrongExercises = Object.values(store.exercises || {}).filter(
+    (ex) => ex.status === 'wrong'
+  );
+  if (wrongExercises.length > 0) {
+    return {
+      title: `重练 ${wrongExercises.length} 道错题`,
+      reason: '错题优先',
+      link: '/practice/wrong',
+    };
+  }
+
+  // 3. 否则 store.lastLocation 存在：
+  //    - “继续上次位置：{章/节标题}” / 理由“最近阅读”
+  //    - 链接 /learn/{chapterId}#{sectionId}
+  if (store.lastLocation && store.lastLocation.chapterId) {
+    const chapter = book?.chapters.find((c) => c.id === store.lastLocation?.chapterId);
+    const section = chapter?.sections.find((s) => s.id === store.lastLocation?.sectionId);
+    const displayTitle = section
+      ? formatDisplayTitle(section.title)
+      : chapter
+      ? formatDisplayTitle(chapter.title)
+      : store.lastLocation.sectionId || store.lastLocation.chapterId;
+    const hash = store.lastLocation.sectionId ? `#${store.lastLocation.sectionId}` : '';
+    return {
+      title: `继续上次位置：${displayTitle}`,
+      reason: '最近阅读',
+      link: `/learn/${store.lastLocation.chapterId}${hash}`,
+    };
+  }
+
+  // 4. 否则已学节数（progress status done/master）为 0：
+  //    - “从第 1 章开始” / 理由“建立基础”
+  //    - 链接 /learn/c01
+  const learnedCount = Object.values(store.progress || {}).filter(
+    (p) => p.status === 'done' || p.status === 'master'
+  ).length;
+  if (learnedCount === 0) {
+    return {
+      title: '从第 1 章开始',
+      reason: '建立基础',
+      link: '/learn/c01',
+    };
+  }
+
+  // 5. 否则已学 >0 且无到期/错题：
+  //    - “继续推进全书” / 理由“保持节奏”
+  //    - 链接 /syllabus
+  return {
+    title: '继续推进全书',
+    reason: '保持节奏',
+    link: '/syllabus',
+  };
+}
 
 export const ProgressPage: React.FC = () => {
   const { store, importStore, resetStore } = useStore();
@@ -86,6 +168,8 @@ export const ProgressPage: React.FC = () => {
       learnedPct,
     };
   }, [store.progress, store.review, totalSections]);
+
+  const todaySuggestion = useMemo(() => getTodaySuggestion(store, book), [store, book]);
 
   // Chapter mapping for reviews
   const chapterMap = useMemo(() => {
@@ -388,6 +472,31 @@ export const ProgressPage: React.FC = () => {
             {kpis.dueTodayCount} <small style={{ fontSize: '13px', fontWeight: 400, color: 'var(--ink-muted)' }}>题</small>
           </div>
           <span style={{ fontSize: '11px', color: 'var(--ink-muted)' }}>到期等待重新练习检验</span>
+        </div>
+      </section>
+
+      {/* 2.5 Today Suggestion Card */}
+      <section
+        className="progress-suggestion-card"
+        aria-labelledby="progress-suggestion-heading"
+        data-testid="progress-suggestion-card"
+      >
+        <div className="progress-suggestion-card__body">
+          <div className="progress-suggestion-card__tag">TODAY · 建议</div>
+          <h2 id="progress-suggestion-heading" className="progress-suggestion-card__title">
+            {todaySuggestion.title}
+          </h2>
+          <p className="progress-suggestion-card__reason">
+            {todaySuggestion.reason}
+          </p>
+        </div>
+        <div className="progress-suggestion-card__action">
+          <Link
+            to={todaySuggestion.link}
+            className="btn btn--primary progress-suggestion-card__link"
+          >
+            开始 →
+          </Link>
         </div>
       </section>
 

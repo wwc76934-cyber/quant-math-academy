@@ -1830,3 +1830,72 @@ details.proof[open] > summary.proof__label::before {
 .bookmark-item__remove-btn:hover {
   color: var(--accent);
 }
+
+/* Progress Suggestion Card (T22) */
+.progress-suggestion-card {
+  background: var(--bg-card, #ffffff);
+  border: 1px solid var(--border, #e5e5e0);
+  border-radius: var(--radius-md, 6px);
+  padding: 20px 24px;
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.progress-suggestion-card__body {
+  flex: 1 1 280px;
+  min-width: 0;
+}
+
+.progress-suggestion-card__tag {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--ink-muted);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.progress-suggestion-card__title {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 6px;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.progress-suggestion-card__reason {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--ink-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.progress-suggestion-card__action {
+  flex-shrink: 0;
+}
+
+.progress-suggestion-card__link {
+  min-width: 88px;
+}
+
+@media (max-width: 640px) {
+  .progress-suggestion-card {
+    padding: 16px;
+    gap: 16px;
+  }
+  .progress-suggestion-card__action {
+    width: 100%;
+  }
+  .progress-suggestion-card__action .btn {
+    width: 100%;
+  }
+}
+
