@@ -1,4 +1,4 @@
-import { ExerciseRecord, NoteRecord, ReviewRecord, StoreV1 } from './types';
+import { ExerciseRecord, FormulaBookmarkMeta, NoteRecord, ReviewRecord, StoreV1 } from './types';
 
 export const STORAGE_KEY = 'qma:store:v1';
 export const CORRUPT_KEY_PREFIX = 'qma:store:corrupt:';
@@ -20,6 +20,7 @@ export const DEFAULT_STORE: StoreV1 = {
   bookmarks: {
     sections: [],
     formulas: [],
+    formulaMeta: {},
   },
   review: {},
   path: {
@@ -113,6 +114,34 @@ export function loadStore(): { store: StoreV1; corrupted: boolean; available: bo
       }
     }
 
+    // Sanitize formulaMeta safely
+    const safeFormulaMeta: Record<string, FormulaBookmarkMeta> = {};
+    if (parsed.bookmarks?.formulaMeta && typeof parsed.bookmarks.formulaMeta === 'object') {
+      for (const [key, val] of Object.entries(parsed.bookmarks.formulaMeta)) {
+        if (
+          val &&
+          typeof val === 'object' &&
+          typeof (val as FormulaBookmarkMeta).id === 'string' &&
+          typeof (val as FormulaBookmarkMeta).latex === 'string' &&
+          typeof (val as FormulaBookmarkMeta).chapterId === 'string' &&
+          typeof (val as FormulaBookmarkMeta).sectionId === 'string'
+        ) {
+          const item = val as FormulaBookmarkMeta;
+          safeFormulaMeta[key] = {
+            id: item.id,
+            latex: item.latex,
+            chapterId: item.chapterId,
+            sectionId: item.sectionId,
+            ...(typeof item.tag === 'string' ? { tag: item.tag } : {}),
+            bookmarkedAt:
+              typeof item.bookmarkedAt === 'string'
+                ? item.bookmarkedAt
+                : new Date().toISOString(),
+          };
+        }
+      }
+    }
+
     // Merge with defaults to ensure all fields are present
     const store: StoreV1 = {
       ...DEFAULT_STORE,
@@ -129,8 +158,9 @@ export function loadStore(): { store: StoreV1; corrupted: boolean; available: bo
       notes: safeNotes,
       review: safeReview,
       bookmarks: {
-        ...DEFAULT_STORE.bookmarks,
-        ...(parsed.bookmarks || {}),
+        sections: Array.isArray(parsed.bookmarks?.sections) ? parsed.bookmarks.sections : [],
+        formulas: Array.isArray(parsed.bookmarks?.formulas) ? parsed.bookmarks.formulas : [],
+        formulaMeta: safeFormulaMeta,
       },
       path: {
         ...DEFAULT_STORE.path,

@@ -33,6 +33,7 @@ export const ReaderPage: React.FC = () => {
     setLastLocation,
     updateSectionProgress,
     logActivity,
+    toggleFormulaBookmark,
   } = useStore();
 
   const [book, setBook] = useState<Book | null>(null);
@@ -407,6 +408,48 @@ export const ReaderPage: React.FC = () => {
     };
   }, [currentSectionId, store.progress]);
 
+  // Inject and sync formula bookmark buttons
+  useEffect(() => {
+    const container = articleContainerRef.current;
+    if (!container) return;
+
+    const bookmarkedSet = new Set(store.bookmarks?.formulas || []);
+    const equations = container.querySelectorAll<HTMLElement>(
+      '.section-block .equation[id]'
+    );
+
+    equations.forEach((eq) => {
+      const eqId = eq.id;
+      if (!eqId) return;
+
+      const isBookmarked = bookmarkedSet.has(eqId);
+      let btn = eq.querySelector<HTMLButtonElement>('.equation__bookmark');
+      if (!btn) {
+        btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'equation__bookmark';
+        btn.setAttribute('data-eq-id', eqId);
+
+        const bodyEl = eq.querySelector('.equation__body');
+        if (bodyEl && bodyEl.nextSibling) {
+          eq.insertBefore(btn, bodyEl.nextSibling);
+        } else {
+          eq.appendChild(btn);
+        }
+      }
+
+      const label = isBookmarked ? '取消收藏' : '收藏公式';
+      btn.textContent = isBookmarked ? '★' : '☆';
+      btn.setAttribute('aria-label', label);
+      btn.setAttribute('title', label);
+      if (isBookmarked) {
+        btn.classList.add('is-bookmarked');
+      } else {
+        btn.classList.remove('is-bookmarked');
+      }
+    });
+  }, [loadedSections, store.bookmarks.formulas]);
+
   // Global Event Delegation for Copy actions inside article
   useEffect(() => {
     const container = articleContainerRef.current;
@@ -414,6 +457,34 @@ export const ReaderPage: React.FC = () => {
 
     const handleClick = async (e: MouseEvent) => {
       const target = e.target as HTMLElement;
+
+      // 0. Toggle Formula Bookmark
+      const bookmarkBtn = target.closest<HTMLElement>('.equation__bookmark');
+      if (bookmarkBtn) {
+        e.preventDefault();
+        e.stopPropagation();
+        const eqEl = bookmarkBtn.closest<HTMLElement>('.equation');
+        if (eqEl) {
+          const eqId = bookmarkBtn.getAttribute('data-eq-id') || eqEl.id;
+          const latex = eqEl.getAttribute('data-latex') || '';
+          const sectionEl = eqEl.closest<HTMLElement>('.section-block');
+          const sectionId = sectionEl?.id || currentSectionId || '';
+          const tagEl = eqEl.querySelector<HTMLElement>('.equation__number');
+          const tag = tagEl?.textContent?.trim() || undefined;
+
+          if (eqId) {
+            const added = toggleFormulaBookmark({
+              id: eqId,
+              latex,
+              tag,
+              chapterId,
+              sectionId,
+            });
+            showToast(added ? '已收藏公式' : '已取消收藏');
+          }
+        }
+        return;
+      }
 
       // 1. Copy Environment Anchor
       const anchorEl = target.closest<HTMLAnchorElement>('.env__anchor');
@@ -458,7 +529,7 @@ export const ReaderPage: React.FC = () => {
 
     container.addEventListener('click', handleClick);
     return () => container.removeEventListener('click', handleClick);
-  }, [loading, chapterData, showToast, logActivity]);
+  }, [loading, chapterData, showToast, logActivity, toggleFormulaBookmark, chapterId, currentSectionId]);
 
   // Keyboard Shortcuts
   useEffect(() => {

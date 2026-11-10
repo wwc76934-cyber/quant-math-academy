@@ -32,9 +32,19 @@ export interface LastLocation {
   at: string;
 }
 
+export interface FormulaBookmarkMeta {
+  id: string;
+  latex: string;
+  tag?: string;
+  chapterId: string;
+  sectionId: string;
+  bookmarkedAt: string;
+}
+
 export interface UserBookmarks {
   sections: string[];
   formulas: string[];
+  formulaMeta: Record<string, FormulaBookmarkMeta>;
 }
 
 export interface PathSetting {
@@ -124,6 +134,7 @@ export interface StoreContextValue {
   deleteNote: (sectionId: string) => void;
   importStore: (raw: unknown) => { success: boolean; error?: string; summary?: ImportStoreSummary };
   resetStore: () => void;
+  toggleFormulaBookmark: (meta: Omit<FormulaBookmarkMeta, 'bookmarkedAt'>) => boolean;
   logActivity: (activity: { type: 'status' | 'read' | 'copy' | 'exercise' | 'note'; targetId: string; detail?: string }) => void;
   clearCorruptedNotice: () => void;
   resolvedTheme: 'light' | 'dark';

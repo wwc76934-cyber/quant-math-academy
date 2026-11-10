@@ -16,6 +16,7 @@ import {
   ExerciseRecord,
   ExerciseStatus,
   FontSizeSetting,
+  FormulaBookmarkMeta,
   ImportStoreSummary,
   LastLocation,
   LineHeightSetting,
@@ -636,6 +637,54 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({
     [updateStore]
   );
 
+  const toggleFormulaBookmark = useCallback(
+    (meta: Omit<FormulaBookmarkMeta, 'bookmarkedAt'>): boolean => {
+      const alreadyBookmarked = Boolean(store.bookmarks?.formulas?.includes(meta.id));
+      const willBeBookmarked = !alreadyBookmarked;
+
+      updateStore((prev) => {
+        const bookmarks = prev.bookmarks || { sections: [], formulas: [], formulaMeta: {} };
+        const formulas = bookmarks.formulas || [];
+        const formulaMeta = bookmarks.formulaMeta || {};
+        const exists = formulas.includes(meta.id);
+
+        if (exists) {
+          const nextFormulas = formulas.filter((id) => id !== meta.id);
+          const nextMeta = { ...formulaMeta };
+          delete nextMeta[meta.id];
+          return {
+            ...prev,
+            bookmarks: {
+              ...bookmarks,
+              formulas: nextFormulas,
+              formulaMeta: nextMeta,
+            },
+          };
+        } else {
+          const nextFormulas = [...formulas, meta.id];
+          const nextMeta = {
+            ...formulaMeta,
+            [meta.id]: {
+              ...meta,
+              bookmarkedAt: new Date().toISOString(),
+            },
+          };
+          return {
+            ...prev,
+            bookmarks: {
+              ...bookmarks,
+              formulas: nextFormulas,
+              formulaMeta: nextMeta,
+            },
+          };
+        }
+      });
+
+      return willBeBookmarked;
+    },
+    [store.bookmarks, updateStore]
+  );
+
   const importStore = useCallback(
     (raw: unknown): { success: boolean; error?: string; summary?: ImportStoreSummary } => {
       try {
@@ -748,7 +797,19 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({
           notes: safeNotes,
           bookmarks:
             candidate.bookmarks && typeof candidate.bookmarks === 'object'
-              ? (candidate.bookmarks as UserBookmarks)
+              ? {
+                  sections: Array.isArray((candidate.bookmarks as UserBookmarks).sections)
+                    ? (candidate.bookmarks as UserBookmarks).sections
+                    : [],
+                  formulas: Array.isArray((candidate.bookmarks as UserBookmarks).formulas)
+                    ? (candidate.bookmarks as UserBookmarks).formulas
+                    : [],
+                  formulaMeta:
+                    (candidate.bookmarks as UserBookmarks).formulaMeta &&
+                    typeof (candidate.bookmarks as UserBookmarks).formulaMeta === 'object'
+                      ? (candidate.bookmarks as UserBookmarks).formulaMeta
+                      : {},
+                }
               : DEFAULT_STORE.bookmarks,
           review: safeReview,
           path: safePath,
@@ -808,6 +869,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({
       reviewWrongExercise,
       setNote,
       deleteNote,
+      toggleFormulaBookmark,
       importStore,
       resetStore,
       logActivity,
@@ -833,6 +895,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({
       reviewWrongExercise,
       setNote,
       deleteNote,
+      toggleFormulaBookmark,
       importStore,
       resetStore,
       logActivity,

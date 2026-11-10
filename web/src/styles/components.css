@@ -1238,6 +1238,37 @@
   border-color: var(--line-strong);
 }
 
+.equation__bookmark {
+  position: absolute;
+  top: -14px;
+  right: 36px;
+  background: transparent;
+  border: none;
+  padding: 0 4px;
+  font-size: 14px;
+  line-height: 1;
+  color: var(--ink-muted);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: color 0.15s ease, opacity 0.15s ease;
+  z-index: 1;
+}
+.equation__bookmark:hover {
+  color: var(--accent);
+}
+.equation__bookmark.is-bookmarked {
+  color: var(--accent);
+}
+
+@media (max-width: 640px) {
+  .equation__bookmark {
+    top: auto;
+    bottom: -16px;
+    right: 0;
+    font-size: 14px;
+  }
+}
+
 .math.math-inline {
   line-height: 1;
   white-space: normal;
