@@ -27,7 +27,7 @@
 | katex | 0.19.1 | MIT | 构建期公式渲染（已升级修复 low 通告） |
 | marked | 15.0.12 | MIT | Markdown 解析 |
 | react / react-dom | 18.3.1 | MIT | UI |
-| react-router-dom | 6.30.6 | MIT | 路由 |
+| react-router-dom | 7.18.5 | MIT | 路由（已升级修复 moderate 通告） |
 | minisearch | 7.2.0 | MIT | 搜索 |
 | typescript（dev） | 5.9.3 | Apache-2.0 | 类型检查 |
 | vite（dev） | 6.4.5 | MIT | 构建 |
@@ -54,9 +54,9 @@
 | 依赖 | 严重度 | 通告 | 现状/影响 | 决策 |
 |---|---|---|---|---|
 | katex | ✅ 已修复 | GHSA-238p-pmpm-9mq7 | 升级 0.19.1；全量公式渲染 0 error、58 内容测试/110 Web 测试通过 | 已完成 |
-| react-router 6.30.6 | moderate | GHSA-wrjc-x8rr-h8h6（开放重定向绕过）、GHSA-337j-9hxr-rhxg（SSR 反序列化） | 纯客户端、无 SSR、无用户可控外链；SSR 通告不适用 | 升级 7.x 为 breaking；发布前评估 |
+| react-router-dom | ✅ 已修复 | GHSA-wrjc-x8rr-h8h6、GHSA-337j-9hxr-rhxg | 升级 7.18.5；110 Web 测试、build 通过；首屏 gzip 69.68→75.28KB | 已完成 |
 
-KaTeX 已升级到 0.19.1，`npm audit --omit=dev` 现在为 **0 vulnerabilities**；React Router 中危通告仍保留，未跨大版本升级。
+KaTeX 已升级到 0.19.1，React Router 已升级到 7.18.5；根与 Web 的 `npm audit --omit=dev` 均为 **0 vulnerabilities**。首屏 JS gzip 75.28KB，仍低于 90KB 预算。
 
 ## 5. 部署方案（待选）
 
@@ -79,7 +79,7 @@ KaTeX 已升级到 0.19.1，`npm audit --omit=dev` 现在为 **0 vulnerabilities
 - [ ] 添加 `LICENSE`（代码）与内容许可/版权声明
 - [ ] 生成并复核 `THIRD_PARTY_NOTICES`
 - [x] KaTeX 升级 0.19.1 并回归
-- [ ] 决定 React Router 6→7 升级与回归
+- [x] React Router 升级 7.18.5 并回归（110 测试通过）
 - [ ] 写公开 `README`（定位、截图、快速开始、架构、限制）
 - [ ] `CONTRIBUTING.md`、`SECURITY.md`、Issue/PR 模板
 - [ ] 确认 `src/` 是否随仓库公开；若否则提供内容获取/构建说明
