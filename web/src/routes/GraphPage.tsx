@@ -154,7 +154,7 @@ export const GraphPage: React.FC = () => {
             <span className="graph-stat-item__label">横向关联边 (无向)</span>
           </div>
           <div className="graph-stat-item">
-            <span className="graph-stat-item__num" style={{ color: 'var(--sage, #3b6e5e)' }}>
+            <span className="graph-stat-item__num" style={{ color: 'var(--success)' }}>
               0 环严格 DAG
             </span>
             <span className="graph-stat-item__label">最深先修 {graphData.stats.maxPrerequisiteDepth} 层</span>
@@ -235,7 +235,7 @@ export const GraphPage: React.FC = () => {
       {loading && (
         <div className="graph-loading" aria-busy="true">
           <p style={{ color: 'var(--ink-secondary)', margin: 0 }}>
-            正在加载知识关联图数据...
+            正在载入知识图谱…
           </p>
         </div>
       )}
@@ -286,18 +286,17 @@ export const GraphPage: React.FC = () => {
                     <div>
                       {isChapterAnnotated ? (
                         <span className="graph-chapter-badge graph-chapter-badge--annotated">
-                          已评审标注 ({chap.coverage?.annotatedSections} /{' '}
-                          {chap.coverage?.totalSections} 节)
+                          已标注 {chap.coverage?.annotatedSections} / {chap.coverage?.totalSections} 节
                         </span>
                       ) : (
-                        <span className="graph-chapter-badge">标注完善中</span>
+                        <span className="graph-chapter-badge">未整理</span>
                       )}
                     </div>
                   </header>
 
                   {!isChapterAnnotated && (
                     <div className="graph-unannotated-notice">
-                      <span>ℹ️ 本章标注完善中，暂未建立关联边，保持诚实留白。</span>
+                      <span>本章还没有整理先修与关联关系。</span>
                     </div>
                   )}
 
@@ -349,7 +348,7 @@ export const GraphPage: React.FC = () => {
                                 <PriorityBadge priority={sec.priority as PriorityLevel} />
                               )}
                               {!sec.annotated && (
-                                <span className="small muted">标注完善中</span>
+                                <span className="small muted">—</span>
                               )}
                             </div>
                           </div>
@@ -446,7 +445,7 @@ export const GraphPage: React.FC = () => {
                               to={`/learn/${sec.chapterId}#${sec.id}`}
                               className="graph-read-link"
                             >
-                              阅读本节 →
+                              阅读本节
                             </Link>
                           </div>
                         </div>

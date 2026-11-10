@@ -129,13 +129,12 @@ export const SyllabusPage: React.FC = () => {
       <main className="syllabus shell" id="main-content">
         <header className="syllabus__head">
           <div>
-            <div className="kicker">教材</div>
             <h1>完整目录</h1>
-            <p>正在读取教材索引与目录数据...</p>
+            <p>正在载入目录…</p>
           </div>
         </header>
         <div style={{ marginTop: '48px', padding: '24px 0', color: 'var(--ink-muted)' }}>
-          <p>加载中...</p>
+          <p>正在载入…</p>
         </div>
       </main>
     );
@@ -146,7 +145,6 @@ export const SyllabusPage: React.FC = () => {
       <main className="syllabus shell" id="main-content">
         <header className="syllabus__head">
           <div>
-            <div className="kicker">教材</div>
             <h1>完整目录</h1>
           </div>
         </header>
@@ -178,7 +176,7 @@ export const SyllabusPage: React.FC = () => {
                 fontWeight: 500,
               }}
             >
-              知识关系图 →
+              知识图谱
             </Link>
           </p>
         </div>
@@ -238,7 +236,7 @@ export const SyllabusPage: React.FC = () => {
         >
           {filteredChapterCount === 0
             ? '全部章节尚未完成 P0/P1 优先级标注。'
-            : '仅显示已完成 P0/P1 标注的章节；其余章“标注完善中”。'}
+            : '只显示含 P0/P1 小节的章节。'}
         </div>
       )}
 

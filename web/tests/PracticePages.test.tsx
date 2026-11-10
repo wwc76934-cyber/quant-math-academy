@@ -91,7 +91,7 @@ describe('T12 Practice & Progress Suite', () => {
       );
 
       await waitFor(() => {
-        expect(screen.getByText(/章节练习与错题本/i)).toBeInTheDocument();
+        expect(screen.getByRole('heading', { level: 1, name: '章节练习' })).toBeInTheDocument();
       });
 
       // Total exercises 698
@@ -119,40 +119,40 @@ describe('T12 Practice & Progress Suite', () => {
       );
 
       await waitFor(() => {
-        expect(screen.getByText(/1 of 20/i)).toBeInTheDocument();
+        expect(screen.getByText('1 / 20')).toBeInTheDocument();
       });
 
       // Check question prompt exists
       expect(screen.getByText(/第 1 题/i)).toBeInTheDocument();
 
       // Solution initially closed
-      expect(screen.queryByText(/详细解答与推导过程/i)).not.toBeInTheDocument();
+      expect(screen.queryByRole('region', { name: /解析/ })).not.toBeInTheDocument();
 
       // Toggle solution
       const solutionBtn = screen.getByRole('button', { name: /展开解析/i });
       fireEvent.click(solutionBtn);
-      expect(screen.getByText(/详细解答与推导过程/i)).toBeInTheDocument();
+      expect(screen.getByRole('region', { name: /解析/ })).toBeInTheDocument();
 
       // Mark correct
       const correctBtn = screen.getByRole('button', { name: /标记做对/i });
       fireEvent.click(correctBtn);
       await waitFor(() => {
-        expect(screen.getByRole('button', { name: /✓ 已(标记)?做对/i })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /^已做对$/ })).toBeInTheDocument();
       });
 
       // Navigate to next question
-      const nextBtn = screen.getByRole('button', { name: /下一题 →/i });
+      const nextBtn = screen.getByRole('button', { name: /下一题/i });
       fireEvent.click(nextBtn);
 
       await waitFor(() => {
-        expect(screen.getByText(/2 of 20/i)).toBeInTheDocument();
+        expect(screen.getByText('2 / 20')).toBeInTheDocument();
       });
 
       // Mark wrong on question 2
       const wrongBtn = screen.getByRole('button', { name: /加入错题/i });
       fireEvent.click(wrongBtn);
       await waitFor(() => {
-        expect(screen.getByRole('button', { name: /✕ 已在错题本/i })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /^已在错题本$/ })).toBeInTheDocument();
       });
     });
   });
@@ -172,10 +172,10 @@ describe('T12 Practice & Progress Suite', () => {
       );
 
       await waitFor(() => {
-        expect(screen.getByText(/错题本与自适应复习/i)).toBeInTheDocument();
+        expect(screen.getByRole('heading', { level: 1, name: '错题本' })).toBeInTheDocument();
       });
 
-      expect(screen.getByText(/错题本空空如也/i)).toBeInTheDocument();
+      expect(screen.getByText('还没有错题')).toBeInTheDocument();
     });
 
     it('renders wrong exercises, allows marking mastered and removing', async () => {
@@ -233,7 +233,7 @@ describe('T12 Practice & Progress Suite', () => {
       fireEvent.click(masterBtn);
 
       await waitFor(() => {
-        expect(screen.getByText(/错题本空空如也/i)).toBeInTheDocument();
+        expect(screen.getByText('还没有错题')).toBeInTheDocument();
       });
     });
   });
@@ -253,7 +253,7 @@ describe('T12 Practice & Progress Suite', () => {
       );
 
       await waitFor(() => {
-        expect(screen.getByText(/学习进度与复习队列/i)).toBeInTheDocument();
+        expect(screen.getByRole('heading', { level: 1, name: '学习进度' })).toBeInTheDocument();
       });
 
       expect(screen.getByTestId('kpi-learned')).toHaveTextContent('0 / 219 节 (0%)');
@@ -314,7 +314,7 @@ describe('T12 Practice & Progress Suite', () => {
       );
 
       await waitFor(() => {
-        expect(screen.getByText(/学习进度与复习队列/i)).toBeInTheDocument();
+        expect(screen.getByRole('heading', { level: 1, name: '学习进度' })).toBeInTheDocument();
       });
 
       // 2 learned sections, 1 master section, 1 wrong, 1 due today
@@ -349,7 +349,7 @@ describe('T12 Practice & Progress Suite', () => {
       fireEvent.click(markCorrectButtons[0]);
 
       await waitFor(() => {
-        expect(screen.getByRole('button', { name: /✓ 已(标记)?做对/i })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /^已做对$/ })).toBeInTheDocument();
       });
 
       // Mark question 2 wrong
@@ -357,7 +357,7 @@ describe('T12 Practice & Progress Suite', () => {
       fireEvent.click(markWrongButtons[1]);
 
       await waitFor(() => {
-        expect(screen.getByRole('button', { name: /✕ 已在错题本/i })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /^已在错题本$/ })).toBeInTheDocument();
       });
     });
   });

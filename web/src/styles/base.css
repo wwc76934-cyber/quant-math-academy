@@ -5,34 +5,47 @@
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+  scrollbar-color: var(--line-strong) transparent;
 }
 
 body {
   margin: 0;
   background: var(--bg);
   color: var(--ink);
-  font-family: var(--font-serif);
-  font-size: var(--prose-size);
-  line-height: 1.9;
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: 1.7;
+  font-feature-settings: "kern";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
 }
 
+h1, h2, h3, h4 {
+  text-wrap: balance;
+  letter-spacing: -0.005em;
+}
+
+p {
+  text-wrap: pretty;
+}
+
 a {
   color: var(--accent);
   text-decoration: none;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
   transition: color 0.14s ease;
 }
 
 a:hover {
   color: var(--accent-hover);
   text-decoration: underline;
-  text-underline-offset: 3px;
 }
 
 ::selection {
   background: var(--selection);
+  color: inherit;
 }
 
 button {
@@ -45,9 +58,39 @@ button {
   cursor: pointer;
 }
 
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+  caret-color: var(--accent);
+}
+
 img, svg {
   max-width: 100%;
   display: block;
+}
+
+kbd {
+  font-family: var(--font-sans);
+}
+
+/* Thin, quiet scrollbars that follow the palette */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--line-strong);
+  border: 3px solid transparent;
+  border-radius: 999px;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--ink-faint);
+}
+::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 /* Accessible focus visible */
@@ -58,6 +101,7 @@ img, svg {
 :focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 2px;
+  border-radius: var(--radius-sm);
 }
 
 /* Reduced motion */
@@ -85,7 +129,7 @@ img, svg {
     background: #ffffff !important;
     color: #000000 !important;
     font-size: 11pt;
-    line-height: 1.5;
+    line-height: 1.6;
   }
   .topbar,
   .mobile-drawer,
@@ -119,10 +163,15 @@ img, svg {
   .lemma,
   .corollary,
   .proposition,
+  .env,
   .env-block,
   .exercise-card {
     break-inside: avoid;
     page-break-inside: avoid;
+  }
+  .env {
+    background: none !important;
+    border-color: #999 !important;
   }
   .equation,
   .math-display {

@@ -144,7 +144,7 @@ describe('T13 Notes & Data Management Component & Page Tests', () => {
         expect(screen.getByTestId('notes-empty')).toBeInTheDocument();
       });
       expect(screen.getByText(/还没有笔记/i)).toBeInTheDocument();
-      expect(screen.getByTestId('notes-count-indicator')).toHaveTextContent('共记录 0 条节笔记');
+      expect(screen.getByTestId('notes-count-indicator')).toHaveTextContent('共 0 条笔记');
     });
 
     it('renders grouped notes, summaries, links, and supports note deletion', async () => {
@@ -172,7 +172,7 @@ describe('T13 Notes & Data Management Component & Page Tests', () => {
       );
 
       await waitFor(() => {
-        expect(screen.getByTestId('notes-count-indicator')).toHaveTextContent('共记录 1 条节笔记');
+        expect(screen.getByTestId('notes-count-indicator')).toHaveTextContent('共 1 条笔记');
       });
 
       // Chapter header & section link
@@ -223,10 +223,10 @@ describe('T13 Notes & Data Management Component & Page Tests', () => {
       );
 
       await waitFor(() => {
-        expect(screen.getByText(/数据管理与备份/i)).toBeInTheDocument();
+        expect(screen.getByText(/备份与恢复/)).toBeInTheDocument();
       });
 
-      const exportBtn = screen.getByRole('button', { name: /导出备份 \(JSON\)/i });
+      const exportBtn = screen.getByRole('button', { name: '导出备份' });
       fireEvent.click(exportBtn);
 
       expect(mockCreateObjectURL).toHaveBeenCalled();
@@ -363,11 +363,11 @@ describe('T13 Notes & Data Management Component & Page Tests', () => {
       );
 
       await waitFor(() => {
-        expect(screen.getByRole('button', { name: /清空本机记录\.\.\./i })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /^清空本机记录$/ })).toBeInTheDocument();
       });
 
       // Open reset modal
-      fireEvent.click(screen.getByRole('button', { name: /清空本机记录\.\.\./i }));
+      fireEvent.click(screen.getByRole('button', { name: /^清空本机记录$/ }));
       expect(screen.getByTestId('reset-confirm-modal')).toBeInTheDocument();
 
       const resetBtn = screen.getByTestId('reset-confirm-btn') as HTMLButtonElement;

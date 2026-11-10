@@ -1,5 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { PageHeader } from '../components/layout/PageHeader';
+import { StudyTabs } from '../components/layout/StudyTabs';
+import { EmptyState } from '../components/ui/EmptyState';
 import { loadBook } from '../features/content/loadBook';
 import { Book } from '../features/content/types';
 import { useStore } from '../features/store/store';
@@ -129,219 +132,79 @@ export const NotesPage: React.FC = () => {
   };
 
   return (
-    <main
-      className="content notes-page shell"
-      id="main-content"
-      style={{ padding: '36px 24px 64px', maxWidth: '960px', margin: '0 auto', fontFamily: 'var(--font-sans)' }}
-    >
-      {/* 1. Header */}
-      <header style={{ marginBottom: '28px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-          <span className="kicker" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.08em', color: 'var(--ink-muted)' }}>
-            STUDY NOTES
-          </span>
-          <span style={{ fontSize: '12px', color: 'var(--ink-muted)' }}>·</span>
-          <span style={{ fontSize: '12px', color: 'var(--ink-muted)' }}>Phase 3</span>
-        </div>
-        <h1 style={{ fontSize: '28px', fontFamily: 'var(--font-serif)', margin: '0 0 10px', fontWeight: 600, color: 'var(--ink)' }}>
-          我的学习笔记
-        </h1>
-        <p style={{ margin: 0, fontSize: '15px', lineHeight: 1.6, color: 'var(--ink-secondary)', maxWidth: '780px' }}>
-          按章节汇总全书阅读过程中记录的数学推导、疑难思考与心得体会。所有笔记均保存在本机浏览器中。
-        </p>
-      </header>
+    <main className="page page--narrow notes-page" id="main-content">
+      <PageHeader
+        title="笔记"
+        lede="阅读时在每节末尾写下的笔记都汇总在这里，按章节归类，最近修改的排在前面。"
+      />
+      <StudyTabs />
 
-      {/* 2. Total Count Indicator */}
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '20px',
-          borderBottom: '1px solid var(--border, #e5e5e0)',
-          paddingBottom: '12px',
-        }}
-      >
-        <span data-testid="notes-count-indicator" style={{ fontSize: '13px', color: 'var(--ink-muted)' }}>
-          共记录 <strong>{allNotes.length}</strong> 条节笔记
-        </span>
-        <Link
-          to={syllabusPath()}
-          style={{ fontSize: '13px', color: 'var(--accent, #1a56db)', textDecoration: 'none' }}
-        >
-          浏览完整教材目录 →
-        </Link>
+      <div className="notes-toolbar">
+        <span data-testid="notes-count-indicator">共 {allNotes.length} 条笔记</span>
+        <Link to={syllabusPath()}>打开目录</Link>
       </div>
 
-      {/* 3. Empty State */}
       {allNotes.length === 0 && !loading && (
-        <section
-          data-testid="notes-empty"
-          style={{
-            background: 'var(--bg-card, #ffffff)',
-            border: '1px dashed var(--border, #e5e5e0)',
-            borderRadius: '6px',
-            padding: '48px 24px',
-            textAlign: 'center',
-          }}
-        >
-          <div style={{ fontSize: '28px', marginBottom: '12px' }}>📝</div>
-          <h2 style={{ fontSize: '18px', margin: '0 0 8px', fontFamily: 'var(--font-serif)', color: 'var(--ink)' }}>
-            还没有笔记
-          </h2>
-          <p style={{ fontSize: '14px', color: 'var(--ink-secondary)', maxWidth: '460px', margin: '0 auto 20px', lineHeight: 1.6 }}>
-            在阅读教材时，你可以在每一节末尾记录推导、疑问或心得体会，系统会自动在此汇集并支持一键直达。
-          </p>
-          <Link to={learnPath('c01')} className="btn btn--primary">
-            前往第一章阅读 →
-          </Link>
-        </section>
-      )}
-
-      {/* 4. Grouped Notes List */}
-      {allNotes.length > 0 && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
-          {Array.from(groupedByChapter.entries()).map(([chapId, notes]) => {
-            const first = notes[0];
-            const chapterLabel = first.chapterLabel || chapId.toUpperCase();
-            const chapterTitle = first.chapterTitle || '';
-
-            return (
-              <section
-                key={chapId}
-                style={{
-                  background: 'var(--bg-card, #ffffff)',
-                  border: '1px solid var(--border, #e5e5e0)',
-                  borderRadius: '6px',
-                  padding: '20px 24px',
-                }}
-              >
-                <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'baseline',
-                    marginBottom: '16px',
-                    borderBottom: '1px solid var(--border, #e5e5e0)',
-                    paddingBottom: '10px',
-                  }}
-                >
-                  <div>
-                    <span style={{ fontSize: '12px', fontFamily: 'var(--font-mono)', color: 'var(--ink-muted)' }}>
-                      {chapterLabel}
-                    </span>
-                    <h2 style={{ margin: '2px 0 0', fontSize: '18px', fontFamily: 'var(--font-serif)', fontWeight: 600, color: 'var(--ink)' }}>
-                      {formatDisplayTitle(chapterTitle)}
-                    </h2>
-                  </div>
-                  <span style={{ fontSize: '12px', color: 'var(--ink-muted)' }}>
-                    {notes.length} 条笔记
-                  </span>
-                </div>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                  {notes.map((item) => {
-                    const excerpt =
-                      item.note.text.length > 120
-                        ? `${item.note.text.slice(0, 120)}...`
-                        : item.note.text;
-                    const isConfirming = deletingId === item.sectionId;
-
-                    return (
-                      <article
-                        key={item.sectionId}
-                        style={{
-                          background: 'var(--bg-subtle, #fcfcfb)',
-                          border: '1px solid var(--border, #e5e5e0)',
-                          borderRadius: '4px',
-                          padding: '14px 16px',
-                        }}
-                      >
-                        <div
-                          style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            marginBottom: '8px',
-                          }}
-                        >
-                          <Link
-                            to={learnPath(item.chapterId, item.sectionId)}
-                            style={{
-                              fontWeight: 600,
-                              fontSize: '14px',
-                              color: 'var(--ink)',
-                              textDecoration: 'none',
-                            }}
-                          >
-                            {item.sectionNumber ? `${item.sectionNumber} ` : ''}
-                            {formatDisplayTitle(item.sectionTitle)}
-                          </Link>
-                          <span style={{ fontSize: '11px', color: 'var(--ink-muted)' }}>
-                            {formatDate(item.note.updatedAt)}
-                          </span>
-                        </div>
-
-                        {/* Pure text excerpt - no dangerouslySetInnerHTML */}
-                        <p
-                          style={{
-                            margin: '0 0 12px',
-                            fontSize: '13px',
-                            lineHeight: 1.6,
-                            color: 'var(--ink-secondary)',
-                            whiteSpace: 'pre-wrap',
-                            wordBreak: 'break-word',
-                          }}
-                        >
-                          {excerpt}
-                        </p>
-
-                        <div
-                          style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            borderTop: '1px solid var(--border, #f0f0ee)',
-                            paddingTop: '8px',
-                          }}
-                        >
-                          <button
-                            type="button"
-                            onClick={() => handleDelete(item.sectionId)}
-                            style={{
-                              background: 'transparent',
-                              border: 'none',
-                              color: isConfirming ? 'var(--warning, #c9510c)' : 'var(--ink-muted)',
-                              fontSize: '12px',
-                              cursor: 'pointer',
-                              padding: 0,
-                              fontWeight: isConfirming ? 600 : 400,
-                            }}
-                          >
-                            {isConfirming ? '确认删除？' : '删除'}
-                          </button>
-
-                          <Link
-                            to={learnPath(item.chapterId, item.sectionId)}
-                            style={{
-                              fontSize: '12px',
-                              fontWeight: 500,
-                              color: 'var(--accent, #1a56db)',
-                              textDecoration: 'none',
-                            }}
-                          >
-                            前往该节正文 →
-                          </Link>
-                        </div>
-                      </article>
-                    );
-                  })}
-                </div>
-              </section>
-            );
-          })}
+        <div data-testid="notes-empty">
+          <EmptyState
+            title="还没有笔记"
+            description="打开任意一节，在正文末尾的笔记框里记下推导、疑问或心得，保存后会出现在这里。"
+            action={
+              <Link to={learnPath('c01')} className="btn btn--primary">
+                从第 1 章开始读
+              </Link>
+            }
+          />
         </div>
       )}
+
+      {allNotes.length > 0 &&
+        Array.from(groupedByChapter.entries()).map(([chapId, notes]) => {
+          const first = notes[0];
+          const chapterLabel = first.chapterLabel || chapId.toUpperCase();
+          const chapterTitle = first.chapterTitle || '';
+
+          return (
+            <section key={chapId} className="list-group" aria-labelledby={`notes-${chapId}`}>
+              <h2 id={`notes-${chapId}`} className="list-group__title">
+                {chapterLabel} {formatDisplayTitle(chapterTitle)} · {notes.length} 条
+              </h2>
+              <ul className="list">
+                {notes.map((item) => {
+                  const excerpt =
+                    item.note.text.length > 160 ? `${item.note.text.slice(0, 160)}…` : item.note.text;
+                  const isConfirming = deletingId === item.sectionId;
+                  const href = learnPath(item.chapterId, item.sectionId);
+
+                  return (
+                    <li key={item.sectionId} className="note-item">
+                      <div className="note-item__head">
+                        <Link to={href} className="note-item__title">
+                          {item.sectionNumber ? `${item.sectionNumber} ` : ''}
+                          {formatDisplayTitle(item.sectionTitle)}
+                        </Link>
+                        <time dateTime={item.note.updatedAt}>{formatDate(item.note.updatedAt)}</time>
+                      </div>
+                      {/* Plain text only: notes are never rendered as HTML */}
+                      <p className="note-item__text">{excerpt}</p>
+                      <div className="note-item__actions">
+                        <Link to={href}>前往该节正文</Link>
+                        <button
+                          type="button"
+                          className={isConfirming ? 'is-confirming' : ''}
+                          onClick={() => handleDelete(item.sectionId)}
+                          onBlur={() => isConfirming && setDeletingId(null)}
+                        >
+                          {isConfirming ? '确认删除？' : '删除'}
+                        </button>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </section>
+          );
+        })}
     </main>
   );
 };

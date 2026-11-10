@@ -41,7 +41,9 @@ describe('SyllabusPage', () => {
     );
 
     // Check heading
-    expect(await screen.findByRole('heading', { level: 1, name: '完整目录' })).toBeInTheDocument();
+    // Wait for the loaded state (the loading state renders the same heading)
+    await screen.findByText('数学语言、证明方法与实数完备性');
+    expect(screen.getByRole('heading', { level: 1, name: '完整目录' })).toBeInTheDocument();
 
     // Check that 34 chapters are in the document
     expect(screen.getByText('数学语言、证明方法与实数完备性')).toBeInTheDocument();
@@ -109,12 +111,12 @@ describe('SyllabusPage', () => {
 
     // Should indicate filtered count and notice
     expect(screen.getByText(/已筛选/)).toBeInTheDocument();
-    expect(screen.getByText(/仅显示已完成 P0\/P1 标注的章节/)).toBeInTheDocument();
+    expect(screen.getByText(/只显示含 P0\/P1 小节的章节/)).toBeInTheDocument();
 
     // Clear filter
     const clearBtn = screen.getByRole('button', { name: '清除筛选' });
     fireEvent.click(clearBtn);
 
-    expect(screen.getByText('数学语言、证明方法与实数完备性')).toBeInTheDocument();
+    expect(await screen.findByText('数学语言、证明方法与实数完备性')).toBeInTheDocument();
   });
 });

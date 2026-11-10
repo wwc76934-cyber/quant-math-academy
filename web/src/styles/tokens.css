@@ -1,29 +1,65 @@
-/* Quant Math Academy - Design System Tokens */
+/*
+ * Quant Math Academy — design tokens
+ *
+ * World: a well-set technical reference book read on screen.
+ * Neutral cool paper, near-black ink, one ink-blue accent used for
+ * links, the current position and primary actions only.
+ * One type family (IBM Plex Sans for Latin and figures, the platform's
+ * Chinese sans for CJK); KaTeX supplies its own math faces.
+ */
 :root {
-  /* Colors - Light Theme (default) */
-  --bg: #faf9f5;
-  --bg-elevated: #ffffff;
-  --bg-subtle: #f2f0e9;
-  --bg-inset: #edeae1;
-  --ink: #1c1b18;
-  --ink-secondary: #4a4842;
-  --ink-muted: #6f6c64;
-  --ink-faint: #9a968c;
-  --line: #e4e0d6;
-  --line-strong: #cfc9bc;
-  --accent: #a5432f;
-  --accent-hover: #8a3524;
-  --accent-soft: #f2e6e1;
-  --success: #4f6b57;
-  --warning: #8a6a2f;
-  --focus: #a5432f;
-  --selection: #ead9c8;
+  color-scheme: light;
 
-  /* Typography */
-  --font-serif: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", "SimSun", serif;
-  --font-sans: "Noto Sans SC", "Source Han Sans SC", "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
-  --font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+  /* Surfaces */
+  --bg: #fbfbfa;
+  --bg-elevated: #ffffff;
+  --bg-subtle: #f3f4f5;
+  --bg-inset: #e9eaec;
+
+  /* Ink */
+  --ink: #16181b;
+  --ink-secondary: #3e434a;
+  --ink-muted: #686e77;
+  --ink-faint: #9a9fa7;
+
+  /* Rules */
+  --line: #e5e6e8;
+  --line-strong: #d0d3d8;
+
+  /* Accent: ink blue */
+  --accent: #2647b0;
+  --accent-hover: #1c3891;
+  --accent-soft: #edf1fb;
+  --on-accent: #ffffff;
+
+  /* Status */
+  --success: #2f6b4f;
+  --success-soft: #e8f2ec;
+  --warning: #8a5a12;
+  --warning-soft: #f6eedf;
+  --danger: #a3301f;
+  --danger-soft: #f8e9e6;
+
+  --focus: #2647b0;
+  --selection: #d8e1f8;
+
+  /* Type */
+  --font-sans: "IBM Plex Sans", "PingFang SC", "HarmonyOS Sans SC", "MiSans", "Microsoft YaHei UI",
+    "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC", system-ui, sans-serif;
+  /* Kept as an alias so older components resolve to the same family. */
+  --font-serif: var(--font-sans);
+  --font-mono: "Cascadia Mono", "SFMono-Regular", "JetBrains Mono", Consolas, "Liberation Mono", monospace;
   --font-math: KaTeX_Main, "Times New Roman", serif;
+
+  /* Type scale (role based) */
+  --text-meta: 12px;
+  --text-label: 13px;
+  --text-ui: 14px;
+  --text-body: 16px;
+  --text-h3: 18px;
+  --text-h2: 22px;
+  --text-h1: 30px;
+  --text-display: 40px;
 
   /* Spacing */
   --space-1: 4px;
@@ -37,32 +73,54 @@
   --space-9: 96px;
 
   /* Radii */
-  --radius-sm: 2px;
-  --radius-md: 4px;
-  --radius-lg: 6px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
 
-  /* Prose Defaults */
-  --prose-size: 18px;
+  /* Elevation (offset + soft blur) */
+  --shadow-sm: 0 1px 2px rgba(16, 20, 28, 0.05);
+  --shadow-md: 0 6px 24px -8px rgba(16, 20, 28, 0.16), 0 2px 6px -2px rgba(16, 20, 28, 0.06);
+
+  /* Reader (overridden at runtime by reader settings) */
+  --prose-size: 17px;
   --prose-leading: 1.9;
   --measure: 38em;
+
+  --topbar-h: 56px;
+  --readerbar-h: 44px;
 }
 
 html[data-theme="dark"] {
-  --bg: #131312;
-  --bg-elevated: #1b1b19;
-  --bg-subtle: #22221f;
-  --bg-inset: #2a2925;
-  --ink: #e8e4da;
-  --ink-secondary: #bdb7aa;
-  --ink-muted: #979184;
-  --ink-faint: #6e6a60;
-  --line: #2e2d28;
-  --line-strong: #454239;
-  --accent: #d08a76;
-  --accent-hover: #e0a08d;
-  --accent-soft: #2e211d;
-  --success: #7fa08a;
-  --warning: #c2a46a;
-  --focus: #d08a76;
-  --selection: #3a2a24;
+  color-scheme: dark;
+
+  --bg: #111215;
+  --bg-elevated: #17191c;
+  --bg-subtle: #1c1e22;
+  --bg-inset: #26292e;
+
+  --ink: #e8e9eb;
+  --ink-secondary: #babec4;
+  --ink-muted: #8d929a;
+  --ink-faint: #646972;
+
+  --line: #25282d;
+  --line-strong: #363a41;
+
+  --accent: #93abf5;
+  --accent-hover: #b3c4f8;
+  --accent-soft: #1b2236;
+  --on-accent: #10131c;
+
+  --success: #7fbf9c;
+  --success-soft: #16261e;
+  --warning: #d6b072;
+  --warning-soft: #2a2216;
+  --danger: #ec9a8c;
+  --danger-soft: #2e1b18;
+
+  --focus: #93abf5;
+  --selection: #2a3557;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 10px 30px -10px rgba(0, 0, 0, 0.6), 0 2px 6px -2px rgba(0, 0, 0, 0.4);
 }

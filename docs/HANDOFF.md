@@ -97,6 +97,13 @@ npm audit --omit=dev          # 0 vulnerabilities（根/Web）
 
 ## 9. 最近变更（避免重复/冲突）
 
+- UI 重构（分支 `ui/product-polish`）：
+  - 字体换为单一无衬线家族：IBM Plex Sans（`@fontsource/ibm-plex-sans`，Latin 400/500/600，OFL-1.1）+ 系统中文黑体；`--font-serif` 保留为同一家族的别名；
+  - 新配色与令牌：`web/src/styles/tokens.css`（冷白底、墨蓝强调、暗色主题）；字号按用途分档 `--text-*`；
+  - 阅读页：章号并入 h1，节号与节标题同级；定理细边框块、定义浅底块、例题不加框、证明细线；左栏目录与右栏信息字号放大；
+  - 共享组件：`PageHeader`、`StudyTabs`（进度/错题本/笔记/公式收藏）、`navItems.ts`；页面样式集中在 `pages.css`；
+  - 规则：不在标题上方放小标签；不用 Unicode 字符充当图标；不用粗彩色左边线。
+
 - T14b/T14c：公式收藏 store + Reader 星标 + `/bookmarks`；
 - T20：搜索结果相关 chips（最多 2）；
 - T22：`/progress` 今日建议卡；

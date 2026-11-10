@@ -30,7 +30,7 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
         )}
         {showReturnToSyllabus && (
           <Link to={syllabusPath()} className="btn btn--ghost btn--sm">
-            返回教材目录 →
+            返回目录
           </Link>
         )}
       </div>

@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { PageHeader } from '../components/layout/PageHeader';
 import { Book } from '../features/content/types';
 import { loadBook } from '../features/content/loadBook';
 import { loadPathsData, normalizePathId } from '../features/paths/loadPaths';
@@ -99,263 +100,98 @@ export const PathsPage: React.FC = () => {
 
   if (loading) {
     return (
-      <main className="content paths-page" id="main-content" style={{ padding: '40px 24px', maxWidth: '1040px', margin: '0 auto' }}>
-        <p className="muted" role="status">正在加载学习路径规划...</p>
+      <main className="page paths-page" id="main-content">
+        <p className="page-loading" role="status">正在载入学习路径…</p>
       </main>
     );
   }
 
   if (error || !pathsData) {
     return (
-      <main className="content paths-page" id="main-content" style={{ padding: '40px 24px', maxWidth: '1040px', margin: '0 auto' }}>
-        <div role="alert" style={{ padding: '16px', background: 'var(--accent-light, #fdf2f2)', border: '1px solid var(--accent, #e53e3e)', borderRadius: '4px' }}>
-          <h3>加载失败</h3>
-          <p>{error || '无法获取学习路径数据'}</p>
+      <main className="page paths-page" id="main-content">
+        <div role="alert" className="notice notice--error">
+          学习路径没有载入成功：{error || '缺少路径数据'}。请刷新页面重试。
         </div>
       </main>
     );
   }
 
   return (
-    <main
-      className="content paths-page"
-      id="main-content"
-      style={{
-        padding: '36px 24px 64px',
-        maxWidth: '1040px',
-        margin: '0 auto',
-        fontFamily: 'var(--font-sans)',
-      }}
-    >
-      {/* Header */}
-      <header style={{ marginBottom: '28px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-          <span className="kicker" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.08em', color: 'var(--muted)' }}>
-            CURRICULUM PATHS
-          </span>
-          <span style={{ fontSize: '12px', color: 'var(--muted)' }}>·</span>
-          <span style={{ fontSize: '12px', color: 'var(--muted)' }}>Phase 3</span>
-        </div>
-        <h1 style={{ fontSize: '28px', fontFamily: 'var(--font-serif)', margin: '0 0 12px', fontWeight: 600, color: 'var(--text)' }}>
-          量化数学学习路径
-        </h1>
-        <p style={{ margin: 0, fontSize: '15px', lineHeight: 1.6, color: 'var(--muted)', maxWidth: '780px' }}>
-          根据量化实习冲刺、系统理论精读、工程应用或自由探索等不同目标，提供结构化的周次安排与自适应下一步推荐。
-        </p>
-      </header>
+    <main className="page paths-page" id="main-content">
+      <PageHeader
+        title="学习路径"
+        lede="按目标挑一条路径，每周给出要读的小节和预计用时。随时可以换路径，已有进度不会丢。"
+      />
 
-      {/* Honest Principle Banner */}
-      <div
-        role="note"
-        aria-label="学习路径原则说明"
-        style={{
-          background: 'var(--bg-card, #fbfbf9)',
-          border: '1px solid var(--border, #e5e5e0)',
-          borderRadius: '4px',
-          padding: '14px 18px',
-          marginBottom: '32px',
-          fontSize: '13px',
-          lineHeight: 1.6,
-          color: 'var(--text-secondary, #555550)',
-          display: 'flex',
-          alignItems: 'flex-start',
-          gap: '10px',
-        }}
-      >
-        <span style={{ fontSize: '14px', lineHeight: '20px', color: 'var(--accent, #1a56db)' }}>ℹ</span>
-        <div>
-          <strong style={{ color: 'var(--text, #111)' }}>核心原则：</strong>
-          学习路径仅决定推荐顺序与自适应学习节奏，<strong>绝不做内容门禁或章节锁定</strong>。全书 34 章 219 节始终可从
-          <Link to={syllabusPath()} style={{ color: 'var(--accent, #1a56db)', margin: '0 4px', textDecoration: 'underline' }}>
-            完整目录
-          </Link>
-          随时自由阅读。未标注章节保持诚实留白，不伪造难度或优先级，切换路径不丢失任何已有学习记录。
-        </div>
-      </div>
+      <p className="notice" role="note" aria-label="学习路径说明">
+        学习路径只给出推荐顺序，不锁定任何章节。全书 34 章始终可以从
+        <Link to={syllabusPath()}>完整目录</Link>
+        直接打开。
+      </p>
 
-      {/* 4 Paths Cards Grid */}
-      <div
-        className="paths-list"
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-          gap: '20px',
-        }}
-      >
+      <div className="path-overview-grid">
         {pathsData.paths.map((p: PathData) => {
           const isCurrentActive = currentActiveId === p.id;
           const stats = pathStats[p.id] || { completed: 0, total: p.totalSections, percentage: 0 };
+          const hours = Math.round(p.totalEstimatedMinutes / 60);
 
           return (
             <article
               key={p.id}
-              className={`path-overview-card ${isCurrentActive ? 'is-active' : ''}`}
+              className={`path-overview-card${isCurrentActive ? ' is-active' : ''}`}
               data-path-id={p.id}
-              style={{
-                background: 'var(--bg-card, #ffffff)',
-                border: isCurrentActive ? '2px solid var(--accent, #1a56db)' : '1px solid var(--border, #e5e5e0)',
-                borderRadius: '6px',
-                padding: '22px 20px',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                position: 'relative',
-                boxShadow: isCurrentActive ? '0 2px 8px rgba(26, 86, 219, 0.08)' : 'none',
-              }}
             >
-              <div>
-                {/* Top row: Code + Active Badge */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-mono, monospace)',
-                      fontWeight: 700,
-                      fontSize: '12px',
-                      letterSpacing: '0.05em',
-                      background: 'var(--bg-hover, #f0f0eb)',
-                      color: 'var(--text-secondary, #444)',
-                      padding: '2px 8px',
-                      borderRadius: '3px',
-                    }}
-                  >
-                    PATH {p.code}
-                  </span>
+              <div className="path-overview-card__top">
+                <span className="path-overview-card__code">
+                  {p.id === 'free' ? '自由阅读' : `路径 ${p.code}`}
+                </span>
+                {isCurrentActive && <span className="path-overview-card__current">正在进行</span>}
+              </div>
 
-                  {isCurrentActive && (
-                    <span
-                      style={{
-                        fontSize: '11px',
-                        fontWeight: 600,
-                        color: '#ffffff',
-                        background: 'var(--accent, #1a56db)',
-                        padding: '2px 8px',
-                        borderRadius: '10px',
-                      }}
-                    >
-                      当前进行中
-                    </span>
-                  )}
-                </div>
+              <h2>{p.title}</h2>
 
-                {/* Title */}
-                <h2 style={{ fontSize: '19px', fontFamily: 'var(--font-serif)', fontWeight: 600, margin: '0 0 8px', color: 'var(--text)' }}>
-                  {p.title}
-                </h2>
+              <div className="path-overview-card__facts">
+                <span>{p.weeks > 0 ? `${p.weeks} 周` : '不限时间'}</span>
+                <span>{p.id === 'free' ? '全书 219 节' : `${stats.total} 节`}</span>
+                {hours > 0 && <span>约 {hours} 小时</span>}
+              </div>
 
-                {/* Meta stats bar */}
-                <div
-                  style={{
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    gap: '12px',
-                    fontSize: '12px',
-                    color: 'var(--muted)',
-                    marginBottom: '12px',
-                  }}
-                >
-                  <span>
-                    <strong>{p.weeks > 0 ? `${p.weeks} 周` : '自定节奏'}</strong>
-                  </span>
-                  <span>·</span>
-                  <span>
-                    {p.id === 'free' ? '全书自由查阅' : `精选 ${stats.total} 节`}
-                  </span>
-                  {p.totalEstimatedMinutes > 0 && (
-                    <>
-                      <span>·</span>
-                      <span>预计 {Math.round(p.totalEstimatedMinutes / 60)} 小时</span>
-                    </>
-                  )}
-                </div>
-
-                {/* Description */}
-                <p style={{ fontSize: '13px', lineHeight: 1.55, color: 'var(--text-secondary, #444)', margin: '0 0 16px' }}>
-                  {p.description}
-                </p>
-
-                {/* Audience */}
-                <div
-                  style={{
-                    fontSize: '12px',
-                    color: 'var(--muted)',
-                    background: 'var(--bg-hover, #fafaf7)',
-                    padding: '8px 10px',
-                    borderRadius: '4px',
-                    marginBottom: '16px',
-                  }}
-                >
-                  <strong style={{ color: 'var(--text-secondary, #444)' }}>适合：</strong>
+              <p className="path-overview-card__desc">{p.description}</p>
+              {p.audience && (
+                <p className="path-overview-card__audience">
+                  <span>适合</span>
                   {p.audience}
+                </p>
+              )}
+
+              <div className="path-overview-card__progress">
+                <div className="path-overview-card__progress-label">
+                  <span>进度</span>
+                  <span>
+                    {stats.completed} / {stats.total} 节
+                  </span>
+                </div>
+                <div className="list-row__bar">
+                  <i style={{ width: `${stats.percentage}%` }} />
                 </div>
               </div>
 
-              {/* Progress & Actions */}
-              <div>
-                <div style={{ marginBottom: '16px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginBottom: '6px' }}>
-                    <span style={{ color: 'var(--muted)' }}>学习进度</span>
-                    <span style={{ fontWeight: 600, color: 'var(--text)' }}>
-                      {stats.completed} / {stats.total} 节 ({stats.percentage}%)
-                    </span>
-                  </div>
-                  <div style={{ height: '5px', background: 'var(--border, #e5e5e0)', borderRadius: '3px', overflow: 'hidden' }}>
-                    <div
-                      style={{
-                        height: '100%',
-                        width: `${stats.percentage}%`,
-                        background: 'var(--accent, #1a56db)',
-                        transition: 'width 0.3s ease',
-                      }}
-                    />
-                  </div>
-                </div>
-
-                <div style={{ display: 'flex', gap: '8px' }}>
-                  <Link
-                    to={pathsPath(p.id)}
-                    className="btn btn--secondary"
-                    style={{
-                      flex: 1,
-                      textAlign: 'center',
-                      fontSize: '13px',
-                      padding: '8px 12px',
-                    }}
+              <div className="path-overview-card__actions">
+                <Link to={pathsPath(p.id)} className="btn btn--secondary">
+                  查看周计划
+                </Link>
+                {!isCurrentActive ? (
+                  <button
+                    type="button"
+                    className="btn btn--ghost"
+                    onClick={() => handleSelectPath(p.id)}
+                    title="首页“今天”会按这条路径推荐下一节，已有进度不受影响"
                   >
-                    查看周计划与推荐 →
-                  </Link>
-
-                  {!isCurrentActive ? (
-                    <button
-                      type="button"
-                      className="btn btn--outline"
-                      onClick={() => handleSelectPath(p.id)}
-                      style={{
-                        fontSize: '13px',
-                        padding: '8px 12px',
-                        cursor: 'pointer',
-                      }}
-                      title="设为当前主路径，不影响已有进度"
-                    >
-                      设为主路径
-                    </button>
-                  ) : (
-                    <button
-                      type="button"
-                      disabled
-                      style={{
-                        fontSize: '13px',
-                        padding: '8px 12px',
-                        background: 'transparent',
-                        border: '1px solid var(--border)',
-                        color: 'var(--muted)',
-                        cursor: 'default',
-                        borderRadius: '4px',
-                      }}
-                    >
-                      已激活
-                    </button>
-                  )}
-                </div>
+                    设为主路径
+                  </button>
+                ) : (
+                  <span className="path-overview-card__hint">首页按这条路径推荐下一节</span>
+                )}
               </div>
             </article>
           );

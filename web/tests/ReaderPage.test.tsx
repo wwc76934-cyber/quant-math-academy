@@ -259,7 +259,7 @@ describe('ReaderPage', () => {
     );
 
     expect(await screen.findByText(/加载章节失败|404|Not found/i)).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /返回教材目录/ })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /返回目录/ })).toBeInTheDocument();
   });
 
   it('updates learning status and persists in store with toast feedback', async () => {

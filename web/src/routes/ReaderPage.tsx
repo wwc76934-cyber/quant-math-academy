@@ -19,6 +19,12 @@ import { useStore } from '../features/store/store';
 import { formatDisplayTitle } from '../lib/format';
 import { learnPath, syllabusPath } from '../lib/paths';
 
+// Static, trusted markup for the injected formula bookmark buttons.
+const STAR_PATH =
+  'M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z';
+const STAR_OUTLINE_SVG = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="${STAR_PATH}"/></svg>`;
+const STAR_FILLED_SVG = `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="${STAR_PATH}"/></svg>`;
+
 export const ReaderPage: React.FC = () => {
   const { chapterId = 'c01' } = useParams<{ chapterId: string }>();
   const location = useLocation();
@@ -439,7 +445,7 @@ export const ReaderPage: React.FC = () => {
       }
 
       const label = isBookmarked ? '取消收藏' : '收藏公式';
-      btn.textContent = isBookmarked ? '★' : '☆';
+      btn.innerHTML = isBookmarked ? STAR_FILLED_SVG : STAR_OUTLINE_SVG;
       btn.setAttribute('aria-label', label);
       btn.setAttribute('title', label);
       if (isBookmarked) {
@@ -650,12 +656,8 @@ export const ReaderPage: React.FC = () => {
 
   if (loading) {
     return (
-      <main className="shell" id="main-content" style={{ padding: '60px 32px' }}>
-        <div className="kicker">QUANT MATH ACADEMY</div>
-        <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '32px', margin: '16px 0' }}>
-          正在加载章节正文...
-        </h1>
-        <p className="small muted">正在按需载入章节数据与切片...</p>
+      <main className="page" id="main-content">
+        <p className="page-loading" role="status">正在载入本章正文…</p>
       </main>
     );
   }
@@ -707,7 +709,7 @@ export const ReaderPage: React.FC = () => {
             fontFamily: 'var(--font-sans)',
           }}
         >
-          正在定位目标内容...
+          正在定位…
         </div>
       )}
 
@@ -732,8 +734,10 @@ export const ReaderPage: React.FC = () => {
           <article className="article" ref={articleContainerRef}>
             {/* Chapter Header */}
             <header className="chapter-head">
-              <div className="kicker">{chapterData.label}</div>
-              <h1>{chapterData.title}</h1>
+              <h1>
+                <span className="chapter-head__num">{chapterData.label}</span>
+                {chapterData.title}
+              </h1>
               {chapterData.introHtml && (
                 <div
                   className="lede"
@@ -750,14 +754,7 @@ export const ReaderPage: React.FC = () => {
                 </span>
                 <button
                   type="button"
-                  style={{
-                    color: 'var(--accent)',
-                    cursor: 'pointer',
-                    background: 'none',
-                    border: 'none',
-                    padding: 0,
-                    font: 'inherit',
-                  }}
+                  className="chapter-head__copy"
                   onClick={async () => {
                     try {
                       await navigator.clipboard.writeText(window.location.href);
@@ -767,7 +764,7 @@ export const ReaderPage: React.FC = () => {
                     }
                   }}
                 >
-                  复制本章链接 ↗
+                  复制本章链接
                 </button>
               </div>
             </header>
@@ -775,10 +772,8 @@ export const ReaderPage: React.FC = () => {
             {/* Dwell Prompt if reading > 30s without progress change */}
             {showStudyPrompt && (
               <div className="study-prompt" role="alert">
-                <span>
-                  你已在当前节阅读超过 30 秒，是否将其标记为「学习中」？
-                </span>
-                <div style={{ display: 'flex', gap: '8px' }}>
+                <span>这一节读了一会儿了，要标记为「学习中」吗？</span>
+                <div className="study-prompt__actions">
                   <Button
                     variant="primary"
                     size="sm"
@@ -832,28 +827,10 @@ export const ReaderPage: React.FC = () => {
                       <ReaderNotes sectionId={section.id} />
                     </>
                   ) : isSecLoading ? (
-                    <div
-                      style={{
-                        padding: '32px 0',
-                        color: 'var(--ink-muted)',
-                        fontFamily: 'var(--font-sans)',
-                        fontSize: '13px',
-                      }}
-                    >
-                      正在加载本节内容...
-                    </div>
+                    <div className="section-state">正在载入本节…</div>
                   ) : secError ? (
-                    <div
-                      style={{
-                        padding: '20px',
-                        background: 'var(--bg-subtle)',
-                        border: '1px solid var(--accent)',
-                        borderRadius: 'var(--radius-md)',
-                      }}
-                    >
-                      <p style={{ margin: '0 0 10px', color: 'var(--accent)', fontSize: '13px' }}>
-                        {secError}
-                      </p>
+                    <div className="notice notice--error">
+                      <p style={{ margin: '0 0 10px' }}>{secError}</p>
                       <Button
                         variant="secondary"
                         size="sm"
@@ -863,16 +840,7 @@ export const ReaderPage: React.FC = () => {
                       </Button>
                     </div>
                   ) : (
-                    <div
-                      style={{
-                        padding: '24px 0',
-                        color: 'var(--ink-muted)',
-                        fontFamily: 'var(--font-sans)',
-                        fontSize: '13px',
-                      }}
-                    >
-                      等待载入...
-                    </div>
+                    <div className="section-state">等待载入</div>
                   )}
                 </section>
               );
@@ -880,9 +848,8 @@ export const ReaderPage: React.FC = () => {
 
             {/* Chapter Summary */}
             {chapterData.summaryHtml && (
-              <section id="summary" style={{ marginTop: '64px' }}>
+              <section id="summary" className="chapter-summary">
                 <div className="section-heading">
-                  <span className="kicker">小结</span>
                   <h2>本章小结</h2>
                 </div>
                 <div
@@ -899,7 +866,7 @@ export const ReaderPage: React.FC = () => {
                 size="sm"
                 onClick={() => setStatusModalOpen(true)}
               >
-                学习状态设置 ▾
+                设置学习状态
               </Button>
               <span className="status-note">
                 当前节：{activeSection ? formatDisplayTitle(activeSection.title) : formatDisplayTitle(chapterData.title)}
@@ -917,7 +884,7 @@ export const ReaderPage: React.FC = () => {
                 size="sm"
                 onClick={navigateToNextSection}
               >
-                下一节 →
+                下一节
               </Button>
             </div>
 
@@ -928,35 +895,25 @@ export const ReaderPage: React.FC = () => {
             />
 
             {/* Chapter Navigation Footer */}
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                marginTop: '64px',
-                paddingTop: '28px',
-                borderTop: '1px solid var(--line)',
-                flexWrap: 'wrap',
-                gap: '12px',
-              }}
-            >
-              {prevChapter ? (
-                <Link to={learnPath(prevChapter.id)} className="btn btn--secondary">
-                  ← 上一章：{prevChapter.label} {prevChapter.title}
+            <nav className="chapter-nav" aria-label="章节切换">
+              {prevChapter && (
+                <Link to={learnPath(prevChapter.id)} className="chapter-nav__link">
+                  <span>上一章 · {prevChapter.label}</span>
+                  <strong>{formatDisplayTitle(prevChapter.title)}</strong>
                 </Link>
-              ) : (
-                <div />
               )}
-
               {nextChapter ? (
-                <Link to={learnPath(nextChapter.id)} className="btn btn--primary">
-                  下一章：{nextChapter.label} {nextChapter.title} →
+                <Link to={learnPath(nextChapter.id)} className="chapter-nav__link chapter-nav__link--next">
+                  <span>下一章 · {nextChapter.label}</span>
+                  <strong>{formatDisplayTitle(nextChapter.title)}</strong>
                 </Link>
               ) : (
-                <Link to={syllabusPath()} className="btn btn--primary">
-                  完成全书阅读 · 返回教材目录
+                <Link to={syllabusPath()} className="chapter-nav__link chapter-nav__link--next">
+                  <span>全书最后一章</span>
+                  <strong>返回目录</strong>
                 </Link>
               )}
-            </div>
+            </nav>
           </article>
 
           {/* Right Column: Page TOC & Active Section Info */}
@@ -985,7 +942,7 @@ export const ReaderPage: React.FC = () => {
           size="sm"
           onClick={() => setStatusModalOpen(true)}
         >
-          学习状态 ▾
+          学习状态
         </Button>
         <div style={{ display: 'flex', gap: '6px' }}>
           <Button variant="ghost" size="sm" onClick={navigateToPrevSection}>
@@ -1021,7 +978,7 @@ export const ReaderPage: React.FC = () => {
                 onClick={() => setTocDrawerOpen(false)}
                 aria-label="关闭目录"
               >
-                ✕
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
               </button>
             </div>
             <div style={{ padding: '16px 0' }}>
@@ -1068,7 +1025,7 @@ export const ReaderPage: React.FC = () => {
                 onClick={() => setRailDrawerOpen(false)}
                 aria-label="关闭"
               >
-                ✕
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
               </button>
             </div>
             <div style={{ padding: '16px 0' }}>

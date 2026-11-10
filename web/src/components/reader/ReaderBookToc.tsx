@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Book, BookChapter, BookPart } from '../../features/content/types';
 import { useStore } from '../../features/store/store';
 import {
-  formatChapterNumber,
   formatChinesePartLabel,
   formatDisplayTitle,
 } from '../../lib/format';
@@ -70,22 +69,10 @@ export const ReaderBookToc: React.FC<ReaderBookTocProps> = ({
           <div key={part.id} className="book-toc__part">
             <button
               type="button"
-              className="kicker"
+              className="book-toc__part-btn"
               onClick={() => togglePart(part.id)}
-              style={{
-                background: 'none',
-                border: 'none',
-                padding: '4px 0',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                width: '100%',
-                textAlign: 'left',
-              }}
               aria-expanded={isPartExpanded}
             >
-              <span>{isPartExpanded ? '▾' : '▸'}</span>
               <span>
                 {formatChinesePartLabel(part.order)} · {part.title}
               </span>
@@ -100,7 +87,7 @@ export const ReaderBookToc: React.FC<ReaderBookTocProps> = ({
                 const firstSection = chapter.sections[0];
 
                 return (
-                  <div key={chapter.id} style={{ marginBottom: '8px' }}>
+                  <div key={chapter.id} className="book-toc__chapter-wrap">
                     <button
                       type="button"
                       className={`book-toc__chapter ${isCurrentChap ? 'is-current' : ''}`}
@@ -112,22 +99,9 @@ export const ReaderBookToc: React.FC<ReaderBookTocProps> = ({
                         }
                       }}
                       aria-current={isCurrentChap ? 'page' : undefined}
-                      style={{
-                        width: '100%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        background: 'none',
-                        border: 'none',
-                        padding: 0,
-                        textAlign: 'left',
-                        cursor: isCurrentChap ? 'default' : 'pointer',
-                      }}
                     >
-                      <span className="num">{formatChapterNumber(chapter.number)}</span>
-                      <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                        {formatDisplayTitle(chapter.title)}
-                      </span>
+                      <span className="num">{chapter.number}</span>
+                      <span className="label">{formatDisplayTitle(chapter.title)}</span>
                     </button>
 
                     {isCurrentChap && (
@@ -147,9 +121,7 @@ export const ReaderBookToc: React.FC<ReaderBookTocProps> = ({
                             >
                               <StatusDot status={progress} />
                               <span className="num">{sec.number}</span>
-                              <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                                {formatDisplayTitle(sec.title)}
-                              </span>
+                              <span className="label">{formatDisplayTitle(sec.title)}</span>
                             </a>
                           );
                         })}
@@ -162,7 +134,7 @@ export const ReaderBookToc: React.FC<ReaderBookTocProps> = ({
                         >
                           <span className="dot dot--empty" />
                           <span className="num">小结</span>
-                          <span>本章小结</span>
+                          <span className="label">本章小结</span>
                         </a>
                         <a
                           href="#exercises"
@@ -171,7 +143,7 @@ export const ReaderBookToc: React.FC<ReaderBookTocProps> = ({
                         >
                           <span className="dot dot--empty" />
                           <span className="num">练习</span>
-                          <span>习题</span>
+                          <span className="label">习题</span>
                         </a>
                       </div>
                     )}

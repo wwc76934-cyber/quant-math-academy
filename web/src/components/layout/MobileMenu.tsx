@@ -1,14 +1,8 @@
 import React, { useEffect, useRef } from 'react';
-import { NavLink } from 'react-router-dom';
-import {
-  homePath,
-  pathsPath,
-  practicePath,
-  progressPath,
-  searchPath,
-  syllabusPath,
-} from '../../lib/paths';
+import { NavLink, useLocation } from 'react-router-dom';
+import { homePath, searchPath } from '../../lib/paths';
 import { ThemeToggle } from '../ui/ThemeToggle';
+import { NAV_ITEMS } from './navItems';
 
 export interface MobileMenuProps {
   isOpen: boolean;
@@ -24,6 +18,7 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
   const drawerRef = useRef<HTMLDivElement>(null);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
   const wasOpenRef = useRef(false);
+  const { pathname } = useLocation();
 
   // Esc key closes drawer
   useEffect(() => {
@@ -102,7 +97,6 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
             onClick={onClose}
           >
             <span className="brand__cn">量化数学学院</span>
-            <span className="brand__en">Quant Math Academy</span>
           </NavLink>
           <button
             ref={closeBtnRef}
@@ -129,34 +123,20 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
         </div>
 
         <nav className="mobile-drawer__nav" aria-label="移动端导航">
-          <NavLink
-            to={syllabusPath()}
-            onClick={onClose}
-            className={({ isActive }) => (isActive ? 'is-active' : '')}
-          >
-            教材
-          </NavLink>
-          <NavLink
-            to={pathsPath()}
-            onClick={onClose}
-            className={({ isActive }) => (isActive ? 'is-active' : '')}
-          >
-            学习路径
-          </NavLink>
-          <NavLink
-            to={practicePath()}
-            onClick={onClose}
-            className={({ isActive }) => (isActive ? 'is-active' : '')}
-          >
-            练习
-          </NavLink>
-          <NavLink
-            to={progressPath()}
-            onClick={onClose}
-            className={({ isActive }) => (isActive ? 'is-active' : '')}
-          >
-            学习进度
-          </NavLink>
+          {NAV_ITEMS.map((item) => {
+            const active = item.match(pathname);
+            return (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                onClick={onClose}
+                className={active ? 'is-active' : ''}
+                aria-current={active ? 'page' : undefined}
+              >
+                {item.label}
+              </NavLink>
+            );
+          })}
           <NavLink
             to={searchPath()}
             onClick={onClose}

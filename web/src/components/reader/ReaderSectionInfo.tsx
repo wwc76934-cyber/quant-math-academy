@@ -90,14 +90,14 @@ export const ReaderSectionInfo: React.FC<ReaderSectionInfoProps> = ({
                 fontSize: '10px',
                 height: '18px',
                 background: 'var(--bg-elevated)',
-                border: '1px solid var(--border)',
+                border: '1px solid var(--line)',
                 color: 'var(--ink)',
               }}
             >
               有笔记
             </span>
           )}
-          {!hasMeta && <span className="small muted">标注完善中</span>}
+          {!hasMeta && <span className="small muted">暂无难度标注</span>}
         </div>
 
         <div className="section-meta__grid">
@@ -140,7 +140,7 @@ export const ReaderSectionInfo: React.FC<ReaderSectionInfoProps> = ({
               title="点击修改学习状态"
             >
               <StatusDot status={progress} />
-              <span>{STATUS_LABELS[progress]} ▾</span>
+              <span>{STATUS_LABELS[progress]}</span>
             </button>
           </div>
           <div>
@@ -368,7 +368,7 @@ export const ReaderSectionInfo: React.FC<ReaderSectionInfoProps> = ({
             }}
           >
             <span>为什么这样标注</span>
-            <span>{rationaleOpen ? '▾' : '▸'}</span>
+            <span className={`disclosure${rationaleOpen ? ' is-open' : ''}`} aria-hidden="true" />
           </button>
           {rationaleOpen && <p className="rail-note">{meta.rationale}</p>}
         </div>
@@ -391,7 +391,6 @@ export const ReaderSectionInfo: React.FC<ReaderSectionInfoProps> = ({
           }}
         >
           <span>查看完整知识关系</span>
-          <span>→</span>
         </Link>
       </div>
     </>

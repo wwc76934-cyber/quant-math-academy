@@ -144,11 +144,11 @@ describe('T22 /progress 今日建议卡 (ProgressSuggestion)', () => {
 
     const card = screen.getByTestId('progress-suggestion-card');
     expect(card).toHaveAttribute('aria-labelledby', 'progress-suggestion-heading');
-    expect(screen.getByText('TODAY · 建议')).toBeInTheDocument();
+    expect(screen.getByText('今天建议先做')).toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 2, name: '先复习 2 道到期错题' })).toBeInTheDocument();
     expect(screen.getByText('间隔复习到期')).toBeInTheDocument();
 
-    const link = screen.getByRole('link', { name: '开始 →' });
+    const link = screen.getByRole('link', { name: '开始' });
     expect(link).toHaveAttribute('href', '/practice/wrong');
   });
 
@@ -185,7 +185,7 @@ describe('T22 /progress 今日建议卡 (ProgressSuggestion)', () => {
     expect(screen.getByRole('heading', { level: 2, name: '重练 2 道错题' })).toBeInTheDocument();
     expect(screen.getByText('错题优先')).toBeInTheDocument();
 
-    const link = screen.getByRole('link', { name: '开始 →' });
+    const link = screen.getByRole('link', { name: '开始' });
     expect(link).toHaveAttribute('href', '/practice/wrong');
   });
 
@@ -213,7 +213,7 @@ describe('T22 /progress 今日建议卡 (ProgressSuggestion)', () => {
     expect(screen.getByRole('heading', { level: 2, name: '继续上次位置：命题、逻辑联结词与量词' })).toBeInTheDocument();
     expect(screen.getByText('最近阅读')).toBeInTheDocument();
 
-    const link = screen.getByRole('link', { name: '开始 →' });
+    const link = screen.getByRole('link', { name: '开始' });
     expect(link).toHaveAttribute('href', '/learn/c01#c01-s1');
   });
 
@@ -236,7 +236,7 @@ describe('T22 /progress 今日建议卡 (ProgressSuggestion)', () => {
     expect(screen.getByRole('heading', { level: 2, name: '从第 1 章开始' })).toBeInTheDocument();
     expect(screen.getByText('建立基础')).toBeInTheDocument();
 
-    const link = screen.getByRole('link', { name: '开始 →' });
+    const link = screen.getByRole('link', { name: '开始' });
     expect(link).toHaveAttribute('href', '/learn/c01');
   });
 
@@ -261,7 +261,7 @@ describe('T22 /progress 今日建议卡 (ProgressSuggestion)', () => {
     expect(screen.getByRole('heading', { level: 2, name: '继续推进全书' })).toBeInTheDocument();
     expect(screen.getByText('保持节奏')).toBeInTheDocument();
 
-    const link = screen.getByRole('link', { name: '开始 →' });
+    const link = screen.getByRole('link', { name: '开始' });
     expect(link).toHaveAttribute('href', '/syllabus');
   });
 

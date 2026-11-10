@@ -67,7 +67,7 @@ describe('PathsPage', () => {
 
     // Principle reminder
     expect(
-      screen.getByText(/学习路径仅决定推荐顺序/)
+      screen.getByText(/学习路径只给出推荐顺序/)
     ).toBeInTheDocument();
   });
 
