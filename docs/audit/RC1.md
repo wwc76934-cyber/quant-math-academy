@@ -3,7 +3,7 @@
 - 日期：2026-11-10
 - 状态：**技术 RC1 就绪；等待用户开源/部署授权**
 - 提交：以当前 `main` HEAD 为准
-- 未执行：创建公开仓库、部署站点、选择许可证
+- 已发布：公开仓库 + GitHub Pages；站点 `https://wwc76934-cyber.github.io/quant-math-academy/`
 
 ## 1. 内容
 

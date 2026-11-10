@@ -1,6 +1,6 @@
 # GitHub Pages 发布步骤（待执行）
 
-- 状态：已推送到 `https://github.com/wwc76934-cyber/quant-math-academy`；Actions build/upload 成功；deploy 因 **Pages 未启用** 返回 404
+- 状态：**已部署成功**：`https://wwc76934-cyber.github.io/quant-math-academy/`；Pages 已启用，workflow build/deploy 均成功
 - 已确认：代码 MIT、正文保留所有权利、公开仓库 + Pages
 
 ## 1. 已准备的文件
@@ -21,7 +21,7 @@ BASE_URL=/quant-math-academy/ npm --prefix web run build
 
 产物 gzip：主 JS 75.32KB；CSS 6.86KB。
 
-## 3. 首次部署的 Pages 启用（必须）
+## 3. 首次部署的 Pages 启用（已完成）
 
 首次运行 `deploy-pages` 报：
 
@@ -29,7 +29,7 @@ BASE_URL=/quant-math-academy/ npm --prefix web run build
 Failed to create deployment (status: 404) ... Ensure GitHub Pages has been enabled
 ```
 
-请打开：
+已通过 GitHub API 启用 Pages；若重建仓库，请打开：
 
 ```
 https://github.com/wwc76934-cyber/quant-math-academy/settings/pages

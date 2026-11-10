@@ -82,8 +82,9 @@ BASE_URL=/<repo-name>/ npm --prefix web run build
 cp web/dist/index.html web/dist/404.html   # SPA fallback
 ```
 
+已部署：**https://wwc76934-cyber.github.io/quant-math-academy/**
+
 工作流见 `.github/workflows/deploy.yml`；详细步骤见 [docs/DEPLOY_GITHUB_PAGES.md](docs/DEPLOY_GITHUB_PAGES.md)。
-本机当前没有 GitHub 凭证，尚未实际推送/部署。
 
 ## 许可
 
