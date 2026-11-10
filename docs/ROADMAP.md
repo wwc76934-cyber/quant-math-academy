@@ -58,7 +58,7 @@
 
 ## 3. Phase 1 — 高质量阅读 MVP
 
-> 状态（2026-11-10）：Phase 1/2/3/5 完成；全书 34 章/219 节覆盖，D/P 主校准 P0 56.6%、P2+P3 10.0%；技术 RC1 就绪；发布配置完成（代码 MIT、正文保留所有权利、公开仓库 + Pages），等待 GitHub URL/凭证；KaTeX/React Router 已升级、audit 0；T14 为 backlog。
+> 状态（2026-11-10）：Phase 1/2/3/5 完成；全书 34 章/219 节覆盖，D/P 主校准 P0 56.6%、P2+P3 10.0%；RC1 已公开发布：https://wwc76934-cyber.github.io/quant-math-academy/；代码 MIT、正文保留所有权利；Phase 4 T14/T20 因 AGY 连续失败待决策；T21 发布验收通过。
 
 ### 3.1 目标
 
