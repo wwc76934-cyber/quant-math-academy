@@ -31,6 +31,9 @@ jobs:
       - name: Install content pipeline deps
         run: npm ci
 
+      - name: Parse book inventory
+        run: npm run content:inventory
+
       - name: Build content
         run: npm run content:build
 
