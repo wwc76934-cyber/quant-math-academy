@@ -77,12 +77,12 @@
 .nav {
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: 26px;
   margin-left: 8px;
 }
 .nav a {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 14px;
   color: var(--ink-secondary);
   height: 56px;
   display: inline-flex;
@@ -187,6 +187,12 @@
   gap: 20px;
   font-family: var(--font-sans);
   font-size: 12px;
+}
+.app-footer__sub {
+  margin-top: 4px;
+}
+.app-footer__links {
+  flex-wrap: wrap;
 }
 .app-footer__links a {
   color: var(--ink-secondary);

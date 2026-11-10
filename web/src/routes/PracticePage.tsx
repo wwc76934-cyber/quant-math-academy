@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import { loadBook } from '../features/content/loadBook';
 import { Book } from '../features/content/types';
 import { useStore } from '../features/store/store';
-import { formatDisplayTitle } from '../lib/format';
+import { PageHeader } from '../components/layout/PageHeader';
+import { formatChinesePartLabel, formatDisplayTitle } from '../lib/format';
 
 export const PracticePage: React.FC = () => {
   const { store } = useStore();
@@ -96,205 +97,105 @@ export const PracticePage: React.FC = () => {
 
   if (loading) {
     return (
-      <main className="content practice-page" id="main-content" style={{ padding: '40px 24px', maxWidth: '1040px', margin: '0 auto' }}>
-        <p className="muted" role="status">正在加载练习题目录...</p>
+      <main className="page practice-page" id="main-content">
+        <p className="page-loading" role="status">正在载入习题目录…</p>
       </main>
     );
   }
 
   if (error || !book) {
     return (
-      <main className="content practice-page" id="main-content" style={{ padding: '40px 24px', maxWidth: '1040px', margin: '0 auto' }}>
-        <div role="alert" style={{ padding: '16px', background: 'var(--bg-subtle)', border: '1px solid var(--accent)', borderRadius: '4px' }}>
-          <h3>练习数据载入失败</h3>
-          <p>{error || '无法获取章节数据'}</p>
+      <main className="page practice-page" id="main-content">
+        <div role="alert" className="notice notice--error">
+          习题目录没有载入成功：{error || '缺少章节数据'}。请刷新页面重试。
         </div>
       </main>
     );
   }
 
+  const accuracy =
+    stats.practicedCount > 0 ? Math.round((stats.correctCount / stats.practicedCount) * 100) : 0;
+
+  const chaptersByPart = book.parts.map((part) => ({
+    part,
+    chapters: part.chapterIds
+      .map((id) => book.chapters.find((c) => c.id === id))
+      .filter((c): c is Book['chapters'][number] => Boolean(c)),
+  }));
+
   return (
-    <main
-      className="content practice-page shell"
-      id="main-content"
-      style={{ padding: '36px 24px 64px', maxWidth: '1040px', margin: '0 auto', fontFamily: 'var(--font-sans)' }}
-    >
-      {/* 1. Page Header */}
-      <header style={{ marginBottom: '28px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-          <span className="kicker" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.08em', color: 'var(--ink-muted)' }}>
-            PRACTICE & SOLUTIONS
+    <main className="page practice-page" id="main-content">
+      <PageHeader
+        title="章节练习"
+        lede={`全书 ${totalExercises} 道习题，按章节编排。每题先独立作答，再展开解析，自评对错；做错的题会进入错题本，按 1、3、7 天的间隔提醒重做。`}
+        actions={
+          <Link to="/practice/wrong" className="btn btn--secondary">
+            错题本{stats.wrongCount > 0 ? ` · ${stats.wrongCount}` : ''}
+          </Link>
+        }
+      />
+
+      <section className="stat-row" aria-label="练习概况">
+        <div className="stat">
+          <span className="stat__label">全书习题</span>
+          <span className="stat__value">{totalExercises}</span>
+        </div>
+        <div className="stat">
+          <span className="stat__label">已练习题数</span>
+          <span className="stat__value">
+            {stats.practicedCount} <small>({stats.percentage}%)</small>
           </span>
-          <span style={{ fontSize: '12px', color: 'var(--ink-muted)' }}>·</span>
-          <span style={{ fontSize: '12px', color: 'var(--ink-muted)' }}>Phase 3</span>
         </div>
-        <h1 style={{ fontSize: '28px', fontFamily: 'var(--font-serif)', margin: '0 0 12px', fontWeight: 600, color: 'var(--ink)' }}>
-          章节练习与错题本
-        </h1>
-        <p style={{ margin: 0, fontSize: '15px', lineHeight: 1.6, color: 'var(--ink-secondary)', maxWidth: '780px' }}>
-          全书 34 章 698 道精选练习题，涵盖核心定理推导与量化应用场景。支持即时标记、错题归集与自适应间隔复习。
-        </p>
-      </header>
-
-      {/* 2. Top Stats Overview */}
-      <section
-        aria-label="练习进度总览"
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: '16px',
-          marginBottom: '28px',
-        }}
-      >
-        <div style={{ background: 'var(--bg-card, #ffffff)', border: '1px solid var(--border, #e5e5e0)', borderRadius: '6px', padding: '16px 18px' }}>
-          <span style={{ fontSize: '12px', color: 'var(--ink-muted)', display: 'block', marginBottom: '4px' }}>全书习题总数</span>
-          <div style={{ fontSize: '24px', fontWeight: 700, fontFamily: 'var(--font-serif)', color: 'var(--ink)' }}>
-            {totalExercises} <small style={{ fontSize: '13px', fontWeight: 400, color: 'var(--ink-muted)' }}>题</small>
-          </div>
-          <span style={{ fontSize: '11px', color: 'var(--ink-muted)' }}>覆盖 34 章全部题库</span>
+        <div className="stat">
+          <span className="stat__label">自评正确率</span>
+          <span className="stat__value">{stats.practicedCount > 0 ? `${accuracy}%` : '—'}</span>
         </div>
-
-        <div style={{ background: 'var(--bg-card, #ffffff)', border: '1px solid var(--border, #e5e5e0)', borderRadius: '6px', padding: '16px 18px' }}>
-          <span style={{ fontSize: '12px', color: 'var(--ink-muted)', display: 'block', marginBottom: '4px' }}>已练习题数</span>
-          <div style={{ fontSize: '24px', fontWeight: 700, fontFamily: 'var(--font-serif)', color: 'var(--ink)' }}>
-            {stats.practicedCount} <small style={{ fontSize: '13px', fontWeight: 400, color: 'var(--ink-muted)' }}>({stats.percentage}%)</small>
-          </div>
-          <span style={{ fontSize: '11px', color: 'var(--ink-muted)' }}>正确率 {stats.practicedCount > 0 ? Math.round((stats.correctCount / stats.practicedCount) * 100) : 0}%</span>
-        </div>
-
-        <div style={{ background: 'var(--bg-card, #ffffff)', border: '1px solid var(--border, #e5e5e0)', borderRadius: '6px', padding: '16px 18px' }}>
-          <span style={{ fontSize: '12px', color: 'var(--ink-muted)', display: 'block', marginBottom: '4px' }}>当前错题记录</span>
-          <div style={{ fontSize: '24px', fontWeight: 700, fontFamily: 'var(--font-serif)', color: stats.wrongCount > 0 ? 'var(--warning, #c9510c)' : 'var(--ink)' }}>
-            {stats.wrongCount} <small style={{ fontSize: '13px', fontWeight: 400, color: 'var(--ink-muted)' }}>题</small>
-          </div>
-          <span style={{ fontSize: '11px', color: 'var(--ink-muted)' }}>已存入错题本</span>
-        </div>
-
-        <div style={{ background: 'var(--bg-card, #ffffff)', border: '1px solid var(--border, #e5e5e0)', borderRadius: '6px', padding: '16px 18px' }}>
-          <span style={{ fontSize: '12px', color: 'var(--ink-muted)', display: 'block', marginBottom: '4px' }}>今日待复习</span>
-          <div style={{ fontSize: '24px', fontWeight: 700, fontFamily: 'var(--font-serif)', color: stats.dueCount > 0 ? 'var(--accent, #1a56db)' : 'var(--ink)' }}>
-            {stats.dueCount} <small style={{ fontSize: '13px', fontWeight: 400, color: 'var(--ink-muted)' }}>题</small>
-          </div>
-          <span style={{ fontSize: '11px', color: 'var(--ink-muted)' }}>基于间隔复习模型</span>
+        <div className="stat">
+          <span className="stat__label">今天要复习</span>
+          <span className="stat__value">{stats.dueCount}</span>
         </div>
       </section>
 
-      {/* 3. Mistakes Notebook Entry Banner */}
-      <section
-        style={{
-          background: 'var(--bg-card, #ffffff)',
-          border: '1px solid var(--border, #e5e5e0)',
-          borderRadius: '6px',
-          padding: '18px 22px',
-          marginBottom: '32px',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: '16px',
-        }}
-      >
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-            <span style={{ fontWeight: 600, fontSize: '16px', color: 'var(--ink)' }}>错题本与复习队列</span>
-            {stats.wrongCount > 0 && (
-              <span className="badge badge--p0" style={{ fontSize: '11px', height: '18px', padding: '0 6px' }}>
-                {stats.wrongCount} 题存入
-              </span>
-            )}
-          </div>
-          <p style={{ margin: 0, fontSize: '13px', color: 'var(--ink-muted)' }}>
-            {stats.wrongCount > 0
-              ? `当前存有 ${stats.wrongCount} 道错题待复盘，其中 ${stats.dueCount} 道题目已到复习周期。`
-              : '目前还没有记录错题。在练习或阅读时遇到疑问，点击“加入错题”即可自动收入。'}
-          </p>
+      {stats.dueCount > 0 && (
+        <div className="notice">
+          有 {stats.dueCount} 道错题今天到期。<Link to="/practice/wrong">去错题本重做</Link>
         </div>
+      )}
 
-        <Link
-          to="/practice/wrong"
-          className="btn btn--secondary"
-          style={{ whiteSpace: 'nowrap', fontSize: '13px', padding: '8px 16px' }}
-        >
-          {stats.wrongCount > 0 ? '进入错题本重练 →' : '查看错题本 →'}
-        </Link>
-      </section>
-
-      {/* 4. Chapter Exercise List */}
-      <div className="section-head" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-        <h2 style={{ fontSize: '20px', fontFamily: 'var(--font-serif)', margin: 0, fontWeight: 600 }}>
-          章节练习列表
-        </h2>
-        <span style={{ fontSize: '13px', color: 'var(--ink-muted)' }}>
-          按 8 篇 34 章脉络
-        </span>
-      </div>
-
-      <div className="practice-chapters" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        {book.chapters.map((chapter) => {
-          const chStat = chapterStatsMap.get(chapter.id) || { total: chapter.exerciseCount || 0, practiced: 0, correct: 0, wrong: 0 };
-          const isDone = chStat.total > 0 && chStat.practiced >= chStat.total;
-
-          return (
-            <div
-              key={chapter.id}
-              style={{
-                background: 'var(--bg-card, #ffffff)',
-                border: '1px solid var(--border, #e5e5e0)',
-                borderRadius: '6px',
-                padding: '14px 18px',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                flexWrap: 'wrap',
-                gap: '12px',
-              }}
-            >
-              <div style={{ flex: '1 1 280px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--ink-muted)' }}>
-                    第 {chapter.number} 章
-                  </span>
-                  {chapter.pilot && (
-                    <span className="badge badge--pilot" style={{ fontSize: '9px', height: '16px' }}>
-                      PILOT
-                    </span>
-                  )}
-                  {isDone && (
-                    <span className="badge badge--p0" style={{ fontSize: '9px', height: '16px' }}>
-                      全部已练
-                    </span>
-                  )}
-                </div>
-                <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 600, color: 'var(--ink)', fontFamily: 'var(--font-serif)' }}>
-                  {formatDisplayTitle(chapter.title)}
-                </h3>
-              </div>
-
-              {/* Progress info */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '20px', fontSize: '13px', color: 'var(--ink-muted)' }}>
-                <span>
-                  共 <strong style={{ color: 'var(--ink)' }}>{chStat.total}</strong> 题
-                </span>
-                <span>
-                  已练 <strong style={{ color: 'var(--ink)' }}>{chStat.practiced}</strong>
-                </span>
-                {chStat.wrong > 0 && (
-                  <span style={{ color: 'var(--warning, #c9510c)' }}>
-                    错题 {chStat.wrong}
-                  </span>
-                )}
-              </div>
-
-              <Link
-                to={`/practice/${chapter.id}`}
-                className="btn btn--secondary"
-                style={{ fontSize: '13px', padding: '6px 14px' }}
-              >
-                进入练习 →
-              </Link>
-            </div>
-          );
-        })}
+      <div className="practice-chapters">
+        {chaptersByPart.map(({ part, chapters }) => (
+          <section key={part.id} className="list-group" aria-labelledby={`practice-${part.id}`}>
+            <h2 id={`practice-${part.id}`} className="list-group__title">
+              {formatChinesePartLabel(part.order)} {part.title}
+            </h2>
+            <ul className="list">
+              {chapters.map((chapter) => {
+                const chStat = chapterStatsMap.get(chapter.id) || {
+                  total: chapter.exerciseCount || 0,
+                  practiced: 0,
+                  correct: 0,
+                  wrong: 0,
+                };
+                const pct = chStat.total > 0 ? Math.round((chStat.practiced / chStat.total) * 100) : 0;
+                return (
+                  <li key={chapter.id}>
+                    <Link to={`/practice/${chapter.id}`} className="list-row">
+                      <span className="list-row__num">第 {chapter.number} 章</span>
+                      <span className="list-row__title">{formatDisplayTitle(chapter.title)}</span>
+                      <span className="list-row__meta">
+                        {chStat.practiced > 0 ? `${chStat.practiced} / ${chStat.total} 题` : `${chStat.total} 题`}
+                        {chStat.wrong > 0 && <em> · 错 {chStat.wrong}</em>}
+                      </span>
+                      <span className="list-row__bar" aria-hidden="true">
+                        <i style={{ width: `${pct}%` }} />
+                      </span>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        ))}
       </div>
     </main>
   );

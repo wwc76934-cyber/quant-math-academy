@@ -88,11 +88,10 @@ describe('BookmarksPage (T14c)', () => {
     await waitFor(() => {
       const mainElement = document.getElementById('main-content');
       expect(mainElement).toBeInTheDocument();
-      expect(mainElement).toHaveClass('content', 'bookmarks-page', 'shell');
+      expect(mainElement).toHaveClass('page', 'bookmarks-page');
     });
 
-    expect(screen.getByRole('heading', { level: 1, name: /学习收藏夹/i })).toBeInTheDocument();
-    expect(screen.getByText('公式收藏保存在本机')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: '公式收藏' })).toBeInTheDocument();
     expect(screen.getByText('还没有收藏公式')).toBeInTheDocument();
 
     const syllabusLink = screen.getByRole('link', { name: /浏览教材/i });
@@ -130,7 +129,7 @@ describe('BookmarksPage (T14c)', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/C11 第11章 期望、方差、矩与概率不等式/)).toBeInTheDocument();
+      expect(screen.getByText(/^第11章 期望、方差、矩与概率不等式$/)).toBeInTheDocument();
     });
 
     expect(screen.getByText('(11.1)')).toBeInTheDocument();
@@ -171,14 +170,14 @@ describe('BookmarksPage (T14c)', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/C11 第11章/)).toBeInTheDocument();
+      expect(screen.getByText(/^第11章 /)).toBeInTheDocument();
     });
 
     const removeBtn = screen.getByRole('button', { name: /取消收藏/i });
     fireEvent.click(removeBtn);
 
     await waitFor(() => {
-      expect(screen.queryByText(/C11 第11章/)).not.toBeInTheDocument();
+      expect(screen.queryByText(/^第11章 /)).not.toBeInTheDocument();
       expect(screen.getByText('还没有收藏公式')).toBeInTheDocument();
     });
   });
@@ -202,7 +201,7 @@ describe('BookmarksPage (T14c)', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/C11 第11章/)).toBeInTheDocument();
+      expect(screen.getByText(/^第11章 /)).toBeInTheDocument();
     });
 
     expect(screen.getByText('c11-legacy-eq-99')).toBeInTheDocument();

@@ -3,10 +3,9 @@
 /* Utilities */
 .kicker {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  letter-spacing: 0.02em;
   color: var(--ink-muted);
 }
 .muted {
@@ -76,11 +75,11 @@
 }
 .btn--primary {
   background: var(--ink);
-  color: #fbfaf7;
+  color: var(--bg);
 }
 .btn--primary:hover {
   background: var(--accent);
-  color: #ffffff;
+  color: var(--on-accent);
 }
 .btn--secondary {
   background: transparent;
@@ -129,12 +128,12 @@
 .chip--active {
   background: var(--ink);
   border-color: var(--ink);
-  color: #fbfaf7;
+  color: var(--bg);
 }
 .chip--active:hover {
   background: var(--ink);
   border-color: var(--ink);
-  color: #fbfaf7;
+  color: var(--bg);
 }
 
 /* D/P Badges */
@@ -156,7 +155,7 @@
 .badge--p0 {
   background: var(--accent);
   border-color: var(--accent);
-  color: #fbfaf7;
+  color: var(--on-accent);
 }
 .badge--p1 {
   border-color: var(--accent);
@@ -207,16 +206,15 @@
 
 /* Empty State & Error State */
 .empty-state {
-  padding: 48px 24px;
+  padding: 40px 24px;
   text-align: center;
-  background: var(--bg-elevated);
-  border: 1px dashed var(--line-strong);
+  background: var(--bg-subtle);
   border-radius: var(--radius-md);
-  margin: 24px 0;
+  margin: 16px 0;
 }
 .empty-state__title {
   font-family: var(--font-serif);
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
   color: var(--ink);
   margin: 0 0 8px;
@@ -339,40 +337,46 @@
 }
 .masthead h1 {
   font-family: var(--font-serif);
-  font-size: 54px;
-  line-height: 1.15;
+  font-size: 40px;
+  line-height: 1.25;
   font-weight: 600;
-  letter-spacing: 0.01em;
-  margin: 14px 0 12px;
+  margin: 0 0 14px;
 }
 .masthead p {
-  max-width: 620px;
+  max-width: 600px;
   margin: 0;
   color: var(--ink-secondary);
-  font-size: 17px;
+  font-size: 16px;
   line-height: 1.8;
+}
+.masthead--compact {
+  padding-bottom: 28px;
+}
+.masthead--compact h1 {
+  font-size: 30px;
 }
 .masthead__meta {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 18px 24px;
+  margin: 0;
   padding-bottom: 4px;
 }
 .masthead__meta div {
   border-top: 1px solid var(--line-strong);
   padding-top: 8px;
 }
-.masthead__meta strong {
-  display: block;
+.masthead__meta dt {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+.masthead__meta dd {
+  margin: 2px 0 0;
   font-family: var(--font-serif);
   font-size: 22px;
   font-weight: 600;
-}
-.masthead__meta span {
-  font-family: var(--font-sans);
-  font-size: 11px;
-  color: var(--ink-muted);
-  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
 }
 
 .home-grid {
@@ -547,8 +551,8 @@
 }
 .path-card__mode {
   font-family: var(--font-sans);
-  font-size: 10px;
-  letter-spacing: 0.14em;
+  font-size: 12px;
+  letter-spacing: 0.02em;
   color: var(--ink-muted);
 }
 .path-card h3 {
@@ -585,7 +589,7 @@
 }
 .part-row {
   display: grid;
-  grid-template-columns: 44px 1fr 180px 56px;
+  grid-template-columns: 56px 1fr 180px 56px;
   gap: 20px;
   align-items: center;
   padding: 15px 0;
@@ -868,7 +872,7 @@
     padding-top: 32px;
   }
   .masthead h1 {
-    font-size: 36px;
+    font-size: 30px;
   }
   .masthead p {
     font-size: 16px;
@@ -1163,7 +1167,7 @@
 .article-content {
   font-family: var(--font-serif);
   font-size: var(--prose-size);
-  line-height: var(--prose-leading, 1.9);
+  line-height: var(--prose-leading);
   max-width: var(--measure);
   margin: 0 auto;
 }
@@ -1717,12 +1721,11 @@ details.proof[open] > summary.proof__label::before {
   margin: 0;
 }
 .bookmarks-page__empty {
-  padding: 48px 24px;
+  padding: 40px 24px;
   text-align: center;
-  background: var(--bg-elevated, #ffffff);
-  border: 1px dashed var(--line);
-  border-radius: var(--radius-md, 8px);
-  margin: 24px 0;
+  background: var(--bg-subtle);
+  border-radius: var(--radius-md);
+  margin: 16px 0;
 }
 .bookmarks-page__empty p {
   font-size: 15px;
@@ -1745,7 +1748,7 @@ details.proof[open] > summary.proof__label::before {
   color: var(--ink);
   margin-bottom: 16px;
   padding-bottom: 8px;
-  border-bottom: 1px solid var(--line-strong, #e5e5e5);
+  border-bottom: 1px solid var(--line-strong);
 }
 .bookmarks-list {
   list-style: none;
@@ -1756,9 +1759,9 @@ details.proof[open] > summary.proof__label::before {
   gap: 16px;
 }
 .bookmark-item {
-  background: var(--bg-elevated, #ffffff);
+  background: var(--bg-elevated);
   border: 1px solid var(--line);
-  border-radius: var(--radius-md, 8px);
+  border-radius: var(--radius-md);
   padding: 16px 20px;
   display: flex;
   flex-direction: column;
@@ -1777,8 +1780,8 @@ details.proof[open] > summary.proof__label::before {
 .bookmark-item__identifier {
   font-weight: 600;
   color: var(--ink);
-  font-family: var(--font-mono, monospace);
-  background: var(--bg-subtle, #f5f5f5);
+  font-family: var(--font-mono);
+  background: var(--bg-subtle);
   padding: 2px 6px;
   border-radius: 4px;
 }
@@ -1791,18 +1794,18 @@ details.proof[open] > summary.proof__label::before {
 .bookmark-item__latex {
   margin: 0;
   padding: 10px 14px;
-  background: var(--bg-subtle, #f8f9fa);
+  background: var(--bg-subtle);
   border: 1px solid var(--line);
-  border-radius: var(--radius-sm, 4px);
+  border-radius: var(--radius-sm);
   overflow-x: auto;
-  font-family: var(--font-mono, monospace);
+  font-family: var(--font-mono);
   font-size: 13px;
   color: var(--ink);
 }
 .bookmark-item__legacy-tip {
   margin: 0;
   font-size: 13px;
-  color: var(--warning, #b45309);
+  color: var(--warning);
   font-style: italic;
 }
 .bookmark-item__actions {
@@ -1812,7 +1815,7 @@ details.proof[open] > summary.proof__label::before {
   font-size: 13px;
 }
 .bookmark-item__jump-link {
-  color: var(--accent, #1a73e8);
+  color: var(--accent);
   text-decoration: none;
 }
 .bookmark-item__jump-link:hover {
@@ -1833,9 +1836,9 @@ details.proof[open] > summary.proof__label::before {
 
 /* Progress Suggestion Card (T22) */
 .progress-suggestion-card {
-  background: var(--bg-card, #ffffff);
-  border: 1px solid var(--border, #e5e5e0);
-  border-radius: var(--radius-md, 6px);
+  background: var(--bg-elevated);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
   padding: 20px 24px;
   margin-bottom: 32px;
   display: flex;
@@ -1852,12 +1855,9 @@ details.proof[open] > summary.proof__label::before {
 
 .progress-suggestion-card__tag {
   font-family: var(--font-sans);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  color: var(--ink-muted);
+  font-size: 12px;
+  color: var(--accent);
   margin-bottom: 6px;
-  text-transform: uppercase;
 }
 
 .progress-suggestion-card__title {

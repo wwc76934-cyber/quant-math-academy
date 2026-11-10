@@ -15,7 +15,12 @@
   --accent-hover: #8a3524;
   --accent-soft: #f2e6e1;
   --success: #4f6b57;
+  --success-soft: #e7eee8;
   --warning: #8a6a2f;
+  --warning-soft: #f3ecdf;
+  --danger: #9b2c22;
+  --danger-soft: #f6e5e1;
+  --on-accent: #ffffff;
   --focus: #a5432f;
   --selection: #ead9c8;
 
@@ -62,7 +67,12 @@ html[data-theme="dark"] {
   --accent-hover: #e0a08d;
   --accent-soft: #2e211d;
   --success: #7fa08a;
+  --success-soft: #1e2a22;
   --warning: #c2a46a;
+  --warning-soft: #2c261b;
+  --danger: #e08a7c;
+  --danger-soft: #33201c;
+  --on-accent: #131312;
   --focus: #d08a76;
   --selection: #3a2a24;
 }

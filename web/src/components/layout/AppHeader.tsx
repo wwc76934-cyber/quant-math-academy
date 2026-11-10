@@ -1,22 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
-import {
-  homePath,
-  pathsPath,
-  practicePath,
-  progressPath,
-  searchPath,
-  syllabusPath,
-} from '../../lib/paths';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { homePath, searchPath } from '../../lib/paths';
 import { ThemeToggle } from '../ui/ThemeToggle';
 import { MobileMenu } from './MobileMenu';
+import { NAV_ITEMS } from './navItems';
+
+const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform || '');
 
 export const AppHeader: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
-  // Listen for Cmd+K / Ctrl+K
+  // Cmd+K / Ctrl+K opens search
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
@@ -56,42 +53,24 @@ export const AppHeader: React.FC = () => {
             </svg>
           </button>
 
-          <Link to={homePath()} className="brand">
+          <Link to={homePath()} className="brand" aria-label="量化数学学院 首页">
             <span className="brand__cn">量化数学学院</span>
-            <span className="brand__en">Quant Math Academy</span>
           </Link>
 
           <nav className="nav" aria-label="主导航">
-            <NavLink
-              to={syllabusPath()}
-              className={({ isActive }) => (isActive ? 'is-active' : '')}
-            >
-              教材
-            </NavLink>
-            <NavLink
-              to={pathsPath()}
-              className={({ isActive }) => (isActive ? 'is-active' : '')}
-            >
-              学习路径
-            </NavLink>
-            <NavLink
-              to={practicePath()}
-              className={({ isActive }) => (isActive ? 'is-active' : '')}
-            >
-              练习
-            </NavLink>
-            <NavLink
-              to="/bookmarks"
-              className={({ isActive }) => (isActive ? 'is-active' : '')}
-            >
-              收藏
-            </NavLink>
-            <NavLink
-              to={progressPath()}
-              className={({ isActive }) => (isActive ? 'is-active' : '')}
-            >
-              学习进度
-            </NavLink>
+            {NAV_ITEMS.map((item) => {
+              const active = item.match(pathname);
+              return (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  className={active ? 'is-active' : ''}
+                  aria-current={active ? 'page' : undefined}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
           </nav>
 
           <div className="topbar__actions">
@@ -116,7 +95,7 @@ export const AppHeader: React.FC = () => {
                 <path d="m20 20-3.5-3.5" />
               </svg>
               <span className="search-label">搜索</span>
-              <kbd>⌘K</kbd>
+              <kbd>{isMac ? '⌘K' : 'Ctrl K'}</kbd>
             </button>
 
             <ThemeToggle />

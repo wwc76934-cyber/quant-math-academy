@@ -100,7 +100,7 @@ export const ReaderExercises: React.FC<ReaderExercisesProps> = ({
             fontSize: '13px',
           }}
         >
-          正在动态载入本章习题数据...
+          正在载入本章习题…
         </div>
       )}
 

@@ -165,7 +165,7 @@ export const ChapterList: React.FC<ChapterListProps> = ({
                           )}
                         </>
                       ) : (
-                        <span className="small muted">标注完善中</span>
+                        <span className="small muted">—</span>
                       )}
                       <span className="small muted">
                         {chapter.sectionCount || totalSections} 节
@@ -207,7 +207,7 @@ export const ChapterList: React.FC<ChapterListProps> = ({
                                   <PriorityBadge priority={sec.priority} />
                                 </>
                               ) : (
-                                <span className="small muted">标注完善中</span>
+                                <span className="small muted">—</span>
                               )}
                             </span>
                             <span className="section-row__status">

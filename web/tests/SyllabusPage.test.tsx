@@ -109,7 +109,7 @@ describe('SyllabusPage', () => {
 
     // Should indicate filtered count and notice
     expect(screen.getByText(/已筛选/)).toBeInTheDocument();
-    expect(screen.getByText(/仅显示已完成 P0\/P1 标注的章节/)).toBeInTheDocument();
+    expect(screen.getByText(/只显示含 P0\/P1 小节的章节/)).toBeInTheDocument();
 
     // Clear filter
     const clearBtn = screen.getByRole('button', { name: '清除筛选' });

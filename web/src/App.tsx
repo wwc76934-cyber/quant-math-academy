@@ -37,7 +37,7 @@ const StorageAlerts: React.FC = () => {
         role="alert"
         style={{
           background: 'var(--accent)',
-          color: '#ffffff',
+          color: 'var(--on-accent)',
           padding: '8px 20px',
           textAlign: 'center',
           fontSize: '12px',
@@ -55,7 +55,7 @@ const StorageAlerts: React.FC = () => {
         role="alert"
         style={{
           background: 'var(--warning)',
-          color: '#ffffff',
+          color: 'var(--on-accent)',
           padding: '8px 20px',
           textAlign: 'center',
           fontSize: '12px',
@@ -72,7 +72,7 @@ const StorageAlerts: React.FC = () => {
           onClick={clearCorruptedNotice}
           style={{
             textDecoration: 'underline',
-            color: '#ffffff',
+            color: 'var(--on-accent)',
             cursor: 'pointer',
             fontWeight: 500,
           }}
@@ -105,13 +105,13 @@ const AcademicPageLoading: React.FC = () => (
           display: 'inline-block',
           width: '16px',
           height: '16px',
-          border: '2px solid var(--border)',
+          border: '2px solid var(--line)',
           borderTopColor: 'var(--accent)',
           borderRadius: '50%',
           animation: 'spin 0.8s linear infinite',
         }}
       />
-      <span style={{ fontSize: '14px', letterSpacing: '0.02em' }}>正在载入页面...</span>
+      <span style={{ fontSize: '14px', letterSpacing: '0.02em' }}>正在载入…</span>
     </div>
   </main>
 );

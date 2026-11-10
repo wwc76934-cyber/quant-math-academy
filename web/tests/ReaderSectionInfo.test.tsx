@@ -155,7 +155,7 @@ describe('ReaderSectionInfo 知识关系增强', () => {
     );
 
     // Unannotated section should show honest notice
-    expect(screen.getByText('标注完善中')).toBeInTheDocument();
+    expect(screen.getByText('暂无难度标注')).toBeInTheDocument();
 
     // Should NOT show prerequisite chain or citations block
     expect(screen.queryByTestId('reader-prereq-chain')).not.toBeInTheDocument();

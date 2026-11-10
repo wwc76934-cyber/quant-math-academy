@@ -12,7 +12,7 @@ import { useStore } from '../features/store/store';
 import {
   formatCurrentDate,
   formatNumber,
-  formatPartNumber,
+  formatChinesePartLabel,
   formatPercentage,
 } from '../lib/format';
 import { learnPath, pathsPath, practicePath, progressPath, syllabusPath } from '../lib/paths';
@@ -215,17 +215,7 @@ export const HomePage: React.FC = () => {
   if (loading) {
     return (
       <main className="home shell" id="main-content">
-        <header className="masthead">
-          <div>
-            <div className="kicker">Quant Math Academy · 2026</div>
-            <h1>
-              量化数学，
-              <br />
-              从知道学什么开始。
-            </h1>
-            <p>加载中...</p>
-          </div>
-        </header>
+        <p className="page-loading" role="status">正在载入目录…</p>
       </main>
     );
   }
@@ -244,74 +234,54 @@ export const HomePage: React.FC = () => {
 
   return (
     <main className="home shell" id="main-content">
-      {/* 1. Masthead */}
-      <header className="masthead">
+      {/* 1. Masthead: what this is, plus search. Kept short so returning learners reach their work fast. */}
+      <header className={`masthead${continueData ? ' masthead--compact' : ''}`}>
         <div>
-          <div className="kicker">Quant Math Academy · 2026</div>
-          <h1>
-            量化数学，
-            <br />
-            从知道学什么开始。
-          </h1>
+          <h1>量化数学进阶教材</h1>
           <p>
-            以《量化数学进阶教材》为底本的结构化学习系统。8 篇 34 章，按难度与必要性重新组织，让一千多页的数学书变成每天可以推进的学习路径。
+            从数学语言、线性代数、概率统计，到随机分析、时间序列与量化研究。
+            每节标注难度与优先级，习题附完整解析。
           </p>
           <form
-            className="home-search-bar"
+            className="home-search"
+            role="search"
             onSubmit={(e) => {
               e.preventDefault();
               const input = (e.currentTarget.elements.namedItem('homeSearch') as HTMLInputElement)?.value;
               navigate(input ? `/search?q=${encodeURIComponent(input.trim())}` : '/search');
             }}
-            style={{
-              display: 'flex',
-              gap: '8px',
-              maxWidth: '520px',
-              marginTop: '16px',
-            }}
           >
             <input
               name="homeSearch"
               type="search"
-              placeholder="搜索公式、定理、习题（按 / 快速检索）..."
+              placeholder="搜索定理、公式或概念，如 Cholesky、鞅、夏普比率"
               aria-label="搜索教材内容"
-              style={{
-                flex: 1,
-                height: '40px',
-                padding: '0 14px',
-                borderRadius: 'var(--radius-sm)',
-                border: '1.5px solid var(--line)',
-                background: 'var(--bg-elevated)',
-                color: 'var(--ink)',
-                fontSize: '14px',
-                outline: 'none',
-              }}
             />
             <Button type="submit" variant="primary" size="md">
               搜索
             </Button>
           </form>
         </div>
-        <div className="masthead__meta">
+        <dl className="masthead__meta">
           <div>
-            <strong>{book.chapters.length}</strong>
-            <span>章 / {book.parts.length} 篇</span>
+            <dt>篇 / 章</dt>
+            <dd>
+              {book.parts.length} / {book.chapters.length}
+            </dd>
           </div>
           <div>
-            <strong>{totalSections}</strong>
-            <span>个知识点</span>
+            <dt>小节</dt>
+            <dd>{totalSections}</dd>
           </div>
           <div>
-            <strong>{formatNumber(totalEquations)}</strong>
-            <span>条公式</span>
+            <dt>习题</dt>
+            <dd>{formatNumber(totalExercisesCount)}</dd>
           </div>
           <div>
-            <strong>
-              {continueData ? `${continueData.percentage}%` : '—'}
-            </strong>
-            <span>当前章进度</span>
+            <dt>独立公式</dt>
+            <dd>{formatNumber(totalEquations)}</dd>
           </div>
-        </div>
+        </dl>
       </header>
 
       {/* 2 & 3. Grid: Continue Learning + Today */}
@@ -320,7 +290,7 @@ export const HomePage: React.FC = () => {
           <section className="continue-card" aria-labelledby="continue-heading">
             <div>
               <div className="continue-card__label">
-                <span className="kicker">继续学习</span>
+                <span className="kicker">上次读到</span>
                 {continueData.section.priority && (
                   <PriorityBadge priority={continueData.section.priority} />
                 )}
@@ -332,15 +302,12 @@ export const HomePage: React.FC = () => {
                 {continueData.chapter.label}　{continueData.chapter.title}
               </h2>
               <div className="section">
-                {continueData.section.number} {continueData.section.title} · 上次学习位置
+                {continueData.section.number} {continueData.section.title}
               </div>
               <div className="bar">
                 <i style={{ width: `${continueData.percentage}%` }} />
               </div>
               <div className="continue-card__foot">
-                <span className="continue-card__pct">
-                  本章 {continueData.percentage}% · 已完成 {continueData.completed} / {continueData.total} 节
-                </span>
                 <Link
                   to={learnPath(
                     continueData.chapter.id,
@@ -348,8 +315,11 @@ export const HomePage: React.FC = () => {
                   )}
                   className="btn btn--primary"
                 >
-                  继续阅读 →
+                  继续阅读
                 </Link>
+                <span className="continue-card__pct">
+                  本章已完成 {continueData.completed} / {continueData.total} 节
+                </span>
               </div>
             </div>
             <div className="ring" aria-hidden="true">
@@ -360,17 +330,21 @@ export const HomePage: React.FC = () => {
           <section className="continue-card continue-card--empty" aria-labelledby="continue-empty-heading">
             <div>
               <div className="continue-card__label">
-                <span className="kicker">开始学习</span>
+                <span className="kicker">第一次来</span>
               </div>
-              <h2 id="continue-heading">从第一篇基础开始</h2>
+              <h2 id="continue-empty-heading">从第 1 章读起，或先选一条路径</h2>
               <div className="section">
-                建议从第 1 章《数学语言、证明方法与实数完备性》开启学习，或直接查看完整教材目录。
+                第 1 章讲数学语言、证明方法与实数完备性，是全书的公共基础。
+                如果目标明确（比如准备量化实习面试），学习路径会给出按周排好的章节。
               </div>
               <div className="continue-card__foot">
                 <Link to={learnPath('c01')} className="btn btn--primary">
-                  从第 1 章开始 →
+                  从第 1 章开始
                 </Link>
-                <Link to={syllabusPath()} className="btn btn--secondary">
+                <Link to={pathsPath()} className="btn btn--secondary">
+                  选择学习路径
+                </Link>
+                <Link to={syllabusPath()} className="btn btn--ghost">
                   查看完整目录
                 </Link>
               </div>
@@ -378,9 +352,9 @@ export const HomePage: React.FC = () => {
           </section>
         )}
 
-        <aside className="today" aria-label="今日面板">
+        <aside className="today" aria-label="今天">
           <div className="today__head">
-            <span className="kicker">今日</span>
+            <span className="kicker">今天</span>
             <span className="small muted">{formatCurrentDate()}</span>
           </div>
 
@@ -391,15 +365,15 @@ export const HomePage: React.FC = () => {
                 <span className="value">
                   {nextSectionData.section.number} {nextSectionData.section.title}
                   <small>
-                    {nextSectionData.sourcePathTitle
-                      ? `${nextSectionData.sourcePathTitle} · `
-                      : ''}
-                    {nextSectionData.section.minutes
-                      ? `预计 ${nextSectionData.section.minutes} 分钟`
-                      : '标注完善中'}
-                    {nextSectionData.section.priority
-                      ? ` · ${nextSectionData.section.priority}`
-                      : ''}
+                    {[
+                      nextSectionData.sourcePathTitle,
+                      nextSectionData.section.minutes
+                        ? `约 ${nextSectionData.section.minutes} 分钟`
+                        : null,
+                      nextSectionData.section.priority,
+                    ]
+                      .filter(Boolean)
+                      .join(' · ') || nextSectionData.chapter.title}
                   </small>
                 </span>
                 <Link
@@ -415,28 +389,33 @@ export const HomePage: React.FC = () => {
               </>
             ) : (
               <span className="value">
-                全书已学完
-                <small>可开始复习与错题回顾</small>
+                全部小节已读完
+                <small>剩下的是复习和错题</small>
               </span>
             )}
           </div>
 
           <div className="today__row">
-            <span className="label">待复习</span>
+            <span className="label">复习</span>
             <span className="value">
               {dueReviewsCount > 0 ? (
                 <>
-                  {dueReviewsCount} 道题目今日到期
-                  <small>错题本共 {wrongCount} 道 · 基于间隔复习</small>
+                  {dueReviewsCount} 道错题今天到期
+                  <small>错题本共 {wrongCount} 道</small>
+                </>
+              ) : wrongCount > 0 ? (
+                <>
+                  今天没有到期的错题
+                  <small>错题本共 {wrongCount} 道</small>
                 </>
               ) : (
                 <>
-                  今日无待复习题目
-                  <small>错题本共 {wrongCount} 道 · 保持复习节奏</small>
+                  还没有错题
+                  <small>练习中做错的题会自动收进错题本</small>
                 </>
               )}
             </span>
-            <Link to={progressPath()} className="arrow" aria-label="查看待复习列表">
+            <Link to="/practice/wrong" className="arrow" aria-label="打开错题本">
               →
             </Link>
           </div>
@@ -446,13 +425,13 @@ export const HomePage: React.FC = () => {
             <span className="value">
               {practicedExercisesCount > 0 ? (
                 <>
-                  已练习 {practicedExercisesCount} / {totalExercisesCount} 题
-                  <small>覆盖全书 34 章节练习题库</small>
+                  已做 {practicedExercisesCount} / {totalExercisesCount} 题
+                  <small>按章节继续练习</small>
                 </>
               ) : (
                 <>
-                  全书共 {totalExercisesCount} 题
-                  <small>进入章节题库与演练模式</small>
+                  共 {totalExercisesCount} 道习题
+                  <small>按章节练习，答完可看解析</small>
                 </>
               )}
             </span>
@@ -466,7 +445,7 @@ export const HomePage: React.FC = () => {
       {/* 4. Learning Paths */}
       <div className="section-head">
         <h2>学习路径</h2>
-        <Link to={pathsPath()}>完整规划与周计划 →</Link>
+        <Link to={pathsPath()}>查看周计划</Link>
       </div>
       <div className="path-grid">
         {(pathsData?.paths || []).map((path) => {
@@ -484,7 +463,7 @@ export const HomePage: React.FC = () => {
           const totalSecs = path.id === 'free' ? 219 : path.totalSections;
           const pct =
             totalSecs > 0 ? Math.round((completedCount / totalSecs) * 100) : 0;
-          const modeLabel = path.code === 'D' ? 'FREE' : `PATH ${path.code}`;
+          const modeLabel = path.code === 'D' ? '自由阅读' : `路径 ${path.code}`;
           const targetHoursPerWeek =
             path.weeks > 0
               ? Math.round(path.totalEstimatedMinutes / 60 / path.weeks)
@@ -497,40 +476,25 @@ export const HomePage: React.FC = () => {
               className={`path-card ${isCurrent ? 'path-card--active' : ''}`}
               aria-label={`查看学习路径：${path.title}`}
             >
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  marginBottom: '4px',
-                }}
-              >
+              <div className="path-card__top">
                 <span className="path-card__mode">{modeLabel}</span>
-                {isCurrent && (
-                  <span
-                    className="badge badge--p0"
-                    style={{ fontSize: '9px', height: '18px' }}
-                  >
-                    当前主路径
-                  </span>
-                )}
+                {isCurrent && <span className="path-card__current">正在进行</span>}
               </div>
               <h3>{path.title}</h3>
               <p>{path.description}</p>
               <div className="path-card__meta">
                 {path.id === 'free' ? (
                   <>
-                    <span>自由节奏</span>
+                    <span>不限进度</span>
                     <span>全书 {totalSecs} 节</span>
-                    <span>已学 {pct}%</span>
+                    {pct > 0 && <span>已完成 {pct}%</span>}
                   </>
                 ) : (
                   <>
                     <span>{path.weeks} 周</span>
-                    <span>约 {targetHoursPerWeek}h/周</span>
-                    <span>
-                      {path.totalSections} 节 ({pct}%)
-                    </span>
+                    <span>每周约 {targetHoursPerWeek} 小时</span>
+                    <span>{path.totalSections} 节</span>
+                    {pct > 0 && <span>已完成 {pct}%</span>}
                   </>
                 )}
               </div>
@@ -541,8 +505,8 @@ export const HomePage: React.FC = () => {
 
       {/* 5. Full Book Map */}
       <div className="section-head">
-        <h2>全书地图</h2>
-        <Link to={syllabusPath()}>完整目录 →</Link>
+        <h2>全书八篇</h2>
+        <Link to={syllabusPath()}>完整目录</Link>
       </div>
       <div className="part-map">
         {partProgressList.map(({ part, percentage }) => (
@@ -552,7 +516,7 @@ export const HomePage: React.FC = () => {
             className="part-row"
           >
             <span className="part-row__num">
-              {formatPartNumber(part.order)}
+              {formatChinesePartLabel(part.order)}
             </span>
             <span className="part-row__title">{part.title}</span>
             <span className="part-row__bar">
@@ -564,8 +528,10 @@ export const HomePage: React.FC = () => {
       </div>
 
       {/* 6. Data note */}
-      <p className="small muted" style={{ marginTop: '32px' }}>
-        学习记录仅保存在本机。你可以随时在“学习进度”中导出全部数据（Phase 3 开放导出功能）。
+      <p className="home-note">
+        不需要注册。进度、笔记和错题只存在这台设备的浏览器里，可在
+        <Link to={progressPath()}>学习进度</Link>
+        页导出备份，换设备时再导入。
       </p>
     </main>
   );

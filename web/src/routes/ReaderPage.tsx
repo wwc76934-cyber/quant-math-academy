@@ -650,12 +650,8 @@ export const ReaderPage: React.FC = () => {
 
   if (loading) {
     return (
-      <main className="shell" id="main-content" style={{ padding: '60px 32px' }}>
-        <div className="kicker">QUANT MATH ACADEMY</div>
-        <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '32px', margin: '16px 0' }}>
-          正在加载章节正文...
-        </h1>
-        <p className="small muted">正在按需载入章节数据与切片...</p>
+      <main className="page" id="main-content">
+        <p className="page-loading" role="status">正在载入本章正文…</p>
       </main>
     );
   }
@@ -707,7 +703,7 @@ export const ReaderPage: React.FC = () => {
             fontFamily: 'var(--font-sans)',
           }}
         >
-          正在定位目标内容...
+          正在定位…
         </div>
       )}
 
@@ -840,7 +836,7 @@ export const ReaderPage: React.FC = () => {
                         fontSize: '13px',
                       }}
                     >
-                      正在加载本节内容...
+                      正在载入本节…
                     </div>
                   ) : secError ? (
                     <div
@@ -871,7 +867,7 @@ export const ReaderPage: React.FC = () => {
                         fontSize: '13px',
                       }}
                     >
-                      等待载入...
+                      等待载入
                     </div>
                   )}
                 </section>

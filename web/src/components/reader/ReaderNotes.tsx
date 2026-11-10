@@ -109,8 +109,8 @@ export const ReaderNotes: React.FC<ReaderNotesProps> = ({ sectionId }) => {
       style={{
         marginTop: '32px',
         padding: '16px 20px',
-        background: 'var(--bg-subtle, #fcfcfb)',
-        border: '1px solid var(--border, #e5e5e0)',
+        background: 'var(--bg-subtle)',
+        border: '1px solid var(--line)',
         borderRadius: '6px',
         fontFamily: 'var(--font-sans)',
       }}
@@ -136,11 +136,11 @@ export const ReaderNotes: React.FC<ReaderNotesProps> = ({ sectionId }) => {
           to={notesPath()}
           style={{
             fontSize: '11px',
-            color: 'var(--accent, #1a56db)',
+            color: 'var(--accent)',
             textDecoration: 'none',
           }}
         >
-          查看全部笔记 →
+          查看全部笔记
         </Link>
       </div>
 
@@ -157,8 +157,8 @@ export const ReaderNotes: React.FC<ReaderNotesProps> = ({ sectionId }) => {
           lineHeight: 1.6,
           fontFamily: 'var(--font-sans)',
           color: 'var(--ink)',
-          background: 'var(--bg-card, #ffffff)',
-          border: '1px solid var(--border, #e0e0dc)',
+          background: 'var(--bg-elevated)',
+          border: '1px solid var(--line)',
           borderRadius: '4px',
           resize: 'vertical',
           boxSizing: 'border-box',
@@ -182,7 +182,7 @@ export const ReaderNotes: React.FC<ReaderNotesProps> = ({ sectionId }) => {
               style={{
                 background: 'transparent',
                 border: 'none',
-                color: confirmDelete ? 'var(--warning, #c9510c)' : 'var(--ink-muted)',
+                color: confirmDelete ? 'var(--warning)' : 'var(--ink-muted)',
                 fontSize: '12px',
                 cursor: 'pointer',
                 padding: '4px 6px',

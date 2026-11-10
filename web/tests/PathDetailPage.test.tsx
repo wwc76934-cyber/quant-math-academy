@@ -69,16 +69,16 @@ describe('PathDetailPage', () => {
     expect(screen.getByText('约 44 小时')).toBeInTheDocument();
 
     // Checkpoints
-    expect(screen.getByText('阶段性复盘与里程碑检查点')).toBeInTheDocument();
+    expect(screen.getByText('阶段自测')).toBeInTheDocument();
     expect(screen.getByText(/第 4 周后/)).toBeInTheDocument();
     expect(screen.getByText(/第 8 周后/)).toBeInTheDocument();
 
     // Next recommended section
     expect(screen.getByText(/推荐下一节/)).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /开始学习/ })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: '开始学习本节' })).toBeInTheDocument();
 
     // Weeks
-    expect(await screen.findByText('WEEK 01')).toBeInTheDocument();
+    expect((await screen.findAllByText('第 1 周')).length).toBeGreaterThan(0);
     expect(
       await screen.findByText('离散概率、古典概型与 Bayes 推断')
     ).toBeInTheDocument();
@@ -105,7 +105,7 @@ describe('PathDetailPage', () => {
     await screen.findByText('量化实习冲刺');
 
     // Click to switch active path to internship
-    const switchBtn = screen.getByRole('button', { name: /设为当前主路径/i });
+    const switchBtn = screen.getByRole('button', { name: /设为主路径/i });
     fireEvent.click(switchBtn);
 
     // Verify localStorage retains the done/master items via waitFor
@@ -134,7 +134,7 @@ describe('PathDetailPage', () => {
   it('renders not found error state for non-existent path mode', async () => {
     renderWithRouter('/paths/non-existent-mode');
 
-    expect(await screen.findByText(/未找到指定学习路径/)).toBeInTheDocument();
+    expect(await screen.findByText('没有找到这条学习路径')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /查看所有学习路径/ })).toBeInTheDocument();
   });
 });

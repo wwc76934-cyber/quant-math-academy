@@ -58,12 +58,12 @@ describe('HomePage', () => {
     expect(await screen.findByText(/量化数学/)).toBeInTheDocument();
 
     // Scale stats from real book.json
-    expect(screen.getByText('34')).toBeInTheDocument();
-    expect(screen.getByText('章 / 8 篇')).toBeInTheDocument();
+    expect(screen.getByText('8 / 34')).toBeInTheDocument();
+    expect(screen.getByText('篇 / 章')).toBeInTheDocument();
     expect(screen.getByText('219')).toBeInTheDocument();
-    expect(screen.getByText('个知识点')).toBeInTheDocument();
+    expect(screen.getByText('小节')).toBeInTheDocument();
     expect(screen.getByText('3,276')).toBeInTheDocument();
-    expect(screen.getByText('条公式')).toBeInTheDocument();
+    expect(screen.getByText('独立公式')).toBeInTheDocument();
   });
 
   it('renders empty start state when no lastLocation exists', async () => {
@@ -75,10 +75,10 @@ describe('HomePage', () => {
       </StoreProvider>
     );
 
-    await screen.findByText(/从知道学什么开始/);
+    await screen.findByRole('heading', { level: 1, name: '量化数学进阶教材' });
 
-    expect(screen.getByText('从第一篇基础开始')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: '从第 1 章开始 →' })).toBeInTheDocument();
+    expect(screen.getByText('从第 1 章读起，或先选一条路径')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: '从第 1 章开始' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: '查看完整目录' })).toBeInTheDocument();
   });
 
@@ -116,13 +116,13 @@ describe('HomePage', () => {
       </StoreProvider>
     );
 
-    await screen.findByText(/从知道学什么开始/);
+    await screen.findByRole('heading', { level: 1, name: '量化数学进阶教材' });
 
     // Should display Continue Learning card for C11
     expect(screen.getByText(/第11章/)).toBeInTheDocument();
     expect(screen.getByText(/期望、方差、矩与概率不等式/)).toBeInTheDocument();
     expect(screen.getByText(/11.4 概率不等式/)).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: '继续阅读 →' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: '继续阅读' })).toBeInTheDocument();
   });
 
   it('renders all 4 real learning paths with active indicator and links', async () => {
@@ -153,10 +153,10 @@ describe('HomePage', () => {
     expect(screen.getByText('自由学习模式')).toBeInTheDocument();
 
     // Active path badge
-    expect(screen.getByText('当前主路径')).toBeInTheDocument();
+    expect(screen.getByText('正在进行')).toBeInTheDocument();
 
     // Link to all paths
-    expect(screen.getByRole('link', { name: '完整规划与周计划 →' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: '查看周计划' })).toHaveAttribute(
       'href',
       '/paths'
     );

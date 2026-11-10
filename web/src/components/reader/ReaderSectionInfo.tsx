@@ -90,14 +90,14 @@ export const ReaderSectionInfo: React.FC<ReaderSectionInfoProps> = ({
                 fontSize: '10px',
                 height: '18px',
                 background: 'var(--bg-elevated)',
-                border: '1px solid var(--border)',
+                border: '1px solid var(--line)',
                 color: 'var(--ink)',
               }}
             >
               有笔记
             </span>
           )}
-          {!hasMeta && <span className="small muted">标注完善中</span>}
+          {!hasMeta && <span className="small muted">暂无难度标注</span>}
         </div>
 
         <div className="section-meta__grid">

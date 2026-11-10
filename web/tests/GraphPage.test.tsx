@@ -83,12 +83,12 @@ describe('GraphPage', () => {
     expect(screen.queryByText(/\\varepsilon-N/)).not.toBeInTheDocument();
 
     // C11, C01, C08 have annotated badge
-    const badges = screen.getAllByText(/已评审标注 \(6 \/ 6 节\)/i);
+    const badges = screen.getAllByText(/已标注 6 \/ 6 节/i);
     expect(badges.length).toBeGreaterThan(0);
 
     // Unannotated chapters have honest notice (34 - 34 = 0, all 34 chapters are annotated)
     const unannotatedNotices = screen.queryAllByText(
-      /本章标注完善中，暂未建立关联边，保持诚实留白/i
+      /本章还没有整理先修与关联关系/i
     );
     expect(unannotatedNotices.length).toBe(0);
   });

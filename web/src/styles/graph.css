@@ -111,7 +111,7 @@
   padding: 6px 12px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--line);
-  background: var(--paper);
+  background: var(--bg);
   color: var(--ink);
   cursor: pointer;
 }
@@ -124,7 +124,7 @@
 /* Chapter Card */
 .graph-chapter-card {
   margin-bottom: 36px;
-  background: var(--paper);
+  background: var(--bg);
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
   overflow: hidden;
@@ -169,7 +169,7 @@
 }
 
 .graph-chapter-badge--annotated {
-  color: var(--sage, #3b6e5e);
+  color: var(--success);
   border-color: rgba(59, 110, 94, 0.3);
   background: rgba(59, 110, 94, 0.08);
 }

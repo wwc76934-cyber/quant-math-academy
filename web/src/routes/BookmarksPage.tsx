@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { PageHeader } from '../components/layout/PageHeader';
+import { StudyTabs } from '../components/layout/StudyTabs';
 import { loadBook } from '../features/content/loadBook';
 import { Book, BookChapter, BookSectionItem } from '../features/content/types';
 import { useStore } from '../features/store/store';
@@ -112,7 +114,7 @@ export const BookmarksPage: React.FC = () => {
       let chapterLabel = '';
       const ch = chapterMap.get(chapterId.toLowerCase());
       if (ch) {
-        chapterLabel = `${ch.id.toUpperCase()} ${ch.label} ${ch.title}`;
+        chapterLabel = `${ch.label} ${ch.title}`;
       } else if (chapterId !== 'unknown') {
         chapterLabel = `${chapterId.toUpperCase()} 章节`;
       } else {
@@ -140,11 +142,12 @@ export const BookmarksPage: React.FC = () => {
   };
 
   return (
-    <main className="content bookmarks-page shell" id="main-content">
-      <header className="bookmarks-page__header">
-        <h1>学习收藏夹</h1>
-        <p className="bookmarks-page__intro">公式收藏保存在本机</p>
-      </header>
+    <main className="page page--narrow bookmarks-page" id="main-content">
+      <PageHeader
+        title="公式收藏"
+        lede="阅读时点公式右侧的星标即可收藏。这里保留公式的 LaTeX 源码，点“跳转公式”回到原文位置。"
+      />
+      <StudyTabs />
 
       {formulas.length === 0 ? (
         <div className="bookmarks-page__empty">

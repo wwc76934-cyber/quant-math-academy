@@ -1,6 +1,9 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { PageHeader } from '../components/layout/PageHeader';
+import { StudyTabs } from '../components/layout/StudyTabs';
 import { useToast } from '../components/reader/Toast';
+import { EmptyState } from '../components/ui/EmptyState';
 import { loadBook } from '../features/content/loadBook';
 import { Book } from '../features/content/types';
 import { useStore } from '../features/store/store';
@@ -357,7 +360,7 @@ export const ProgressPage: React.FC = () => {
     if (!pendingImport) return;
     const res = importStore(pendingImport.raw);
     if (res.success) {
-      showToast('数据恢复成功！');
+      showToast('已从备份恢复');
       setPendingImport(null);
     } else {
       setImportError(res.error || '导入失败');
@@ -373,18 +376,17 @@ export const ProgressPage: React.FC = () => {
 
   if (loading) {
     return (
-      <main className="content progress-page" id="main-content" style={{ padding: '40px 24px', maxWidth: '1040px', margin: '0 auto' }}>
-        <p className="muted" role="status">正在加载学习进度与统计...</p>
+      <main className="page progress-page" id="main-content">
+        <p className="page-loading" role="status">正在载入学习记录…</p>
       </main>
     );
   }
 
   if (error || !book) {
     return (
-      <main className="content progress-page" id="main-content" style={{ padding: '40px 24px', maxWidth: '1040px', margin: '0 auto' }}>
-        <div role="alert" style={{ padding: '16px', background: 'var(--bg-subtle)', border: '1px solid var(--accent)', borderRadius: '4px' }}>
-          <h3>数据载入失败</h3>
-          <p>{error || '无法获取章节数据'}</p>
+      <main className="page progress-page" id="main-content">
+        <div role="alert" className="notice notice--error">
+          目录数据没有载入成功：{error || '缺少章节数据'}。请刷新页面重试。
         </div>
       </main>
     );
@@ -393,483 +395,178 @@ export const ProgressPage: React.FC = () => {
   const nowIso = new Date().toISOString();
 
   return (
-    <main
-      className="content progress-page shell"
-      id="main-content"
-      style={{ padding: '36px 24px 64px', maxWidth: '1040px', margin: '0 auto', fontFamily: 'var(--font-sans)' }}
-    >
-      {/* 1. Page Header */}
-      <header style={{ marginBottom: '28px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-          <span className="kicker" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.08em', color: 'var(--ink-muted)' }}>
-            PROGRESS & METRICS
+    <main className="page progress-page" id="main-content">
+      <PageHeader
+        title="学习进度"
+        lede={`全书 ${totalSections} 节、${totalExercises} 道习题的阅读和练习记录。数据只存在这台设备的浏览器里，页面底部可以导出备份。`}
+      />
+      <StudyTabs />
+
+      <section className="stat-row" aria-label="进度概况">
+        <div className="stat" data-testid="kpi-learned">
+          <span className="stat__label">已读完</span>
+          <span className="stat__value">
+            {kpis.learnedSections}{' '}
+            <small>
+              / {totalSections} 节 ({formatPercentage(kpis.learnedPct)})
+            </small>
           </span>
-          <span style={{ fontSize: '12px', color: 'var(--ink-muted)' }}>·</span>
-          <span style={{ fontSize: '12px', color: 'var(--ink-muted)' }}>Phase 3</span>
+          <span className="stat__hint">标为“已完成”或“已掌握”的小节</span>
         </div>
-        <h1 style={{ fontSize: '28px', fontFamily: 'var(--font-serif)', margin: '0 0 12px', fontWeight: 600, color: 'var(--ink)' }}>
-          学习进度与复习队列
-        </h1>
-        <p style={{ margin: 0, fontSize: '15px', lineHeight: 1.6, color: 'var(--ink-secondary)', maxWidth: '780px' }}>
-          追踪全书 34 章 219 节知识点掌握情况、{totalExercises} 道习题练习记录与基于间隔遗忘模型的错题复习队列。
-        </p>
-      </header>
-
-      {/* 2. Four Core KPIs */}
-      <section
-        aria-label="核心进度指标"
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: '16px',
-          marginBottom: '32px',
-        }}
-      >
-        <div
-          data-testid="kpi-learned"
-          style={{ background: 'var(--bg-card, #ffffff)', border: '1px solid var(--border, #e5e5e0)', borderRadius: '6px', padding: '16px 18px' }}
-        >
-          <span style={{ fontSize: '12px', color: 'var(--ink-muted)', display: 'block', marginBottom: '4px' }}>已学节数 (done / master)</span>
-          <div style={{ fontSize: '24px', fontWeight: 700, fontFamily: 'var(--font-serif)', color: 'var(--ink)' }}>
-            {kpis.learnedSections} <small style={{ fontSize: '13px', fontWeight: 400, color: 'var(--ink-muted)' }}>/ {totalSections} 节 ({formatPercentage(kpis.learnedPct)})</small>
-          </div>
-          <span style={{ fontSize: '11px', color: 'var(--ink-muted)' }}>已标记完成或掌握的知识点</span>
+        <div className="stat" data-testid="kpi-mastered">
+          <span className="stat__label">已掌握</span>
+          <span className="stat__value">
+            {kpis.masteredSections} <small>节</small>
+          </span>
+          <span className="stat__hint">能独立复述定理与推导</span>
         </div>
-
-        <div
-          data-testid="kpi-mastered"
-          style={{ background: 'var(--bg-card, #ffffff)', border: '1px solid var(--border, #e5e5e0)', borderRadius: '6px', padding: '16px 18px' }}
-        >
-          <span style={{ fontSize: '12px', color: 'var(--ink-muted)', display: 'block', marginBottom: '4px' }}>重点掌握 (master)</span>
-          <div style={{ fontSize: '24px', fontWeight: 700, fontFamily: 'var(--font-serif)', color: 'var(--ink)' }}>
-            {kpis.masteredSections} <small style={{ fontSize: '13px', fontWeight: 400, color: 'var(--ink-muted)' }}>节</small>
-          </div>
-          <span style={{ fontSize: '11px', color: 'var(--ink-muted)' }}>完全精通且可推导的核心节</span>
+        <div className="stat" data-testid="kpi-wrong">
+          <span className="stat__label">错题</span>
+          <span className="stat__value">
+            {kpis.wrongCount} <small>题</small>
+          </span>
+          <span className="stat__hint">
+            <Link to="/practice/wrong">打开错题本</Link>
+          </span>
         </div>
-
-        <div
-          data-testid="kpi-wrong"
-          style={{ background: 'var(--bg-card, #ffffff)', border: '1px solid var(--border, #e5e5e0)', borderRadius: '6px', padding: '16px 18px' }}
-        >
-          <span style={{ fontSize: '12px', color: 'var(--ink-muted)', display: 'block', marginBottom: '4px' }}>错题本题目</span>
-          <div style={{ fontSize: '24px', fontWeight: 700, fontFamily: 'var(--font-serif)', color: kpis.wrongCount > 0 ? 'var(--warning, #c9510c)' : 'var(--ink)' }}>
-            {kpis.wrongCount} <small style={{ fontSize: '13px', fontWeight: 400, color: 'var(--ink-muted)' }}>题</small>
-          </div>
-          <Link
-            to="/practice/wrong"
-            style={{ fontSize: '11px', color: 'var(--accent, #1a56db)', textDecoration: 'none' }}
-          >
-            前往错题本管理 →
-          </Link>
-        </div>
-
-        <div
-          data-testid="kpi-due"
-          style={{ background: 'var(--bg-card, #ffffff)', border: '1px solid var(--border, #e5e5e0)', borderRadius: '6px', padding: '16px 18px' }}
-        >
-          <span style={{ fontSize: '12px', color: 'var(--ink-muted)', display: 'block', marginBottom: '4px' }}>今日待复习</span>
-          <div style={{ fontSize: '24px', fontWeight: 700, fontFamily: 'var(--font-serif)', color: kpis.dueTodayCount > 0 ? 'var(--accent, #1a56db)' : 'var(--ink)' }}>
-            {kpis.dueTodayCount} <small style={{ fontSize: '13px', fontWeight: 400, color: 'var(--ink-muted)' }}>题</small>
-          </div>
-          <span style={{ fontSize: '11px', color: 'var(--ink-muted)' }}>到期等待重新练习检验</span>
+        <div className="stat" data-testid="kpi-due">
+          <span className="stat__label">今天到期</span>
+          <span className="stat__value">
+            {kpis.dueTodayCount} <small>题</small>
+          </span>
+          <span className="stat__hint">到了该重做的时间</span>
         </div>
       </section>
 
-      {/* 2.5 Today Suggestion Card */}
       <section
         className="progress-suggestion-card"
         aria-labelledby="progress-suggestion-heading"
         data-testid="progress-suggestion-card"
       >
         <div className="progress-suggestion-card__body">
-          <div className="progress-suggestion-card__tag">TODAY · 建议</div>
+          <div className="progress-suggestion-card__tag">今天建议先做</div>
           <h2 id="progress-suggestion-heading" className="progress-suggestion-card__title">
             {todaySuggestion.title}
           </h2>
-          <p className="progress-suggestion-card__reason">
-            {todaySuggestion.reason}
-          </p>
+          <p className="progress-suggestion-card__reason">{todaySuggestion.reason}</p>
         </div>
         <div className="progress-suggestion-card__action">
-          <Link
-            to={todaySuggestion.link}
-            className="btn btn--primary progress-suggestion-card__link"
-          >
-            开始 →
+          <Link to={todaySuggestion.link} className="btn btn--primary progress-suggestion-card__link">
+            开始
           </Link>
         </div>
       </section>
 
-      {/* 3. Review Queue Section */}
-      <section aria-labelledby="review-queue-heading" style={{ marginBottom: '40px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '16px' }}>
+      {/* Review queue */}
+      <section className="progress-block" aria-labelledby="review-queue-heading">
+        <div className="progress-block__head">
           <div>
-            <h2 id="review-queue-heading" style={{ fontSize: '20px', fontFamily: 'var(--font-serif)', margin: '0 0 4px', fontWeight: 600, color: 'var(--ink)' }}>
-              复习队列
-            </h2>
-            <p style={{ margin: 0, fontSize: '13px', color: 'var(--ink-muted)' }}>
-              按到期时间排序，连续做对 3 次或标记掌握后移出队列（最多展示前 20 条）。
-            </p>
+            <h2 id="review-queue-heading">复习队列</h2>
+            <p>按到期时间排序，最多显示 20 条。连续答对 3 次或标记掌握后移出。</p>
           </div>
-          <Link
-            to="/practice/wrong"
-            style={{ fontSize: '13px', color: 'var(--accent, #1a56db)', textDecoration: 'none', fontWeight: 500 }}
-          >
-            查看全部错题本 →
-          </Link>
+          <Link to="/practice/wrong">全部错题</Link>
         </div>
 
         {reviewQueue.length === 0 ? (
-          <div
-            data-testid="review-queue-empty"
-            style={{
-              background: 'var(--bg-card, #ffffff)',
-              border: '1px dashed var(--border, #e5e5e0)',
-              borderRadius: '6px',
-              padding: '32px 20px',
-              textAlign: 'center',
-            }}
-          >
-            <p style={{ margin: '0 0 8px', fontSize: '15px', color: 'var(--ink-secondary)', fontWeight: 500 }}>
-              当前复习队列为空
-            </p>
-            <p style={{ margin: '0 0 16px', fontSize: '13px', color: 'var(--ink-muted)' }}>
-              在阅读教材或章节练习中做错的题目会自动进入复习队列，并按 1 天 / 3 天 / 7 天提示复习。
-            </p>
-            <Link
-              to="/practice"
-              className="btn btn--secondary"
-              style={{
-                display: 'inline-block',
-                padding: '6px 16px',
-                fontSize: '13px',
-                border: '1px solid var(--border)',
-                borderRadius: '4px',
-                textDecoration: 'none',
-                color: 'var(--ink)',
-              }}
-            >
-              浏览章节练习题库
-            </Link>
+          <div data-testid="review-queue-empty">
+            <EmptyState
+              title="复习队列是空的"
+              description="练习中标为“做错”的题会进入这里，按 1、3、7 天的间隔提醒你重做。"
+              action={
+                <Link to={practicePath()} className="btn btn--secondary">
+                  去做练习
+                </Link>
+              }
+            />
           </div>
         ) : (
-          <div
-            style={{
-              background: 'var(--bg-card, #ffffff)',
-              border: '1px solid var(--border, #e5e5e0)',
-              borderRadius: '6px',
-              overflow: 'hidden',
-            }}
-          >
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'minmax(220px, 2fr) 110px 140px 100px',
-                padding: '10px 16px',
-                background: 'var(--bg-subtle, #f6f6f4)',
-                borderBottom: '1px solid var(--border, #e5e5e0)',
-                fontSize: '12px',
-                fontWeight: 600,
-                color: 'var(--ink-muted)',
-              }}
-            >
-              <span>题目</span>
-              <span>连续正确</span>
-              <span>复习状态</span>
-              <span style={{ textAlign: 'right' }}>操作</span>
-            </div>
-            <div role="list">
-              {reviewQueue.map((item) => {
-                const ch = chapterMap.get(item.chapterId);
-                const isDue = item.dueAt <= nowIso;
-                const dueDate = new Date(item.dueAt);
-                const dueText = isDue
-                  ? '今日待复习'
-                  : `${dueDate.getMonth() + 1}月${dueDate.getDate()}日到期`;
+          <ul className="list">
+            {reviewQueue.map((item) => {
+              const ch = chapterMap.get(item.chapterId);
+              const isDue = item.dueAt <= nowIso;
+              const dueDate = new Date(item.dueAt);
+              const dueText = isDue ? '今日待复习' : `${dueDate.getMonth() + 1} 月 ${dueDate.getDate()} 日复习`;
 
-                return (
-                  <div
-                    role="listitem"
-                    key={item.exerciseId}
-                    style={{
-                      display: 'grid',
-                      gridTemplateColumns: 'minmax(220px, 2fr) 110px 140px 100px',
-                      alignItems: 'center',
-                      padding: '12px 16px',
-                      borderBottom: '1px solid var(--border, #e5e5e0)',
-                      fontSize: '13px',
-                    }}
-                  >
-                    <div>
-                      <div style={{ fontWeight: 600, color: 'var(--ink)' }}>
-                        {ch ? `${ch.label} 习题 ${item.number}` : `${item.chapterId.toUpperCase()} 习题 ${item.number}`}
-                      </div>
-                      <div style={{ fontSize: '11px', color: 'var(--ink-muted)', marginTop: '2px' }}>
-                        {ch ? formatDisplayTitle(ch.title) : ''}
-                      </div>
-                    </div>
-                    <div>
-                      <span
-                        style={{
-                          display: 'inline-block',
-                          padding: '2px 6px',
-                          borderRadius: '3px',
-                          fontSize: '11px',
-                          fontWeight: 600,
-                          background: item.correctStreak > 0 ? '#e6f4ea' : 'var(--bg-subtle, #f0f0ee)',
-                          color: item.correctStreak > 0 ? '#137333' : 'var(--ink-muted)',
-                        }}
-                      >
-                        {item.correctStreak} / 3 次
-                      </span>
-                    </div>
-                    <div>
-                      <span
-                        style={{
-                          fontSize: '12px',
-                          fontWeight: isDue ? 600 : 400,
-                          color: isDue ? 'var(--warning, #c9510c)' : 'var(--ink-muted)',
-                        }}
-                      >
-                        {dueText}
-                      </span>
-                    </div>
-                    <div style={{ textAlign: 'right' }}>
-                      <Link
-                        to={`${practicePath(item.chapterId)}#ex-${item.number}`}
-                        style={{
-                          fontSize: '12px',
-                          fontWeight: 500,
-                          color: 'var(--accent, #1a56db)',
-                          textDecoration: 'none',
-                        }}
-                      >
-                        练习 →
-                      </Link>
-                    </div>
+              return (
+                <li key={item.exerciseId} className={`review-item${isDue ? ' is-due' : ''}`}>
+                  <div className="review-item__main">
+                    <strong>
+                      {ch ? `${ch.label} 习题 ${item.number}` : `${item.chapterId.toUpperCase()} 习题 ${item.number}`}
+                    </strong>
+                    <span className={isDue ? 'review-item__due' : 'review-item__when'}>{dueText}</span>
+                    <span className="review-item__meta">
+                      {ch ? `${formatDisplayTitle(ch.title)} · ` : ''}连续答对 {item.correctStreak} / 3 次
+                    </span>
                   </div>
-                );
-              })}
-            </div>
-          </div>
+                  <div className="review-item__actions">
+                    <Link
+                      to={`${practicePath(item.chapterId)}#${item.exerciseId}`}
+                      className={`btn btn--sm ${isDue ? 'btn--primary' : 'btn--secondary'}`}
+                    >
+                      重做
+                    </Link>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
         )}
       </section>
 
-      {/* 4. My Notes Section */}
-      <section aria-labelledby="notes-section-heading" style={{ marginBottom: '40px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '16px' }}>
+      {/* Chapter table */}
+      <section className="progress-block" aria-labelledby="chapter-progress-heading">
+        <div className="progress-block__head">
           <div>
-            <h2 id="notes-section-heading" style={{ fontSize: '20px', fontFamily: 'var(--font-serif)', margin: '0 0 4px', fontWeight: 600, color: 'var(--ink)' }}>
-              我的笔记
-            </h2>
-            <p style={{ margin: 0, fontSize: '13px', color: 'var(--ink-muted)' }}>
-              已在 {noteCount} 节记录学习推导与心得，支持纯文本编辑与快速跳转。
+            <h2 id="chapter-progress-heading">各章进度</h2>
+            <p>
+              已记笔记 {noteCount} 节 · <Link to={notesPath()}>查看笔记</Link>
             </p>
           </div>
-          <Link
-            to={notesPath()}
-            style={{ fontSize: '13px', color: 'var(--accent, #1a56db)', textDecoration: 'none', fontWeight: 500 }}
-          >
-            查看全部笔记 ({noteCount}) →
-          </Link>
         </div>
 
-        {noteCount === 0 ? (
-          <div
-            data-testid="notes-empty-card"
-            style={{
-              background: 'var(--bg-card, #ffffff)',
-              border: '1px dashed var(--border, #e5e5e0)',
-              borderRadius: '6px',
-              padding: '28px 20px',
-              textAlign: 'center',
-            }}
-          >
-            <p style={{ margin: '0 0 8px', fontSize: '15px', color: 'var(--ink-secondary)', fontWeight: 500 }}>
-              还没有记录任何笔记
-            </p>
-            <p style={{ margin: '0 0 16px', fontSize: '13px', color: 'var(--ink-muted)' }}>
-              在阅读各章节知识点时，可在正文底部随时记录推导心得、考点备忘或疑问。
-            </p>
-            <Link
-              to="/syllabus"
-              className="btn btn--secondary"
-              style={{
-                display: 'inline-block',
-                padding: '6px 16px',
-                fontSize: '13px',
-                border: '1px solid var(--border)',
-                borderRadius: '4px',
-                textDecoration: 'none',
-                color: 'var(--ink)',
-              }}
-            >
-              浏览章节教材
-            </Link>
-          </div>
-        ) : (
-          <div
-            data-testid="notes-summary-card"
-            style={{
-              background: 'var(--bg-card, #ffffff)',
-              border: '1px solid var(--border, #e5e5e0)',
-              borderRadius: '6px',
-              padding: '16px 20px',
-            }}
-          >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div>
-                <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--ink)' }}>
-                  已累计记录 {noteCount} 节笔记
-                </span>
-                <span style={{ marginLeft: '12px', fontSize: '12px', color: 'var(--ink-muted)' }}>
-                  纯文本保存在本地，换设备前建议导出备份。
-                </span>
-              </div>
-              <Link
-                to={notesPath()}
-                className="btn btn--secondary"
-                style={{
-                  padding: '6px 14px',
-                  fontSize: '13px',
-                  border: '1px solid var(--border)',
-                  borderRadius: '4px',
-                  textDecoration: 'none',
-                  color: 'var(--ink)',
-                }}
-              >
-                前往笔记管理页 →
-              </Link>
-            </div>
-          </div>
-        )}
-      </section>
-
-      {/* 5. Chapter Progress Table */}
-      <section aria-labelledby="chapter-progress-heading">
-        <div style={{ marginBottom: '16px' }}>
-          <h2 id="chapter-progress-heading" style={{ fontSize: '20px', fontFamily: 'var(--font-serif)', margin: '0 0 4px', fontWeight: 600, color: 'var(--ink)' }}>
-            章节明细
-          </h2>
-          <p style={{ margin: 0, fontSize: '13px', color: 'var(--ink-muted)' }}>
-            全书 34 章节进度、习题完成度与错题一览表。
-          </p>
-        </div>
-
-        <div
-          style={{
-            background: 'var(--bg-card, #ffffff)',
-            border: '1px solid var(--border, #e5e5e0)',
-            borderRadius: '6px',
-            overflowX: 'auto',
-          }}
-        >
-          <table
-            style={{
-              width: '100%',
-              borderCollapse: 'collapse',
-              fontSize: '13px',
-              textAlign: 'left',
-            }}
-          >
+        <div className="table-scroll">
+          <table className="data-table">
             <thead>
-              <tr
-                style={{
-                  background: 'var(--bg-subtle, #f6f6f4)',
-                  borderBottom: '1px solid var(--border, #e5e5e0)',
-                  fontSize: '12px',
-                  color: 'var(--ink-muted)',
-                }}
-              >
-                <th style={{ padding: '10px 16px', fontWeight: 600 }}>章节</th>
-                <th style={{ padding: '10px 16px', fontWeight: 600, width: '180px' }}>知识点进度</th>
-                <th style={{ padding: '10px 16px', fontWeight: 600, width: '120px' }}>习题练习</th>
-                <th style={{ padding: '10px 16px', fontWeight: 600, width: '90px' }}>错题</th>
-                <th style={{ padding: '10px 16px', fontWeight: 600, width: '140px', textAlign: 'right' }}>操作</th>
+              <tr>
+                <th scope="col">章</th>
+                <th scope="col" className="data-table__bar-col">小节</th>
+                <th scope="col">习题</th>
+                <th scope="col">错题</th>
+                <th scope="col" className="data-table__actions">
+                  <span className="visually-hidden">操作</span>
+                </th>
               </tr>
             </thead>
             <tbody>
               {chapterTableData.map((row) => (
-                <tr
-                  key={row.id}
-                  style={{
-                    borderBottom: '1px solid var(--border, #e5e5e0)',
-                  }}
-                >
-                  <td style={{ padding: '12px 16px' }}>
-                    <Link
-                      to={learnPath(row.id)}
-                      style={{
-                        color: 'var(--ink)',
-                        fontWeight: 600,
-                        textDecoration: 'none',
-                        display: 'block',
-                      }}
-                    >
-                      {row.label} {formatDisplayTitle(row.title)}
+                <tr key={row.id}>
+                  <td>
+                    <Link to={learnPath(row.id)} className="data-table__title">
+                      <span>{row.label}</span> {formatDisplayTitle(row.title)}
                     </Link>
                   </td>
-                  <td style={{ padding: '12px 16px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <div
-                        style={{
-                          flex: 1,
-                          height: '6px',
-                          background: 'var(--bg-subtle, #eee)',
-                          borderRadius: '3px',
-                          overflow: 'hidden',
-                        }}
-                      >
-                        <div
-                          style={{
-                            width: `${row.sectionPct}%`,
-                            height: '100%',
-                            background: row.sectionPct === 100 ? '#137333' : 'var(--accent, #1a56db)',
-                            borderRadius: '3px',
-                          }}
+                  <td className="data-table__bar-col">
+                    <span className="data-table__bar">
+                      <span className="list-row__bar">
+                        <i
+                          style={{ width: `${row.sectionPct}%` }}
+                          className={row.sectionPct === 100 ? 'is-complete' : ''}
                         />
-                      </div>
-                      <span style={{ fontSize: '11px', color: 'var(--ink-muted)', minWidth: '45px' }}>
+                      </span>
+                      <span className="data-table__num">
                         {row.learnedCount}/{row.sectionCount}
                       </span>
-                    </div>
-                  </td>
-                  <td style={{ padding: '12px 16px', color: 'var(--ink-secondary)' }}>
-                    {row.practicedCount} / {row.exerciseCount} 题
-                  </td>
-                  <td style={{ padding: '12px 16px' }}>
-                    <span
-                      style={{
-                        color: row.wrongCount > 0 ? 'var(--warning, #c9510c)' : 'var(--ink-muted)',
-                        fontWeight: row.wrongCount > 0 ? 600 : 400,
-                      }}
-                    >
-                      {row.wrongCount} 题
                     </span>
                   </td>
-                  <td style={{ padding: '12px 16px', textAlign: 'right' }}>
-                    <Link
-                      to={learnPath(row.id)}
-                      style={{
-                        marginRight: '12px',
-                        color: 'var(--ink-muted)',
-                        textDecoration: 'none',
-                        fontSize: '12px',
-                      }}
-                    >
-                      阅读
-                    </Link>
-                    <Link
-                      to={practicePath(row.id)}
-                      style={{
-                        color: 'var(--accent, #1a56db)',
-                        textDecoration: 'none',
-                        fontSize: '12px',
-                        fontWeight: 500,
-                      }}
-                    >
-                      练习 →
-                    </Link>
+                  <td className="data-table__num">
+                    {row.practicedCount} / {row.exerciseCount} 题
+                  </td>
+                  <td className={`data-table__num${row.wrongCount > 0 ? ' is-warning' : ''}`}>
+                    {row.wrongCount > 0 ? `${row.wrongCount} 题` : '—'}
+                  </td>
+                  <td className="data-table__actions">
+                    <Link to={learnPath(row.id)}>阅读</Link>
+                    <Link to={practicePath(row.id)}>练习</Link>
                   </td>
                 </tr>
               ))}
@@ -878,308 +575,144 @@ export const ProgressPage: React.FC = () => {
         </div>
       </section>
 
-      {/* 6. Data Management & Backup */}
-      <section
-        aria-labelledby="data-management-heading"
-        style={{
-          marginTop: '48px',
-          borderTop: '1px solid var(--border, #e5e5e0)',
-          paddingTop: '32px',
-        }}
-      >
-        <div style={{ marginBottom: '20px' }}>
-          <h2 id="data-management-heading" style={{ fontSize: '20px', fontFamily: 'var(--font-serif)', margin: '0 0 4px', fontWeight: 600, color: 'var(--ink)' }}>
-            数据管理与备份
-          </h2>
-          <p style={{ margin: 0, fontSize: '13px', color: 'var(--ink-muted)' }}>
-            所有学习记录保存在当前浏览器本地（LocalStorage），无云端存储。更换设备或清理浏览器缓存前请务必导出备份。
-          </p>
+      {/* Data management */}
+      <section className="progress-block data-panel" aria-labelledby="data-management-heading">
+        <div className="progress-block__head">
+          <div>
+            <h2 id="data-management-heading">备份与恢复</h2>
+            <p>
+              进度、练习记录、错题和笔记都只保存在当前浏览器里，不会上传。换设备或清理浏览器数据前，先导出一份备份。
+            </p>
+          </div>
         </div>
 
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: '16px',
-            marginBottom: '24px',
-          }}
-        >
-          {/* Export Card */}
-          <div
-            style={{
-              background: 'var(--bg-card, #ffffff)',
-              border: '1px solid var(--border, #e5e5e0)',
-              borderRadius: '6px',
-              padding: '20px',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-            }}
-          >
+        <div className="data-panel__rows">
+          <div className="data-panel__row">
             <div>
-              <h3 style={{ margin: '0 0 8px', fontSize: '15px', fontWeight: 600, color: 'var(--ink)' }}>
-                导出学习数据
-              </h3>
-              <p style={{ margin: '0 0 16px', fontSize: '13px', color: 'var(--ink-secondary)', lineHeight: 1.5 }}>
-                导出包含阅读进度、习题答题、错题复习队列与笔记的完整 JSON 备份文件（schemaVersion: 1）。
-              </p>
+              <h3>导出备份</h3>
+              <p>下载一个 JSON 文件，包含全部阅读进度、练习记录、错题和笔记。</p>
             </div>
-            <button
-              type="button"
-              onClick={handleExport}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '8px',
-                padding: '8px 16px',
-                background: 'var(--accent, #1a56db)',
-                color: '#ffffff',
-                border: 'none',
-                borderRadius: '4px',
-                fontSize: '13px',
-                fontWeight: 500,
-                cursor: 'pointer',
-              }}
-            >
-              导出备份 (JSON)
+            <button type="button" className="btn btn--primary" onClick={handleExport}>
+              导出备份
             </button>
           </div>
 
-          {/* Import Card */}
-          <div
-            style={{
-              background: 'var(--bg-card, #ffffff)',
-              border: '1px solid var(--border, #e5e5e0)',
-              borderRadius: '6px',
-              padding: '20px',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-            }}
-          >
+          <div className="data-panel__row">
             <div>
-              <h3 style={{ margin: '0 0 8px', fontSize: '15px', fontWeight: 600, color: 'var(--ink)' }}>
-                恢复/导入备份
-              </h3>
-              <p style={{ margin: '0 0 16px', fontSize: '13px', color: 'var(--ink-secondary)', lineHeight: 1.5 }}>
-                从导出的 JSON 文件恢复进度。导入前会严格校验数据格式并展示摘要预览，确认后覆盖本机数据。
-              </p>
+              <h3>从备份恢复</h3>
+              <p>选择之前导出的文件。导入前会先校验并显示摘要，确认后才会覆盖本机数据。</p>
             </div>
-            <div>
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept=".json,application/json"
-                style={{ display: 'none' }}
-                onChange={handleFileSelect}
-                data-testid="file-import-input"
-              />
-              <button
-                type="button"
-                onClick={() => {
-                  setImportError(null);
-                  fileInputRef.current?.click();
-                }}
-                style={{
-                  width: '100%',
-                  padding: '8px 16px',
-                  background: 'transparent',
-                  color: 'var(--ink)',
-                  border: '1px solid var(--border, #e5e5e0)',
-                  borderRadius: '4px',
-                  fontSize: '13px',
-                  fontWeight: 500,
-                  cursor: 'pointer',
-                }}
-              >
-                选择备份文件导入...
-              </button>
-            </div>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".json,application/json"
+              className="visually-hidden"
+              onChange={handleFileSelect}
+              data-testid="file-import-input"
+              tabIndex={-1}
+              aria-hidden="true"
+            />
+            <button
+              type="button"
+              className="btn btn--secondary"
+              onClick={() => {
+                setImportError(null);
+                fileInputRef.current?.click();
+              }}
+            >
+              选择备份文件
+            </button>
           </div>
 
-          {/* Reset / Clear Card */}
-          <div
-            style={{
-              background: 'var(--bg-card, #ffffff)',
-              border: '1px solid var(--border, #e5e5e0)',
-              borderRadius: '6px',
-              padding: '20px',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-            }}
-          >
+          <div className="data-panel__row">
             <div>
-              <h3 style={{ margin: '0 0 8px', fontSize: '15px', fontWeight: 600, color: 'var(--warning, #c9510c)' }}>
-                清空本机记录
-              </h3>
-              <p style={{ margin: '0 0 16px', fontSize: '13px', color: 'var(--ink-secondary)', lineHeight: 1.5 }}>
-                重置阅读进度、练习错题与笔记，恢复至初始默认配置。操作不可逆，需二次确认。
-              </p>
+              <h3>清空本机记录</h3>
+              <p>删除全部进度、练习记录、错题和笔记，并恢复默认阅读设置。无法撤销。</p>
             </div>
             <button
               type="button"
+              className="btn btn--secondary btn--danger"
               onClick={() => {
                 setShowResetConfirm(true);
                 setResetInput('');
               }}
-              style={{
-                padding: '8px 16px',
-                background: 'transparent',
-                color: 'var(--warning, #c9510c)',
-                border: '1px solid var(--warning, #c9510c)',
-                borderRadius: '4px',
-                fontSize: '13px',
-                fontWeight: 500,
-                cursor: 'pointer',
-              }}
             >
-              清空本机记录...
+              清空本机记录
             </button>
           </div>
         </div>
 
-        {/* Import Error Message */}
         {importError && (
-          <div
-            role="alert"
-            data-testid="import-error-alert"
-            style={{
-              padding: '12px 16px',
-              background: '#fdf2f2',
-              border: '1px solid #f8b4b4',
-              borderRadius: '6px',
-              color: '#9b1c1c',
-              fontSize: '13px',
-              marginBottom: '20px',
-            }}
-          >
-            <strong>导入校验失败：</strong>{importError}
+          <div role="alert" data-testid="import-error-alert" className="notice notice--error">
+            <strong>无法导入：</strong>
+            {importError}
           </div>
         )}
 
-        {/* Import Preview Modal / Confirmation Box */}
         {pendingImport && (
           <div
             role="dialog"
             aria-modal="true"
             aria-labelledby="import-preview-title"
             data-testid="import-preview-modal"
-            style={{
-              background: 'var(--bg-subtle, #f6f6f4)',
-              border: '2px solid var(--accent, #1a56db)',
-              borderRadius: '6px',
-              padding: '20px',
-              marginBottom: '24px',
-            }}
+            className="confirm-panel"
           >
-            <h3 id="import-preview-title" style={{ margin: '0 0 8px', fontSize: '16px', color: 'var(--ink)' }}>
-              确认导入备份数据
-            </h3>
-            <p style={{ margin: '0 0 16px', fontSize: '13px', color: 'var(--ink-secondary)' }}>
-              文件 <code>{pendingImport.filename}</code> 校验通过（schemaVersion: 1）。
-              <strong style={{ color: 'var(--warning, #c9510c)', marginLeft: '4px' }}>
-                确认后将完全覆盖当前本机的学习记录与笔记！
-              </strong>
+            <h3 id="import-preview-title">确认导入备份</h3>
+            <p>
+              文件 <code>{pendingImport.filename}</code> 格式正确。
+              <strong>确认后将完全覆盖当前本机的学习记录与笔记，无法撤销。</strong>
             </p>
-
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
-                gap: '12px',
-                marginBottom: '16px',
-                background: 'var(--bg-card, #ffffff)',
-                padding: '12px 16px',
-                borderRadius: '4px',
-                border: '1px solid var(--border, #e5e5e0)',
-              }}
-            >
+            <dl className="confirm-panel__summary">
               <div>
-                <span style={{ fontSize: '11px', color: 'var(--ink-muted)', display: 'block' }}>已学节数</span>
-                <strong style={{ fontSize: '16px', color: 'var(--ink)' }}>{pendingImport.summary.progressCount} 节</strong>
+                <dt>已读小节</dt>
+                <dd>{pendingImport.summary.progressCount} 节</dd>
               </div>
               <div>
-                <span style={{ fontSize: '11px', color: 'var(--ink-muted)', display: 'block' }}>已练习题</span>
-                <strong style={{ fontSize: '16px', color: 'var(--ink)' }}>{pendingImport.summary.exerciseCount} 题</strong>
+                <dt>练习记录</dt>
+                <dd>{pendingImport.summary.exerciseCount} 题</dd>
               </div>
               <div>
-                <span style={{ fontSize: '11px', color: 'var(--ink-muted)', display: 'block' }}>错题本</span>
-                <strong style={{ fontSize: '16px', color: 'var(--ink)' }}>{pendingImport.summary.wrongCount} 题</strong>
+                <dt>错题</dt>
+                <dd>{pendingImport.summary.wrongCount} 题</dd>
               </div>
               <div>
-                <span style={{ fontSize: '11px', color: 'var(--ink-muted)', display: 'block' }}>节笔记</span>
-                <strong style={{ fontSize: '16px', color: 'var(--ink)' }}>{pendingImport.summary.noteCount} 条</strong>
+                <dt>笔记</dt>
+                <dd>{pendingImport.summary.noteCount} 条</dd>
               </div>
               <div>
-                <span style={{ fontSize: '11px', color: 'var(--ink-muted)', display: 'block' }}>当前学习路径</span>
-                <strong style={{ fontSize: '16px', color: 'var(--ink)' }}>{pendingImport.summary.activePath}</strong>
+                <dt>学习路径</dt>
+                <dd>{pendingImport.summary.activePath}</dd>
               </div>
-            </div>
-
-            <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
-              <button
-                type="button"
-                onClick={() => setPendingImport(null)}
-                style={{
-                  padding: '6px 14px',
-                  background: 'transparent',
-                  border: '1px solid var(--border)',
-                  borderRadius: '4px',
-                  fontSize: '13px',
-                  cursor: 'pointer',
-                  color: 'var(--ink)',
-                }}
-              >
+            </dl>
+            <div className="confirm-panel__actions">
+              <button type="button" className="btn btn--ghost" onClick={() => setPendingImport(null)}>
                 取消
               </button>
               <button
                 type="button"
+                className="btn btn--primary"
                 onClick={handleConfirmImport}
                 data-testid="confirm-import-btn"
-                style={{
-                  padding: '6px 16px',
-                  background: 'var(--accent, #1a56db)',
-                  color: '#ffffff',
-                  border: 'none',
-                  borderRadius: '4px',
-                  fontSize: '13px',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                }}
               >
-                确认覆盖并恢复
+                覆盖并恢复
               </button>
             </div>
           </div>
         )}
 
-        {/* Reset Confirmation Dialog */}
         {showResetConfirm && (
           <div
             role="dialog"
             aria-modal="true"
             aria-labelledby="reset-dialog-title"
             data-testid="reset-confirm-modal"
-            style={{
-              background: '#fdf2f2',
-              border: '2px solid var(--warning, #c9510c)',
-              borderRadius: '6px',
-              padding: '20px',
-              marginBottom: '24px',
-            }}
+            className="confirm-panel confirm-panel--danger"
           >
-            <h3 id="reset-dialog-title" style={{ margin: '0 0 8px', fontSize: '16px', color: 'var(--warning, #c9510c)' }}>
-              高危操作：清空所有本机数据
-            </h3>
-            <p style={{ margin: '0 0 12px', fontSize: '13px', color: 'var(--ink)', lineHeight: 1.5 }}>
-              该操作将彻底清空当前浏览器的全部学习进度、习题作答历史、错题复习队列与所写笔记，并将排版设置重置为默认值。此操作无法撤销。
+            <h3 id="reset-dialog-title">清空这台设备上的全部学习记录？</h3>
+            <p>
+              进度、练习记录、错题、笔记和阅读设置都会被删除，无法撤销。建议先导出备份。输入 <strong>清空</strong> 以确认。
             </p>
-            <p style={{ margin: '0 0 12px', fontSize: '13px', color: 'var(--ink-secondary)' }}>
-              请输入 <strong>清空</strong> 以确认操作：
-            </p>
-            <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+            <div className="confirm-panel__actions confirm-panel__actions--start">
               <input
                 type="text"
                 value={resetInput}
@@ -1187,67 +720,23 @@ export const ProgressPage: React.FC = () => {
                 placeholder="输入 清空"
                 aria-label="输入“清空”以确认清空所有本机数据"
                 data-testid="reset-confirm-input"
-                style={{
-                  padding: '6px 10px',
-                  fontSize: '13px',
-                  border: '1px solid var(--border, #ccc)',
-                  borderRadius: '4px',
-                  width: '160px',
-                }}
               />
               <button
                 type="button"
+                className="btn btn--primary btn--danger-solid"
                 onClick={handleResetStore}
                 disabled={resetInput.trim() !== '清空'}
                 data-testid="reset-confirm-btn"
-                style={{
-                  padding: '6px 16px',
-                  background: resetInput.trim() === '清空' ? 'var(--warning, #c9510c)' : '#ccc',
-                  color: '#ffffff',
-                  border: 'none',
-                  borderRadius: '4px',
-                  fontSize: '13px',
-                  fontWeight: 600,
-                  cursor: resetInput.trim() === '清空' ? 'pointer' : 'not-allowed',
-                }}
               >
                 确认清空
               </button>
-              <button
-                type="button"
-                onClick={() => setShowResetConfirm(false)}
-                style={{
-                  padding: '6px 12px',
-                  background: 'transparent',
-                  border: '1px solid var(--border)',
-                  borderRadius: '4px',
-                  fontSize: '13px',
-                  cursor: 'pointer',
-                  color: 'var(--ink)',
-                }}
-              >
+              <button type="button" className="btn btn--ghost" onClick={() => setShowResetConfirm(false)}>
                 取消
               </button>
             </div>
           </div>
         )}
       </section>
-
-      {/* 7. Storage Note */}
-      <footer
-        style={{
-          marginTop: '40px',
-          padding: '16px 20px',
-          background: 'var(--bg-subtle, #f6f6f4)',
-          borderRadius: '6px',
-          fontSize: '12px',
-          color: 'var(--ink-muted)',
-          lineHeight: 1.6,
-        }}
-      >
-        <strong>本地存储与数据隐私说明：</strong>
-        全书 34 章的阅读标记、练习做题记录与错题复习队列完全保存在当前浏览器的 LocalStorage 中，不上传任何服务器。即使离线也可以正常记录与复习。
-      </footer>
     </main>
   );
 };

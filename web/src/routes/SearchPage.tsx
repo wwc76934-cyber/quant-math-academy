@@ -370,7 +370,7 @@ export const SearchPage: React.FC = () => {
             value={inputVal}
             onChange={(e) => setInputVal(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="输入术语、公式名或概念（如 期望、SVD、Itô、GARCH、夏普、VaR）..."
+            placeholder="输入术语、公式名或概念，如 期望、SVD、Itô、GARCH"
             autoComplete="off"
             spellCheck="false"
             aria-autocomplete="list"
