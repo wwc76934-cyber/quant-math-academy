@@ -127,7 +127,7 @@
     },
     "c29-s3": {
       "difficulty": "D2",
-      "priority": "P0",
+      "priority": "P1",
       "minutes": 55,
       "examFrequency": "high",
       "tags": [
@@ -175,7 +175,7 @@
         "c29-eq-29.11",
         "c29-eq-29.12"
       ],
-      "rationale": "本节建立定义29.7式(29.8)GARCH(1,1)，证明定理29.8平稳条件phi=alpha+beta<1与式(29.10)无条件方差，导出命题29.9式(29.11)平方收益ARMA表示与自相关几何衰减，证明式(29.12)多步预测向长期方差回归，剖析News Impact Curve。波动率建模绝对核心构件，属P0最高频考点。",
+      "rationale": "本节建立定义29.7 GARCH(1,1)，证明定理29.8平稳条件 alpha+beta<1 并给出波动率预测递推。它是波动率方向的核心工具，但非波动率岗位可后置，且依赖 ARCH 基础；按标注手册校准为 P1。",
       "reviewed": true,
       "reviewedBy": "DSH",
       "reviewedAt": "2026-11-10"
