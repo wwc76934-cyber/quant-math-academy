@@ -102,6 +102,12 @@ cp web/dist/index.html web/dist/404.html   # SPA fallback
 - 打印仅 PDF smoke；无障碍未做完整屏幕阅读器实测。
 - 未做 1,964 页逐字校勘；已完成结构闸门、公式渲染、30 项抽查与 D/P 复核。
 
+## 参与
+
+- [CONTRIBUTING.md](CONTRIBUTING.md)：开发、测试、内容与许可边界
+- [SECURITY.md](SECURITY.md)：漏洞报告与支持范围
+- [CONTENT_NOTICE.md](CONTENT_NOTICE.md)：正文版权
+
 ## 设计文档
 
 - [PRD](docs/product/PRD.md)

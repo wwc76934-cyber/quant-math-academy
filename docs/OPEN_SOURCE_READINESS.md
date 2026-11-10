@@ -77,13 +77,13 @@ KaTeX 已升级到 0.19.1，React Router 已升级到 7.18.5；根与 Web 的 `n
 - [ ] 用户确认代码许可与内容许可范围
 - [ ] 用户确认公开仓库/私有仓库/不建仓库
 - [ ] 用户确认是否部署及平台
-- [ ] 添加 `LICENSE`（代码）与内容许可/版权声明
-- [ ] 生成并复核 `THIRD_PARTY_NOTICES`
+- [x] 添加 `LICENSE`（MIT）与 `CONTENT_NOTICE.md`（All rights reserved）
+- [x] 生成 `THIRD_PARTY_NOTICES.md`
 - [x] KaTeX 升级 0.19.1 并回归
 - [x] React Router 升级 7.18.5 并回归（110 测试通过）
-- [ ] 写公开 `README`（定位、截图、快速开始、架构、限制）
-- [ ] `CONTRIBUTING.md`、`SECURITY.md`、Issue/PR 模板
-- [ ] 确认 `src/` 是否随仓库公开；若否则提供内容获取/构建说明
+- [x] 写公开 `README`（定位、截图、快速开始、架构、限制）
+- [x] `CONTRIBUTING.md`、`SECURITY.md`、Issue/PR 模板
+- [x] 确认 `src/` 随公开仓库（正文 All rights reserved，仅可浏览）
 - [ ] 再跑 build、110+58 测试、4 视口截图、打印 PDF
 - [ ] 确认无密钥/隐私数据/本地缓存进入仓库
 
