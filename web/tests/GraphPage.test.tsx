@@ -47,7 +47,7 @@ describe('GraphPage', () => {
 
     await waitFor(() => {
       expect(screen.getByText('219')).toBeInTheDocument();
-      expect(screen.getByText('142')).toBeInTheDocument();
+      expect(screen.getByText('155')).toBeInTheDocument();
       expect(screen.getByText('0 环严格 DAG')).toBeInTheDocument();
       // Dynamic annotated nodes count on filter chip
       expect(
@@ -87,11 +87,11 @@ describe('GraphPage', () => {
     const badges = screen.getAllByText(/已评审标注 \(6 \/ 6 节\)/i);
     expect(badges.length).toBeGreaterThan(0);
 
-    // Unannotated chapters have honest notice (34 - 23 = 11)
+    // Unannotated chapters have honest notice (34 - 25 = 9)
     const unannotatedNotices = screen.getAllByText(
       /本章标注完善中，暂未建立关联边，保持诚实留白/i
     );
-    expect(unannotatedNotices.length).toBe(11);
+    expect(unannotatedNotices.length).toBe(9);
   });
 
   it('filters by scope: clicking "只看已标注" hides unannotated chapters', async () => {
@@ -113,8 +113,8 @@ describe('GraphPage', () => {
     fireEvent.click(annotatedChip);
 
     await waitFor(() => {
-      // C23 is unannotated and should not be displayed in the list
-      expect(screen.queryByText('C23')).not.toBeInTheDocument();
+      // C25 is unannotated and should not be displayed in the list
+      expect(screen.queryByText('C25')).not.toBeInTheDocument();
       // C11 is annotated and should still be displayed
       expect(screen.getByText('C11')).toBeInTheDocument();
     });
