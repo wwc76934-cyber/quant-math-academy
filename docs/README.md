@@ -60,7 +60,8 @@
 - T10 Batch 13（收官）：C34 共 7 节复核；全书 **34 章 / 219 节** 已标注，**558 先修 / 446 相关 / 0 环**，`unannotatedNodes=0`。
 - T17 优先级校准审计：P0 172/219（78.5%）、P2+P3 仅 3 节；修正 C25.4→P2、C29.3→P1。
 - T18 校准 Batch 1–6：C20/C23/C25–C34 重判 + P2 细化；P0 124/219（56.6%），P1 73 / P2 21 / P3 1；P2+P3 10.0%。
-- Phase 6 审计：静态/隐私/测试就绪；移除未使用 pagedjs；发现 KaTeX low、React Router moderate 通告，未自动跨版修复；内容版权与许可待用户确认。
+- Phase 6 审计：静态/隐私/测试就绪；移除未使用 pagedjs；KaTeX 0.19.1 + React Router 7.18.5 升级后根/Web `npm audit` 均 **0 vulnerabilities**；首屏 JS gzip 75.28KB；内容版权与许可待用户确认。
+- T19 超长节评估：4 个 1.05–1.19MB 单节，gzip 57–60KB，DOM 8.7–9.5 万；无溢出；暂不拆分，待低端真机验证。
 - 视觉原型与最终截图：`design/prototype/`、`web/screenshots/`。
 - Phase 1 试点章：C01、C08、C11、C33。
 
@@ -76,9 +77,9 @@
 ## 下一步
 
 1. **等待用户确认 Phase 6**：代码许可、内容许可、仓库公开/私有、部署平台。
-2. 确认后：生成 THIRD_PARTY_NOTICES、LICENSE、README/CONTRIBUTING/SECURITY，评估 KaTeX/React Router 升级。
+2. 确认后：生成 THIRD_PARTY_NOTICES、LICENSE、README/CONTRIBUTING/SECURITY。
 3. T14 公式收藏：稳定版 backlog。
-4. 4 个 >1MB 单节按真实设备长任务再评估是否二次拆分。
+4. 4 个超长节按 T19 口径做低端真机验证；无卡顿则不拆。
 
 ## Phase 1 验收
 
