@@ -15,7 +15,7 @@
     "test:content": "node --test tools/content/*.test.mjs"
   },
   "dependencies": {
-    "katex": "0.16.22",
+    "katex": "^0.19.1",
     "marked": "15.0.12"
   }
 }

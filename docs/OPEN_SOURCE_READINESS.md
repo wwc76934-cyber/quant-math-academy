@@ -24,7 +24,7 @@
 
 | 包 | 版本 | 许可 | 用途 |
 |---|---|---|---|
-| katex | 0.16.22 | MIT | 构建期公式渲染 |
+| katex | 0.19.1 | MIT | 构建期公式渲染（已升级修复 low 通告） |
 | marked | 15.0.12 | MIT | Markdown 解析 |
 | react / react-dom | 18.3.1 | MIT | UI |
 | react-router-dom | 6.30.6 | MIT | 路由 |
@@ -53,10 +53,10 @@
 
 | 依赖 | 严重度 | 通告 | 现状/影响 | 决策 |
 |---|---|---|---|---|
-| katex 0.16.22 | low | GHSA-238p-pmpm-9mq7：原型污染可绕过 trust 限制 | 本站公式在构建期渲染，不接受用户输入公式；暴露面低 | 升级 0.19.1 为 breaking，需全量公式回归；发布前评估 |
+| katex | ✅ 已修复 | GHSA-238p-pmpm-9mq7 | 升级 0.19.1；全量公式渲染 0 error、58 内容测试/110 Web 测试通过 | 已完成 |
 | react-router 6.30.6 | moderate | GHSA-wrjc-x8rr-h8h6（开放重定向绕过）、GHSA-337j-9hxr-rhxg（SSR 反序列化） | 纯客户端、无 SSR、无用户可控外链；SSR 通告不适用 | 升级 7.x 为 breaking；发布前评估 |
 
-**没有执行 `npm audit fix --force`**：它会跨大版本升级并可能破坏公式/路由，必须先跑完整回归。
+KaTeX 已升级到 0.19.1，`npm audit --omit=dev` 现在为 **0 vulnerabilities**；React Router 中危通告仍保留，未跨大版本升级。
 
 ## 5. 部署方案（待选）
 
@@ -78,7 +78,8 @@
 - [ ] 用户确认是否部署及平台
 - [ ] 添加 `LICENSE`（代码）与内容许可/版权声明
 - [ ] 生成并复核 `THIRD_PARTY_NOTICES`
-- [ ] 决定 KaTeX / React Router 升级与回归
+- [x] KaTeX 升级 0.19.1 并回归
+- [ ] 决定 React Router 6→7 升级与回归
 - [ ] 写公开 `README`（定位、截图、快速开始、架构、限制）
 - [ ] `CONTRIBUTING.md`、`SECURITY.md`、Issue/PR 模板
 - [ ] 确认 `src/` 是否随仓库公开；若否则提供内容获取/构建说明
